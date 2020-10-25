@@ -1,0 +1,63 @@
+- defaults:
+    link:
+        create: true
+        relink: true
+
+- clean: ['~', '~/.config', '~/.vim']
+
+- create:
+    - ~/repos
+
+- link:
+    ~/.dotfiles: "" # This links ~/.dotfiles to this repo
+    ~/.config/alacritty/alacritty.yml: alacritty.yml
+    ~/.clang-format: clang-format
+    ~/.condarc: condarc
+    ~/.inputrc: inputrc
+    # kitty
+    ~/.config/kitty/kitty.conf: kitty/kitty.conf
+    # i3
+    ~/.config/i3:
+        if: '[ $(uname) = Linux ]'
+        path: i3
+    # zsh
+    ~/.zshrc: zshrc
+    # git & github-cli
+    ~/.gitconfig: git/gitconfig
+    ~/.gitignore_global: git/gitignore_global
+    ~/.config/gh: github-cli
+    # vim
+    ~/.config/nvim: nvim
+    ~/.vim/autoload/airline: vim/autoload/airline # airline custom theme
+    ~/.config/coc/UltiSnips: vim/snippets
+    ~/.vim/plugin: vim/plugin
+    ~/.vim/spell: vim/spell
+    ~/.vim/coc-settings.json: vim/coc-settings.json
+    ~/.vim/tasks.ini: vim/tasks.ini
+    ~/.vimrc: vimrc
+
+- link:
+    ~/.config/kitty/os.conf:
+        if: '[ $(uname) = Darwin ]'
+        path: kitty/macOS.conf
+
+- link:
+    ~/.config/kitty/os.conf:
+        if: '[ $(uname) = Linux ]'
+        path: kitty/linux.conf
+
+- shell:
+    - ['touch ~/.gitconfig_local
+       ~/.config/alacritty/alacritty_local.yml
+       ~/.config/kitty/local.conf
+       ~/.vimrc_before ~/.vimrc_after ~/.vim/bookmarks
+       ~/.zshrc_before ~/.zshrc_after', "Creating local files"]
+    - ["git submodule update --init --recursive", "Installing submodules"]
+    - [
+        '[ -f ~/.vim/autoload/plug.vim ] ||
+         curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
+        "Installing vim-plug"
+      ]
+
+# vim: expandtab shiftwidth=4 softtabstop=4

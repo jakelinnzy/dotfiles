@@ -1,0 +1,56 @@
+// vi: ft=jsonc
+{
+  "json.schemas": [
+    {
+      "fileMatch": ["coc-settings.json"],
+      "schema": { "allowTrailingCommas": true }
+    }
+  ],
+  "coc.preferences.jumpCommand": "tab drop",
+  "snippets.extends": {
+    "cpp": ["c"]
+  },
+  // Python
+  // This enables Microsoft's Python Language Server
+  "python.jediEnabled": false,
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.pylintUseMinimalCheckers": false,
+  "python.linting.pylintPath": "python3 -m pylint",
+  // C/C++
+  "clangd.arguments": ["-header-insertion=never"],
+  "clangd.fallbackFlags": ["-Wall", "-Ilib"],
+  // LaTeX
+  // "latex.build.executable": "tectonic",
+  // "latex.build.args": [
+  //     "%f",
+  //     "--synctex",
+  //     "--keep-logs",
+  //     "--keep-intermediates",
+  //     // "--outdir out"
+  // ],
+  // "latex.build.outputDirectory": "out",
+  // TSServer
+  "tsserver.formatOnType": false,
+  // Prettier
+  "prettier.formatterPriority": 1,
+
+  "languageserver": {
+    "haskell": {
+      "command": "haskell-language-server-wrapper",
+      "args": ["--lsp"],
+      "rootPatterns": [
+        "*.cabal",
+        "stack.yaml",
+        "cabal.project",
+        "package.yaml",
+        "hie.yaml"
+      ],
+      "filetypes": ["haskell", "lhaskell"]
+    },
+    "digestif": {
+      "command": "digestif",
+      "filetypes": ["tex", "plaintex", "context"]
+    }
+  }
+}

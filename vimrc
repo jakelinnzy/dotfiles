@@ -243,6 +243,10 @@ set ttimeoutlen=33  " wait up to 33ms after Esc for special key
 
 let g:is_posix = 1  " Prevent Vim from marking the $() in shell script as error
 
+if has('nvim')
+    set shada='100,<1000,s100,:1000,n~/.nvim_shada
+endif
+
 " - Color Scheme {{{1
 
 " Use true colors in terminal

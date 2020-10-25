@@ -43,7 +43,7 @@ export TYPEWRITTEN_COLORS='arrow:yellow;symbol:yellow;'\
 'right_prompt_prefix:242'
 export TYPEWRITTEN_GIT_RELATIVE_PATH=false
 export TYPEWRITTEN_RIGHT_PROMPT_PREFIX="# "
-export TYPEWRITTEN_CURSOR="underscore"  # underscore / terminal
+export TYPEWRITTEN_CURSOR="terminal"  # underscore / terminal
 antibody bundle reobin/typewritten
 
 # END antibody config }}}

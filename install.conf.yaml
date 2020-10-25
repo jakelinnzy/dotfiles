@@ -10,7 +10,6 @@
 
 - link:
     ~/.dotfiles: "" # This links ~/.dotfiles to this repo
-    ~/.config/alacritty/alacritty.yml: alacritty.yml
     ~/.clang-format: clang-format
     ~/.condarc: condarc
     ~/.inputrc: inputrc

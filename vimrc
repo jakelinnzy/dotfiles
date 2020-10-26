@@ -33,6 +33,7 @@ Plug 'junegunn/fzf.vim'
 " auto-pairs prevents <CR> from expanding abbreviations
 Plug 'junegunn/vim-easy-align'  " ga to align
 Plug 'junegunn/vim-emoji'
+Plug 'junegunn/vim-peekaboo'    " automatically show register contents
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
@@ -63,6 +64,7 @@ Plug 'wellle/targets.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 if $TERM_PROGRAM =~# '\v(kitty|iTerm)'
+    let s:patched_font = 1
     Plug 'ryanoasis/vim-devicons'
 endif
 Plug 'liuchengxu/vim-which-key'
@@ -261,10 +263,7 @@ endif
 set background=dark
 
 " Color Scheme Overrides
-function! s:color_ayu_mirage() abort
-    let g:ayucolor = "mirage"
-    colorscheme ayu
-
+function! s:ayu_mirage_overrides() abort
     hi Cursor        gui=NONE guifg=#212733 guibg=#D9D7CE ctermfg=0 ctermbg=7
     hi lCursor       gui=NONE guifg=#212733 guibg=#D9D7CE
     hi Comment       guifg=#7C8793
@@ -283,6 +282,8 @@ function! s:color_ayu_mirage() abort
     hi link semshiSelected CocHighlightText
 endfunction
 
+au vimrc ColorScheme ayu call s:ayu_mirage_overrides()
+
 function! s:color_seoul256() abort
     " Seoul256 (dark): 233~239 default:237
     let g:seoul256_background = 234
@@ -292,10 +293,6 @@ function! s:color_seoul256() abort
     hi CursorLine    ctermbg=236 guibg=#303030
     hi CursorColumn  ctermbg=236 guibg=#303030
     hi CursorLineNr  ctermbg=236 guibg=#303030
-endfunction
-
-function! s:color_janah() abort
-    colorscheme janah
 endfunction
 
 function! s:semshi_overrides()
@@ -319,11 +316,13 @@ function! s:semshi_overrides()
     " hi semshiErrorChar       ctermfg=231 guifg=#ffffff ctermbg=160 guibg=#d70000
     " sign define semshiError text=E> texthl=semshiErrorSign
 endfunction
+
 au vimrc ColorScheme * call s:semshi_overrides()
 
 " Apply color scheme
 try
-    call s:color_ayu_mirage()
+    let g:ayucolor = "mirage"
+    colorscheme ayu
 catch /^Vim\%((\a\+)\)\=:E185/
     " Color scheme not found
     echom 'Color scheme not found.'
@@ -501,8 +500,14 @@ tnoremap <M-j> <C-\><C-n><C-W>j
 tnoremap <M-k> <C-\><C-n><C-W>k
 tnoremap <M-l> <C-\><C-n><C-W>l
 
-" Ctrl-w t to move window to a new tab
+" Ctrl-W t to move window to a new tab
 nnoremap <C-w>t <C-w>T
+
+if has('nvim')
+    let g:float_terminal_height = 15
+    " Ctrl-M to open a temporary terminal window
+    nnoremap <silent> <C-m> :<C-u>OpenTerm<CR>
+endif
 
 " <Leader> {{{2
 
@@ -561,6 +566,9 @@ let g:which_key_leader.f.e.t = 'Edit global tasks'
 " File - Edit - Dictionary
 nnoremap <silent> <Leader>fed :silent call execute('tab drop '..&spellfile)<CR>
 let g:which_key_leader.f.e.d = 'Edit dictionary'
+" File - Edit - Snippet
+nnoremap <silent> <Leader>fes :silent SnipEdit<CR>
+let g:which_key_leader.f.e.s = 'Edit Snippets'
 " File - Copy - Content (copy the whole file to system clipboard)
 nnoremap <silent> <Leader>fcc gg"+yG<C-o>:<C-u>echom "Copied to clipboard"<CR>
 let g:which_key_leader.f.c.c = 'Copy file content'
@@ -614,8 +622,6 @@ let g:which_key_leader.f.g.c = 'Commits'
 " Find - Helptags
 nnoremap <silent> <Leader>fh  :<C-u>silent Helptags<CR>
 let g:which_key_leader.f.h = 'Find Helptags'
-" gb to search for buffers
-nnoremap <silent> gb          :<C-u>silent Buffers<CR>
 
 " Edit - Trim (trailing whitespaces and newlines)
 nnoremap <silent> <Leader>et :<C-u>call TrimTrailingWhitespace()<CR>
@@ -625,6 +631,9 @@ nmap <Leader>ef <Plug>(coc-format)
 let g:which_key_leader.e.f = 'Format'
 vmap <Leader>ef <Plug>(coc-format-selected)
 
+" Run - Select (search task to run with FZF)
+nnoremap <silent> <Leader>rs :<C-u>AsyncTaskFzf<CR>
+let g:which_key_leader.r.s = 'Select task...'
 " Run - Build
 nnoremap <silent> <Leader>rb :<C-u>AsyncTask project-build<CR>
 let g:which_key_leader.r.b = 'Build project'
@@ -638,6 +647,16 @@ let g:which_key_leader.r.t = 'Test project'
 nnoremap <silent> <Leader>rf :<C-u>AsyncTask file-run<CR>
 let g:which_key_leader.r.f = 'Run current file'
 
+" Goto - History
+nnoremap <silent> <Leader>gh  :<C-u>History<CR>
+let g:which_key_leader.g.h = 'History files'
+" Goto - Buffer
+nnoremap <silent> gb          :<C-u>silent Buffers<CR>
+nnoremap <silent> <Leader>gb  :<C-u>silent Buffers<CR>
+let g:which_key_leader.g.b = 'Buffer'
+" Goto - Marks
+nnoremap <silent> <Leader>gm :<C-u>silent Marks<CR>
+let g:which_key_leader.g.m = 'Mark'
 " Goto - tag
 "     Also works in visual mode
 noremap <Leader>gt <C-]>
@@ -770,12 +789,11 @@ let g:which_key_leader.t.c.l = 'Cursor line'
 " Toggle - Cursor - Column
 nnoremap <silent> <Leader>tcc :<C-u>set cursorcolumn!<BAR>set cursorcolumn?<CR>
 let g:which_key_leader.t.c.c = 'Cursor column'
-" Toggle - ColoRizer
+" Toggle - Colorizer
 nnoremap <silent> <Leader>tcr :<C-u>ColorizerToggle<CR>
 let g:which_key_leader.t.c.r = 'Colorizer'
-" Toggle - COc
+" Toggle - Coc
 nnoremap <silent> <Leader>tco :<C-u>call ToggleCoc()<CR>
-
 
 " \rl to save and reload vimrc
 augroup vimrc
@@ -809,6 +827,8 @@ command! TScratch tabnew +MakeScratch
 " file it was loaded from, thus the changes you made.
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
             \ | wincmd p | diffthis
+
+" }}}
 
 " END Commands }}}2
 
@@ -889,7 +909,7 @@ let g:airline_mode_map = {
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
-if $TERM_PROGRAM =~# '\v(kitty|iTerm)'
+if s:patched_font
     " powerline symbols
     let g:airline_left_sep = ''
     let g:airline_left_alt_sep = ''
@@ -979,6 +999,38 @@ let g:asynctasks_term_reuse = 1
 let g:asynctasks_profile = 'debug'
 let g:asynctasks_term_rows = 15
 
+" FZF integration
+function! s:asynctasks_fzf_sink(what)
+    let p1 = stridx(a:what, '<')
+    if p1 >= 0
+        let name = strpart(a:what, 0, p1)
+        let name = substitute(name, '^\s*\(.\{-}\)\s*$', '\1', '')
+        if name != ''
+            exec "AsyncTask ". fnameescape(name)
+        endif
+    endif
+endfunction
+
+function! s:asynctasks_fzf()
+    let rows = asynctasks#source(&columns * 48 / 100)
+    let source = []
+    for row in rows
+        let name = row[0]
+        let source += [name . '  ' . row[1] . '  : ' . row[2]]
+    endfor
+    let opts = { 'source': source, 'sink': function('s:asynctasks_fzf_sink'),
+                \ 'options': '+m --nth 1 --inline-info --tac' }
+    if exists('g:fzf_layout')
+        for key in keys(g:fzf_layout)
+            let opts[key] = deepcopy(g:fzf_layout[key])
+        endfor
+    endif
+    call fzf#run(fzf#wrap(opts))
+endfunction
+
+command! -nargs=0 AsyncTaskFzf call s:asynctasks_fzf()
+
+
 " - coc.nvim {{{2
 " ---------------------------
 
@@ -1006,7 +1058,7 @@ let g:coc_global_extensions = [
 " Use <tab> to select and accept the first completion item
 inoremap <silent><expr> <tab>
             \ pumvisible() ? coc#_select_confirm()
-            \ : "\<C-g>u\<tab>"
+            \ : "\<tab>"
 
 function! s:check_back_space() abort
     let col = col('.') - 1
@@ -1037,7 +1089,7 @@ xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 
 " Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold   :call CocAction('fold', <f-args>)
+command! -nargs=? Fold   :set foldcall CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer.
 command! OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
@@ -1136,7 +1188,6 @@ augroup vimrc
 augroup END
 
 
-
 " - editorconfig {{{2
 
 " Only highlight the lines that exceed length limit
@@ -1169,6 +1220,9 @@ let g:fzf_colors = {
           \ 'spinner': ['fg', 'Label'],
           \ 'header':  ['fg', 'Comment']
           \ }
+
+imap <C-x><C-f> <Plug>(fzf-complete-path)
+imap <C-x><C-l> <Plug>(fzf-complete-line)
 
 " - goyo & limelight {{{2
 

@@ -53,8 +53,8 @@ antibody bundle reobin/typewritten
 export EDITOR="nvim"
 
 # Compilation flags
-export CFLAGS="-Wall -std=c99"
-export CXXFLAGS="-Wall -std=c++14"
+export CFLAGS="-Wall -Wextra -std=c99"
+export CXXFLAGS="-Wall -Wextra -std=c++17"
 
 # make pkg-config find icu
 export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"

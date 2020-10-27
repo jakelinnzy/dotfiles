@@ -6,12 +6,20 @@
 " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 " Things to do first {{{1
-set nocompatible
+if &compatible
+    set nocompatible
+endif
 let mapleader = ' '
 let maplocalleader = '\'
 let s:mac = has('mac')
 let s:windows = has('win32') || has('win64')
 let s:linux = has('linux')
+if $TERM_PROGRAM =~# '\v(kitty|iTerm)'
+    let s:patched_font = 1
+else
+    let s:patched_font = 0
+endif
+
 source ~/.vimrc_before
 " }}}
 " vim-plug Setup {{{1
@@ -63,8 +71,7 @@ Plug 'wellle/targets.vim'
 " Display
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-if $TERM_PROGRAM =~# '\v(kitty|iTerm)'
-    let s:patched_font = 1
+if s:patched_font
     Plug 'ryanoasis/vim-devicons'
 endif
 Plug 'liuchengxu/vim-which-key'
@@ -73,7 +80,10 @@ Plug 'junegunn/limelight.vim'
 if has('nvim')
     Plug 'norcalli/nvim-colorizer.lua'
     " Semantic highlighting for Python, only supports neovim.
-    Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+    " Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+endif
+if has('nvim-0.5.0')
+    Plug 'nvim-treesitter/nvim-treesitter'
 endif
 
 " Languages
@@ -81,12 +91,11 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'editorconfig/editorconfig-vim'
 Plug 'skywind3000/asynctasks.vim'
 Plug 'skywind3000/asyncrun.vim'
-Plug 'sheerun/vim-polyglot'    " Language pack
 " Plug 'keith/swift.vim'
-" Plug 'plasticboy/vim-markdown'
+Plug 'plasticboy/vim-markdown'
 Plug 'neoclide/jsonc.vim'
 Plug 'lervag/vimtex'
-Plug 'jackguo380/vim-lsp-cxx-highlight'
+Plug 'sheerun/vim-polyglot'    " Language pack
 
 " Color scheme
 Plug 'ayu-theme/ayu-vim'
@@ -98,6 +107,7 @@ Plug 'zacanger/angr.vim'
 Plug 'joshdick/onedark.vim'
 Plug 'junegunn/seoul256.vim'
 Plug 'fenetikm/falcon'
+Plug 'embark-theme/vim', { 'as': 'embark' }
 
 " Plug '~/repos/runscript.vim'
 
@@ -156,26 +166,27 @@ set shortmess=filmntToOF   " Shorten various messages, see :h 'shortmess'
 set shortmess+=rxc         " Avoids hit-enter prompts
 
 if has('nvim')
-    " Looks like nvim doesn't support this option
-    " but the number column is highlighted on error so it's enough
-    set signcolumn=no
     " Make pum and floating windows pseudo-transparent
-    set pumblend=20
-    set winblend=20
+    set pumblend=15
+    set winblend=15
     " Highlight yanked text
     au vimrc TextYankPost * silent!
                 \ lua vim.highlight.on_yank {higroup="IncSearch", timeout=500}
-else
-    " Display signcolumn (coc's diagnostics) in the number column
-    set signcolumn=number
 endif
+
+" Display signcolumn (coc's diagnostics) in the number column
+set signcolumn=number
 
 set title                  " Displays terminal title
 
-" Cursor shapes, see :h 'guicursor'
-set guicursor=n-v-c-sm:block-Cursor
-            \,i-ci-ve:ver25-Cursor
-            \,r-cr-o:hor20-Cursor
+if has('nvim') || has('gui')
+    " Cursor shapes, see :h 'guicursor'
+    set guicursor=n-v-c-sm:block-Cursor
+                \,i-ci-ve:ver25-Cursor
+                \,r-cr-o:hor20-Cursor
+endif
+
+set fillchars+=stl:\ ,stlnc:\  " fix status line
 
 " Open new split window at bottom right
 set splitbelow
@@ -238,6 +249,8 @@ set autoread
 set nobackup        " Language Servers may have issue with backup
 set nowritebackup
 
+set lazyredraw      " Don't redraw while executing macros, etc.
+
 set timeout         " time out for key combinations e.g dd
 set timeoutlen=1000
 set ttimeout        " time out for key codes
@@ -262,9 +275,10 @@ endif
 
 set background=dark
 
-" Color Scheme Overrides
-function! s:ayu_mirage_overrides() abort
-    hi Cursor        gui=NONE guifg=#212733 guibg=#D9D7CE ctermfg=0 ctermbg=7
+" Color scheme overrides
+let g:ayucolor = "mirage"
+function! s:ayu_mirage()
+    hi Cursor        gui=NONE guifg=#212733 guibg=#D9D7CE
     hi lCursor       gui=NONE guifg=#212733 guibg=#D9D7CE
     hi Comment       guifg=#7C8793
     hi CursorLine    guibg=#303844
@@ -276,15 +290,14 @@ function! s:ayu_mirage_overrides() abort
     hi Operator      guifg=#F29E74
     hi NonText       guifg=#506070
 
-    hi link StatusLineNC Statusline
-    hi link startifyHeader Function
+    hi! link SpecialKey   NonText
+    hi! link startifyHeader Function
     hi CocHighlightText    guibg=#4C5763
-    hi link semshiSelected CocHighlightText
+    hi! link semshiSelected CocHighlightText
 endfunction
+au vimrc ColorScheme ayu call s:ayu_mirage()
 
-au vimrc ColorScheme ayu call s:ayu_mirage_overrides()
-
-function! s:color_seoul256() abort
+function! s:seoul256()
     " Seoul256 (dark): 233~239 default:237
     let g:seoul256_background = 234
     let g:seoul256_srgb = 1
@@ -294,6 +307,7 @@ function! s:color_seoul256() abort
     hi CursorColumn  ctermbg=236 guibg=#303030
     hi CursorLineNr  ctermbg=236 guibg=#303030
 endfunction
+au vimrc ColorScheme seoul256 call s:seoul256()
 
 function! s:semshi_overrides()
     hi semshiAttribute guifg=#3CAEA3
@@ -316,12 +330,10 @@ function! s:semshi_overrides()
     " hi semshiErrorChar       ctermfg=231 guifg=#ffffff ctermbg=160 guibg=#d70000
     " sign define semshiError text=E> texthl=semshiErrorSign
 endfunction
-
 au vimrc ColorScheme * call s:semshi_overrides()
 
 " Apply color scheme
 try
-    let g:ayucolor = "mirage"
     colorscheme ayu
 catch /^Vim\%((\a\+)\)\=:E185/
     " Color scheme not found
@@ -407,7 +419,7 @@ inoremap jk <Esc>
 " <Esc> to exit terminal mode
 " fzf.vim can interfere with this, so check first
 tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<C-\><C-n>"
-tnoremap <expr> jk (&filetype == "fzf") ? "<Esc>" : "<C-\><C-n>"
+" tnoremap <expr> jk (&filetype == "fzf") ? "<Esc>" : "<C-\><C-n>"
 
 
 " More sensible defaults {{{2
@@ -425,9 +437,8 @@ nnoremap S <Nop>
 " Make Y consistent with C and D
 nnoremap Y y$
 
-" ^U and ^W in Insert Mode breaks undo sequence
+" ^U Insert Mode breaks undo sequence
 inoremap <C-u> <C-g>u<C-u>
-inoremap <C-w> <C-g>u<C-w>
 
 " n always search forward and N always backward
 nnoremap <expr> n  'Nn'[v:searchforward]
@@ -503,11 +514,17 @@ tnoremap <M-l> <C-\><C-n><C-W>l
 " Ctrl-W t to move window to a new tab
 nnoremap <C-w>t <C-w>T
 
+" Nvim Terminal {{{2
 if has('nvim')
     let g:float_terminal_height = 15
-    " Ctrl-M to open a temporary terminal window
-    nnoremap <silent> <C-m> :<C-u>OpenTerm<CR>
 endif
+
+" Visual Mode {{{2
+
+" Visual mode pressing * or # searches for the current selection
+vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@/<CR><CR>
+vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
+
 
 " <Leader> {{{2
 
@@ -536,11 +553,11 @@ let g:which_key_leader = {
             \        'c': { 'name': '+cursor/coc' },
             \        }
             \ }
-" <Leader>q to quit the current file with Sayonara
-nnoremap <silent> <Leader>q :<C-u>Sayonara<CR>
-let g:which_key_leader.q = 'Smart quit'
-nnoremap <silent> <Leader>Q :<C-u>Sayonara!<CR>
-let g:which_key_leader.Q = 'Smart quit (preserve window)'
+" <Leader>q to quit the current buffer with Sayonara
+nnoremap <silent> <Leader>q :Sayonara<CR>
+let g:which_key_leader.q = 'Quit'
+nnoremap <silent> <Leader>Q :Sayonara!<CR>
+let g:which_key_leader.Q = 'Quit (preserve window)'
 
 " <Leader><Tab> goes to the alternate file
 noremap <Leader><Tab> <C-^>
@@ -549,8 +566,13 @@ let g:which_key_leader['<Tab>'] = 'Alt-file'
 noremap <silent> <Leader><CR> :<C-u>noh<CR>
 let g:which_key_leader['<CR>'] = 'No-highlight'
 
+nnoremap <silent> <Leader>i  :Files<CR>
+let g:which_key_leader.i = 'Find files'
 
-" Leader-f starts file (buffer) level operations and find
+if has('nvim')
+    nnoremap <silent> <Leader>o  :OpenTerm<CR>
+    let g:which_key_leader.o = 'Open terminal'
+endif
 
 " File - Edit - Vimrc
 nnoremap <silent> <Leader>fev :silent tab drop ~/.vimrc<CR>
@@ -607,6 +629,9 @@ let g:which_key_leader.f.N.V = 'Open buffer with clipboard (vsplit)'
 " File - Tree
 nnoremap <silent> <Leader>ft  :<C-u>NERDTreeToggle<CR>
 let g:which_key_leader.f.t = 'NERDTree'
+" File - Startify
+nnoremap <silent> <Leader>fs :<C-u>Startify<CR>
+let g:which_key_leader.f.s = 'Startify'
 
 " Find - Files (search for files with fzf.vim)
 nnoremap <silent> <Leader>ff  :<C-u>silent Files<CR>
@@ -672,6 +697,8 @@ let g:which_key_leader.g.n = 'Next'
 nnoremap <silent> <Leader>gst :<C-u>Git status<CR>
 let g:which_key_leader.g.s.t = 'git status'
 
+" Language - Commands (coc)
+nnoremap <Leader>lc :CocList commands<CR>
 " Language - ReName
 nmap <Leader>lrn <Plug>(coc-rename)
 let g:which_key_leader.l.r.n = 'Rename'
@@ -721,7 +748,7 @@ nnoremap <silent><expr> <Leader>whd ':resize -'..(v:count ? v:count : "3")..'<CR
 let g:which_key_leader.w.i = 'Decrease height'
 
 " <Space>s to save current file
-nnoremap <silent> <Leader>s :<C-u>silent call TrimTrailingWhitespace() <Bar> w<CR>
+nnoremap <silent> <Leader>s :w<CR>
 let g:which_key_leader.s = 'Save file'
 
 " Toggle - Wrap
@@ -754,6 +781,9 @@ let g:which_key_leader.t.a.j = 'Join lines'
 nnoremap <silent> <Leader>tac :<C-u>call ToggleSetFlag('formatoptions', 't',
             \ 'Format both comment and code', 'Only format comment.')<CR>
 let g:which_key_leader.t.a.c = 'Only format comment'
+" Toggle - Airline - Whitespace
+nnoremap <silent> <Leader>taw :AirlineToggleWhitespace<CR>
+let g:which_key_leader.t.a.w = 'Check WS'
 " Toggle - Number (both number and relativenumber)
 nnoremap <silent> <Leader>tn :<C-u>set number! <BAR>
             \ let &relativenumber = &number <BAR> set number?<CR>
@@ -792,6 +822,11 @@ let g:which_key_leader.t.c.c = 'Cursor column'
 " Toggle - Colorizer
 nnoremap <silent> <Leader>tcr :<C-u>ColorizerToggle<CR>
 let g:which_key_leader.t.c.r = 'Colorizer'
+" Toggle - Conceal
+nnoremap <silent> <Leader>tcl :<C-u>
+            \ let &conceallevel = (&conceallevel == 0) ? 2 : 0 <BAR>
+            \ set conceallevel? <CR>
+
 " Toggle - Coc
 nnoremap <silent> <Leader>tco :<C-u>call ToggleCoc()<CR>
 
@@ -843,10 +878,15 @@ iabbrev @@m jakelinnzy@gmail.com
 iabbrev @@s ---<CR>Ziyang Lin<CR>jakelinnzy@gmail.com
 
 augroup vimrc
-    au FileType c,cpp iabbrev i32 int32_t
-    au FileType c,cpp iabbrev i64 int64_t
+    au FileType c,cpp iabbrev <buffer> i32 int32_t
+    au FileType c,cpp iabbrev <buffer> i64 int64_t
     " Quickly insert JavaDoc-style comments
-    au FileType c,cpp,java  iabbrev /** /**<CR><CR>/<Up>
+    au FileType c,cpp,java  iabbrev <buffer> /** /**<CR><CR>/<Up>
+
+    " shebang
+    au FileType python  iabbrev <buffer> #! #!/usr/bin/env python3
+    au FileType sh,bash iabbrev <buffer> #! #!/bin/bash
+
 augroup END
 
 
@@ -919,8 +959,10 @@ else
     " unicode symbols
     " let g:airline_left_sep = ' »'
     " let g:airline_left_sep = '▶'
+    let g:airline_left_sep = ''
     " let g:airline_right_sep = '« '
     " let g:airline_right_sep = '◀'
+    let g:airline_right_sep = ''
     let g:airline_left_sep = ''
     let g:airline_right_sep = ''
 endif
@@ -936,7 +978,7 @@ let g:airline_symbols.paste = 'ρ'
 let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = 'Ɇ'
 let g:airline_symbols.whitespace = 'Ξ'
-let g:airline_symbols.dirty='⚡'
+let g:airline_symbols.dirty='✗'
 
 " Customize the modified indicator
 function! AirlineInit()
@@ -958,7 +1000,7 @@ let g:airline#extensions#default#section_truncate_width = {
             \ }
 
 let g:airline_extensions = [
-            \ 'branch', 'tabline', 'fzf', 'po', 'term', 'coc', 'cursormode',
+            \ 'branch', 'tabline', 'fzf', 'term', 'coc',
             \ 'undotree', 'vimtex', 'whitespace'
             \ ]
 
@@ -987,8 +1029,13 @@ let g:airline#extensions#branch#displayed_head_limit = 10
 
 " whitespace
 let g:airline#extensions#whitespace#enabled = 1
+" disable the mixed-indent-file check
+let g:airline#extensions#whitespace#checks =
+            \ [ 'indent', 'trailing', 'long', 'conflicts' ]
 let airline#extensions#c_like_langs =
             \ ['arduino', 'c', 'cpp', 'cuda', 'go', 'javascript', 'ld', 'php']
+
+au vimrc FileType gitcommit call airline#extensions#whitespace#disable()
 
 
 " - asynctasks.vim {{{2
@@ -1025,7 +1072,7 @@ function! s:asynctasks_fzf()
             let opts[key] = deepcopy(g:fzf_layout[key])
         endfor
     endif
-    call fzf#run(fzf#wrap(opts))
+    call fzf#run(opts)
 endfunction
 
 command! -nargs=0 AsyncTaskFzf call s:asynctasks_fzf()
@@ -1034,6 +1081,7 @@ command! -nargs=0 AsyncTaskFzf call s:asynctasks_fzf()
 " - coc.nvim {{{2
 " ---------------------------
 
+let g:coc_config_home = '~/.vim'
 " Will be automatically installed
 " After changing this list, reload vimrc and run :CocRestart
 let g:coc_global_extensions = [
@@ -1049,6 +1097,7 @@ let g:coc_global_extensions = [
             \ 'coc-yaml',
             \ 'coc-toml',
             \ 'coc-python',
+            \ 'coc-vimtex',
             \ 'coc-rls',
             \ 'coc-vimlsp',
             \ 'coc-emoji',
@@ -1059,12 +1108,6 @@ let g:coc_global_extensions = [
 inoremap <silent><expr> <tab>
             \ pumvisible() ? coc#_select_confirm()
             \ : "\<tab>"
-
-function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :<C-u>call <SID>show_documentation()<CR>
@@ -1092,6 +1135,11 @@ omap ac <Plug>(coc-classobj-a)
 command! -nargs=? Fold   :set foldcall CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer.
 command! OR :call CocAction('runCommand', 'editor.action.organizeImport')
+
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of language server.
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
 
 " Configure Snippets
 command! SnipEdit     :CocCommand snippets.editSnippets
@@ -1204,6 +1252,8 @@ let g:fzf_action = {
 
 " [Buffers] Jump to the existing window if possible
 let g:fzf_buffers_jump = 1
+
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6 } }
 
 let g:fzf_colors = {
           \ 'fg':      ['fg', 'Normal'],
@@ -1416,6 +1466,10 @@ vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
 
 " }}}
 
+" - vim-polyglot {{{2
+let g:polyglor_disabled = ['markdown']
+
+
 " - vim-markdown {{{2
 
 let g:vim_markdown_folding_style_pythonic = 1
@@ -1429,18 +1483,17 @@ let g:vim_markdown_json_frontmatter = 1
 " - vimtex {{{2
 
 let g:tex_flavor = 'latex'
-" Use latexmk or tectonic
+
 let g:vimtex_compiler_method = "latexmk"
 
 " If using latexmk, make sure to call XeLaTeX to support CJK
 let g:vimtex_compiler_latexmk = {
             \ 'build_dir' : '',
             \ 'callback' : 1,
-            \ 'continuous' : 1,
+            \ 'continuous' : 0,
             \ 'executable' : 'latexmk',
             \ 'hooks' : [],
             \ 'options' : [
-            \   '-xelatex',
             \   '-verbose',
             \   '-file-line-error',
             \   '-synctex=1',
@@ -1448,6 +1501,35 @@ let g:vimtex_compiler_latexmk = {
             \ ],
             \}
 
+let g:vimtex_compiler_latexmk_engines = {
+            \ '_'                : '-xelatex',
+            \ 'pdflatex'         : '-pdf',
+            \ 'dvipdfex'         : '-pdfdvi',
+            \ 'lualatex'         : '-lualatex',
+            \ 'xelatex'          : '-xelatex',
+            \ 'context (pdftex)' : '-pdf -pdflatex=texexec',
+            \ 'context (luatex)' : '-pdf -pdflatex=context',
+            \ 'context (xetex)'  : '-pdf -pdflatex=''texexec --xtx''',
+            \}
+
+nnoremap <silent> <LocalLeader>lt
+            \ :call vimtex#fzf#run('ctli', g:fzf_layout)<CR>
+
+" nvim-treesitter {{{2
+
+if has('nvim-0.5.0')
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+    ensure_installed = "maintained",
+    highlight = {
+        enable = true,
+    },
+    indent = {
+        enable = true,
+    },
+}
+EOF
+endif
 
 " - semshi {{{2
 
@@ -1488,11 +1570,6 @@ augroup vimrc
                 \ :CocCommand python.setInterpreter<CR>
     au FileType python   map <buffer><silent> <LocalLeader>l
                 \ :CocCommand python.enableLinting<CR>
-    au FileType python  iabbrev <buffer> #! #!/usr/bin/env python3
-
-    " shell
-    au FileType sh,bash iabbrev <buffer> #! #!/bin/bash
-
 augroup END
 
 " END File type settings }}}1

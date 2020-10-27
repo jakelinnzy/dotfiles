@@ -10,8 +10,8 @@ if [ "$(uname)" = "Linux" ]; then
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 fi
 export PATH="$PATH:/usr/local/sbin"
-export PATH="$PATH:$HOME/.cargo/bin" # cargo
 export PATH="$PATH:$HOME/opt/bin:$HOME/.local/bin"
+export PATH="$PATH:$HOME/.cargo/bin" # cargo
 export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH" # ghc
 
 # END PATH }}}
@@ -22,25 +22,25 @@ export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH" # ghc
 # should be called before compinit
 if type brew &>/dev/null; then
     local brew_prefix=$(brew --prefix)
-    FPATH="$brew_prefix/share/zsh/site-functions:$FPATH"
+    fpath=($brew_prefix/share/zsh/site-functions $fpath)
 fi
+fpath=(~/.zfunc /usr/local/share/zsh-completions $fpath)
 
+# use oh-my-zsh's plugins
 ZSH=$(antibody path ohmyzsh/ohmyzsh)
-source <(antibody init)
+plugins=(autojump git)
 
+source <(antibody init)
+antibody bundle zsh-users/zsh-completions
 antibody bundle ohmyzsh/ohmyzsh
-antibody bundle ohmyzsh/ohmyzsh path:plugins/autojump
-antibody bundle ohmyzsh/ohmyzsh path:plugins/git
 antibody bundle zsh-users/zsh-syntax-highlighting
 antibody bundle zsh-users/zsh-autosuggestions
-antibody bundle zsh-users/zsh-completions
+antibody bundle lukechilds/zsh-better-npm-completion
 antibody bundle MichaelAquilina/zsh-autoswitch-virtualenv
 # antibody bundle djui/alias-tips
 
 # - color theme
-export TYPEWRITTEN_COLORS='arrow:yellow;symbol:yellow;'\
-'symbol_root:magenta;current_directory:cyan;'\
-'right_prompt_prefix:242'
+export TYPEWRITTEN_COLORS='arrow:yellow;symbol:yellow;symbol_root:magenta;current_directory:cyan;right_prompt_prefix:242'
 export TYPEWRITTEN_GIT_RELATIVE_PATH=false
 export TYPEWRITTEN_RIGHT_PROMPT_PREFIX="# "
 export TYPEWRITTEN_CURSOR="terminal"  # underscore / terminal
@@ -48,24 +48,30 @@ antibody bundle reobin/typewritten
 
 # END antibody config }}}
 
-# Settings {{{1
+# Settings & aliases {{{1
 
-export EDITOR="nvim"
+# Neovim (nvim remote)
+# This prevents nested nvim
+if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
+    export VISUAL="nvr -cc tabedit --remote-wait +'set bufhidden=wipe'"
+else
+    export VISUAL="nvim"
+fi
+export EDITOR="$VISUAL"
+export GIT_EDITOR="$VISUAL"
+alias v="$VISUAL"
 
 # Compilation flags
-export CFLAGS="-Wall -Wextra -std=c99"
-export CXXFLAGS="-Wall -Wextra -std=c++17"
+export CFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c99"
+export CXXFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c++17"
 
 # make pkg-config find icu
 export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-# Sets http_proxy, https_proxy, and all_proxy to break GFW
-# Comment when not needed
-[ -s ~/.export_proxy.zsh ] && source ~/.export_proxy.zsh
+# fzf & ripgrep
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
+export FZF_DEFAULT_COMMAND="rg --files"
 
-# Aliases {{{1
-alias v=nvim
-alias zshrc="nvim ~/.zshrc"
 alias la="ls -Ah"
 alias lla="ls -lAh"
 alias coa="conda activate"
@@ -131,13 +137,17 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # fzf {{{2
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# direnv {{{2
+type direnv > /dev/null && eval "$(direnv hook zsh)"
+direnv() { asdf exec direnv "$@"; }
+
 # END Initialisation }}}1
 
 [ -f ~/.zshrc_after ] && source ~/.zshrc_after
 
 # reset the $? variable so it doesn't mess up the prompt
 :
-
 
 # zsh profiler
 # zprof

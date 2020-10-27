@@ -7,11 +7,15 @@
 
 - create:
     - ~/repos
+    - ~/.zfunc
 
 - link:
     ~/.dotfiles: "" # This links ~/.dotfiles to this repo
+    ~/.editorconfig: editorconfig
     ~/.clang-format: clang-format
     ~/.condarc: condarc
+    # direnv
+    ~/.config/direnv: direnv
     ~/.inputrc: inputrc
     # kitty
     ~/.config/kitty/kitty.conf: kitty/kitty.conf
@@ -19,11 +23,12 @@
     ~/.config/i3:
         if: '[ $(uname) = Linux ]'
         path: i3
+    ~/.config/ripgrep/ripgreprc: ripgrep/ripgreprc
     # zsh
     ~/.zshrc: zshrc
     # git & github-cli
     ~/.gitconfig: git/gitconfig
-    ~/.gitignore_global: git/gitignore_global
+    ~/.config/git/ignore: git/ignore
     ~/.config/gh: github-cli
     # vim
     ~/.config/nvim: nvim
@@ -47,7 +52,6 @@
 
 - shell:
     - ['touch ~/.gitconfig_local
-       ~/.config/alacritty/alacritty_local.yml
        ~/.config/kitty/local.conf
        ~/.vimrc_before ~/.vimrc_after ~/.vim/bookmarks
        ~/.zshrc_before ~/.zshrc_after', "Creating local files"]
@@ -57,6 +61,11 @@
          curl -fLo ~/.vim/autoload/plug.vim --create-dirs
          https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
         "Installing vim-plug"
+      ]
+    - [
+        'type nvim > /dev/null && nvim -es -u nvim/init.vim -i NONE -c
+        "PlugInstall" -c "qa"',
+        "Installing vim plugins"
       ]
 
 # vim: expandtab shiftwidth=4 softtabstop=4

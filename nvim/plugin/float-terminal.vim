@@ -45,6 +45,8 @@ function! s:float_terminal_open() abort
         setl norelativenumber
         setl modifiable
         setl bufhidden=hide
+        au BufEnter <buffer>
+                    \ startinsert
         au TermLeave <buffer>
                     \ if bufexists(s:float_terminal_buffer) |
                     \     close |

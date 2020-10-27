@@ -1,0 +1,4 @@
+--smart-case
+--glob=!.git
+--ignore
+--hidden

@@ -1,10 +1,17 @@
+set meta-flag on
+set convert-meta on
+set input-meta on
+set output-meta on
+
+"\M-b": backward-word
+"\M-f": forward-word
 "\C-p":history-search-backward
 "\C-n":history-search-forward
 
-set colored-stats On
-set completion-ignore-case On
+set colored-stats on
+set completion-ignore-case on
 set completion-prefix-display-length 3
-set mark-symlinked-directories On
-# set show-all-if-ambiguous On
-# set show-all-if-unmodified On
-set visible-stats On
+set mark-symlinked-directories on
+# set show-all-if-ambiguous on
+# set show-all-if-unmodified on
+set visible-stats on

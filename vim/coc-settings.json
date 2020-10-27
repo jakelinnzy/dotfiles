@@ -6,33 +6,34 @@
       "schema": { "allowTrailingCommas": true }
     }
   ],
+  // -- coc
   "coc.preferences.jumpCommand": "tab drop",
   "snippets.extends": {
     "cpp": ["c"]
   },
-  // Python
+  // -- coc diagnostics
+  "diagnostic.enable": true,
+  "diagnostic.level": "hint",
+  "diagnostic.messageTarget": "float",
+  "diagnostic.refreshAfterSave": true,
+  // "diagnostic.virtualText": true,
+  "diagnostic.errorSign": "🔴",
+  "diagnostic.warningSign": "🟠",
+  "diagnostic.infoSign": "🟢",
+  "diagnostic.hintSign": "🔵",
+  // -- Python
   // This enables Microsoft's Python Language Server
   "python.jediEnabled": false,
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
   "python.linting.pylintUseMinimalCheckers": false,
   "python.linting.pylintPath": "python3 -m pylint",
-  // C/C++
+  // -- C/C++
   "clangd.arguments": ["-header-insertion=never"],
   "clangd.fallbackFlags": ["-Wall", "-Ilib"],
-  // LaTeX
-  // "latex.build.executable": "tectonic",
-  // "latex.build.args": [
-  //     "%f",
-  //     "--synctex",
-  //     "--keep-logs",
-  //     "--keep-intermediates",
-  //     // "--outdir out"
-  // ],
-  // "latex.build.outputDirectory": "out",
-  // TSServer
+  // -- TSServer
   "tsserver.formatOnType": false,
-  // Prettier
+  // -- Prettier
   "prettier.formatterPriority": 1,
 
   "languageserver": {

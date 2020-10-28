@@ -51,13 +51,7 @@ antigen bundle lukechilds/zsh-better-npm-completion
 antigen bundle MichaelAquilina/zsh-autoswitch-virtualenv
 # antigen bundle djui/alias-tips
 
-# - color theme
-export TYPEWRITTEN_COLORS='arrow:yellow;symbol:yellow;symbol_root:magenta;current_directory:cyan;right_prompt_prefix:242'
-export TYPEWRITTEN_GIT_RELATIVE_PATH=false
-export TYPEWRITTEN_RIGHT_PROMPT_PREFIX="# "
-export TYPEWRITTEN_CURSOR="terminal"  # underscore / terminal
 antigen theme romkatv/powerlevel10k
-# antigen theme reobin/typewritten@main
 
 antigen apply
 

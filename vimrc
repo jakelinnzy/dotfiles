@@ -1487,7 +1487,7 @@ let g:polyglor_disabled = ['markdown']
 
 " - vim-markdown {{{2
 
-let g:vim_markdown_folding_style_pythonic = 0
+let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_math = 1
 let g:vim_markdown_strikethrough = 1
 let g:vim_markdown_conceal_code_blocks = 0
@@ -1581,6 +1581,7 @@ augroup vimrc
 
     " Markdown
     " au FileType markdown setlocal conceallevel=2
+    au FileType markdown setlocal foldlevel=999
 
     " Python
     " \i to set coc-python's interpreter

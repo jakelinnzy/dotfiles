@@ -39,11 +39,11 @@
   # automatically hidden when the input line reaches it. Right prompt above the
   # last prompt line gets hidden if it would overlap with left prompt.
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
-    my_separator            # a # sign
     status                  # exit code of the last command
+    my_separator            # a # sign
     dir                     # current directory
     vcs                     # git status
-    # command_execution_time  # duration of the last command
+    command_execution_time  # duration of the last command
     background_jobs         # presence of background jobs
     direnv                  # direnv status (https://direnv.net/)
     asdf                    # asdf version manager (https://github.com/asdf-vm/asdf)
@@ -199,14 +199,14 @@
 
   ##################################[ dir: current directory ]##################################
   # Default current directory color.
-  typeset -g POWERLEVEL9K_DIR_FOREGROUND=11
+  typeset -g POWERLEVEL9K_DIR_FOREGROUND=3
   # If directory is too long, shorten some of its segments to the shortest possible unique
   # prefix. The shortened directory can be tab-completed to the original.
   typeset -g POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_unique
   # Replace removed segment suffixes with this symbol.
   typeset -g POWERLEVEL9K_SHORTEN_DELIMITER=
   # Color of the shortened directory segments.
-  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=220
+  typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=247
   # Color of the anchor directory segments. Anchor segments are never shortened. The first
   # segment is always an anchor.
   typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=3
@@ -354,7 +354,7 @@
       # Styling for up-to-date Git status.
       local       meta='%f'      # default foreground
       local      clean='%155F'   # green foreground
-      local   modified='%11F'    # yellow foreground
+      local   modified='%210F'   # yellow foreground
       local  untracked='%51F'    # blue foreground
       local conflicted='%129F'   # red foreground
     else
@@ -487,7 +487,7 @@
 
   # Status when it's just an error code (e.g., '1'). No need to show it if prompt_char is enabled as
   # it will signify error by turning red.
-  typeset -g POWERLEVEL9K_STATUS_ERROR=false
+  typeset -g POWERLEVEL9K_STATUS_ERROR=true
   typeset -g POWERLEVEL9K_STATUS_ERROR_FOREGROUND=160
   typeset -g POWERLEVEL9K_STATUS_ERROR_VISUAL_IDENTIFIER_EXPANSION='✘'
 

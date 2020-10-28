@@ -75,6 +75,7 @@ if s:patched_font
     Plug 'ryanoasis/vim-devicons'
 endif
 Plug 'liuchengxu/vim-which-key'
+" Zen mode
 Plug 'junegunn/goyo.vim'
 Plug 'junegunn/limelight.vim'
 if has('nvim')
@@ -88,6 +89,7 @@ endif
 
 " Languages
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
 Plug 'editorconfig/editorconfig-vim'
 Plug 'skywind3000/asynctasks.vim'
 Plug 'skywind3000/asyncrun.vim'
@@ -250,6 +252,7 @@ set nobackup        " Language Servers may have issue with backup
 set nowritebackup
 
 set lazyredraw      " Don't redraw while executing macros, etc.
+set synmaxcol=500   " Don't highlight long lines
 
 set timeout         " time out for key combinations e.g dd
 set timeoutlen=1000
@@ -531,16 +534,17 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 let g:which_key_leader = {
             \ 'f': { 'name': '+file/find',
             \        'e': { 'name': '+edit' },
-            \        'c': { 'name': '+copy/close' },
+            \        'c': { 'name': '+find-coc' },
+            \        'd': { 'name': '+delete' },
             \        'n': { 'name': '+new' },
             \        'N': { 'name': '+new from clipboard' },
+            \        'y': { 'name': '+yank' },
             \        'g': {}, },
             \ 'r': { 'name': '+run' },
             \ 'e': { 'name': '+editing' },
             \ 'g': { 'name': '+goto/git',
             \        's': {} },
-            \ 'l': { 'name': '+language',
-            \        'r': { 'name': '+rename/refactor' }, },
+            \ 'l': { 'name': '+language', },
             \ 'w': { 'name': '+window',
             \        'm': { 'name': '+move' },
             \        'w': { 'name': '+width' },
@@ -550,8 +554,7 @@ let g:which_key_leader = {
             \        'a': { 'name': '+autoformat' },
             \        'r': { 'name': '+relative...' },
             \        'd': {},
-            \        'c': { 'name': '+cursor/coc' },
-            \        }
+            \        'c': { 'name': '+cursor/coc' }, },
             \ }
 " <Leader>q to quit the current buffer with Sayonara
 nnoremap <silent> <Leader>q :Sayonara<CR>
@@ -591,16 +594,16 @@ let g:which_key_leader.f.e.d = 'Edit dictionary'
 " File - Edit - Snippet
 nnoremap <silent> <Leader>fes :silent SnipEdit<CR>
 let g:which_key_leader.f.e.s = 'Edit Snippets'
-" File - Copy - Content (copy the whole file to system clipboard)
-nnoremap <silent> <Leader>fcc gg"+yG<C-o>:<C-u>echom "Copied to clipboard"<CR>
-let g:which_key_leader.f.c.c = 'Copy file content'
-" File - Copy - Path (copy the full path to system clipboard)
-nnoremap <silent> <Leader>fcp :<C-u>let @+ = expand("%:p") <Bar>
+" File - Yank - Content (copy the whole file to system clipboard)
+nnoremap <silent> <Leader>fyc gg"+yG<C-o>:<C-u>echom "Copied to clipboard"<CR>
+let g:which_key_leader.f.y.c = 'Copy file content'
+" File - Yank - Path (copy the full path to system clipboard)
+nnoremap <silent> <Leader>fyp :<C-u>let @+ = expand("%:p") <Bar>
             \ echom "Copied "..@+.." to clipboard"<CR>
-let g:which_key_leader.f.c.p = 'Copy file path'
+let g:which_key_leader.f.y.p = 'Copy file path'
 " File - Close - Hidden
-nnoremap <silent> <Leader>fch :<C-u>call DeleteHiddenBuffers()<CR>
-let g:which_key_leader.f.c.h = 'Close hidden buffers'
+nnoremap <silent> <Leader>fdh :<C-u>call DeleteHiddenBuffers()<CR>
+let g:which_key_leader.f.d.h = 'Delete hidden buffers'
 
 " File(buffer) - New (open an empty buffer that can be thrown away at any time)
 nnoremap <silent> <Leader>fnn :<C-u>Scratch<CR>
@@ -634,19 +637,27 @@ nnoremap <silent> <Leader>fs :<C-u>Startify<CR>
 let g:which_key_leader.f.s = 'Startify'
 
 " Find - Files (search for files with fzf.vim)
-nnoremap <silent> <Leader>ff  :<C-u>silent Files<CR>
+"     also <leader>i
+nnoremap <silent> <Leader>ff  :<C-u>Files<CR>
 let g:which_key_leader.f.f = 'Find files'
-nnoremap <silent> <Leader>fz  :<C-u>silent Files<CR>
-let g:which_key_leader.f.z = 'Find files'
 " Find - Ripgrep <Leader>fr to call ripgrep
-nnoremap <silent> <Leader>fr  :<C-u>silent Rg<CR>
-let g:which_key_leader.f.z = 'Find with Rg'
+nnoremap <silent> <Leader>fr  :<C-u>silent FRg<CR>
+let g:which_key_leader.f.r = 'Find with Rg'
 " Find - Git - Commits
 nnoremap <silent> <Leader>fgc :<C-u>silent Commits<CR>
 let g:which_key_leader.f.g.c = 'Commits'
 " Find - Helptags
 nnoremap <silent> <Leader>fh  :<C-u>silent Helptags<CR>
 let g:which_key_leader.f.h = 'Find Helptags'
+" Find - CocCommands
+nnoremap <silent> <Leader>fcl :CocFzfList<CR>
+let g:which_key_leader.f.c.l = 'CocFzfList'
+nnoremap <silent> <Leader>fcc :CocFzfList commands<CR>
+let g:which_key_leader.f.c.c = 'commands'
+nnoremap <silent> <Leader>fco :CocFzfList outline<CR>
+let g:which_key_leader.f.c.o = 'outline'
+nnoremap <silent> <Leader>fcs :CocFzfList sources<CR>
+let g:which_key_leader.f.c.s = 'sources'
 
 " Edit - Trim (trailing whitespaces and newlines)
 nnoremap <silent> <Leader>et :<C-u>call TrimTrailingWhitespace()<CR>
@@ -698,13 +709,13 @@ nnoremap <silent> <Leader>gst :<C-u>Git status<CR>
 let g:which_key_leader.g.s.t = 'git status'
 
 " Language - Commands (coc)
-nnoremap <Leader>lc :CocList commands<CR>
-" Language - ReName
-nmap <Leader>lrn <Plug>(coc-rename)
-let g:which_key_leader.l.r.n = 'Rename'
-" Language - ReFactor
-nmap <Leader>lrf <Plug>(coc-refactor)
-let g:which_key_leader.l.r.f = 'Refactor'
+nnoremap <Leader>lc :CocFzfList commands<CR>
+" Language - Rename
+nmap <Leader>lr <Plug>(coc-rename)
+let g:which_key_leader.l.r = 'Rename'
+" Language - reFactor
+nmap <Leader>lf <Plug>(coc-refactor)
+let g:which_key_leader.l.f = 'Refactor'
 " Language - Go to definition
 nmap <silent> <Leader>lg <Plug>(coc-definition)
 let g:which_key_leader.l.g = 'Go to definition'
@@ -714,12 +725,11 @@ let g:which_key_leader.l.i = 'Go to implementation'
 " Language - Action
 "     Example: `<Leader>aap` for current paragraph
 xmap <Leader>la   <Plug>(coc-codeaction-selected)
-nmap <Leader>la   <Plug>(coc-codeaction-selected)
-let g:which_key_leader.l.a = 'Code Action'
+let g:which_key_leader.l.a = { 'name': 'Code Action' }
 "     for the current line
 nmap <Leader>lac  <Plug>(coc-codeaction)
 " Language - Diagnostics
-nnoremap <silent> <Leader>ld :<C-u>CocList diagnostics<CR>
+nnoremap <silent> <Leader>ld :<C-u>CocFzfList diagnostics<CR>
 let g:which_key_leader.l.d = 'Diagnostics'
 
 " Window - Move - h/j/k/l
@@ -1081,8 +1091,10 @@ command! -nargs=0 AsyncTaskFzf call s:asynctasks_fzf()
 " - coc.nvim {{{2
 " ---------------------------
 
+" Config file at ~/.vim/coc-settings.json
 let g:coc_config_home = '~/.vim'
-" Will be automatically installed
+
+" These coc extensions will be automatically installed
 " After changing this list, reload vimrc and run :CocRestart
 let g:coc_global_extensions = [
             \ 'coc-snippets',
@@ -1132,7 +1144,7 @@ xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 
 " Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold   :set foldcall CocAction('fold', <f-args>)
+command! -nargs=? Fold   :call CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer.
 command! OR :call CocAction('runCommand', 'editor.action.organizeImport')
 
@@ -1244,7 +1256,6 @@ let g:EditorConfig_max_line_indicator = "exceeding"
 " - FZF.vim {{{2
 
 let g:fzf_action = {
-            \ 'ctrl-m': 'drop',
             \ 'ctrl-t': 'tab split',
             \ 'ctrl-s': 'split',
             \ 'ctrl-v': 'vsplit'
@@ -1271,8 +1282,12 @@ let g:fzf_colors = {
           \ 'header':  ['fg', 'Comment']
           \ }
 
+let g:fzf_preview_window = ['right:50%', 'ctrl-/']
+
 imap <C-x><C-f> <Plug>(fzf-complete-path)
 imap <C-x><C-l> <Plug>(fzf-complete-line)
+
+command! -bang -nargs=* FRg call fzf#vim#grep("rg --line-number --no-heading --color=always --smart-case -- ".shellescape(<q-args>), 0)
 
 " - goyo & limelight {{{2
 
@@ -1472,9 +1487,10 @@ let g:polyglor_disabled = ['markdown']
 
 " - vim-markdown {{{2
 
-let g:vim_markdown_folding_style_pythonic = 1
+let g:vim_markdown_folding_style_pythonic = 0
 let g:vim_markdown_math = 1
 let g:vim_markdown_strikethrough = 1
+let g:vim_markdown_conceal_code_blocks = 0
 let g:vim_markdown_frontmatter = 1
 let g:vim_markdown_toml_frontmatter = 1
 let g:vim_markdown_json_frontmatter = 1
@@ -1523,9 +1539,11 @@ require'nvim-treesitter.configs'.setup {
     ensure_installed = "maintained",
     highlight = {
         enable = true,
+        disable = { "bash", "zsh" },
     },
     indent = {
         enable = true,
+        disable = { "bash", "zsh" },
     },
 }
 EOF
@@ -1562,7 +1580,7 @@ augroup vimrc
     au FileType make     setlocal noexpandtab
 
     " Markdown
-    au FileType markdown setlocal conceallevel=2
+    " au FileType markdown setlocal conceallevel=2
 
     " Python
     " \i to set coc-python's interpreter

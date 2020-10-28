@@ -47,10 +47,7 @@ function! s:float_terminal_open() abort
         setl bufhidden=hide
         au BufEnter <buffer>
                     \ startinsert
-        au TermLeave <buffer>
-                    \ if bufexists(s:float_terminal_buffer) |
-                    \     close |
-                    \ endif
+        tnoremap <buffer> <Esc> <C-\><C-n>:close<CR>
     endif
     startinsert
 endfunction

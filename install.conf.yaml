@@ -8,6 +8,7 @@
 - create:
     - ~/repos
     - ~/.zfunc
+    - ~/.local
 
 - link:
     ~/.dotfiles: "" # This links ~/.dotfiles to this repo
@@ -26,6 +27,7 @@
     ~/.config/ripgrep/ripgreprc: ripgrep/ripgreprc
     # zsh
     ~/.zshrc: zshrc
+    ~/.p10k.zsh: zsh-p10k/p10k.zsh
     # git & github-cli
     ~/.gitconfig: git/gitconfig
     ~/.config/git/ignore: git/ignore
@@ -56,6 +58,8 @@
        ~/.vimrc_before ~/.vimrc_after ~/.vim/bookmarks
        ~/.zshrc_before ~/.zshrc_after', "Creating local files"]
     - ["git submodule update --init --recursive", "Installing submodules"]
+    - ['[ -f ~/.local/antigen.sh ] ||
+        curl -L git.io/antigen > ~/.local/antigen.zsh', "installing antigen"]
     - [
         '[ -f ~/.vim/autoload/plug.vim ] ||
          curl -fLo ~/.vim/autoload/plug.vim --create-dirs

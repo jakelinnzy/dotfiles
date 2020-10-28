@@ -1,3 +1,4 @@
+
 # zsh profiler
 # zmodload zsh/zprof
 # to use, add `zprof` to end of .zshrc
@@ -16,7 +17,14 @@ export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH" # ghc
 
 # END PATH }}}
 
-# plugin config (antibody) {{{1
+# plugin config (antigen) {{{1
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
 
 # loads zsh completions installed with homebrew
 # should be called before compinit
@@ -26,36 +34,47 @@ if type brew &>/dev/null; then
 fi
 fpath=(~/.zfunc /usr/local/share/zsh-completions $fpath)
 
-# use oh-my-zsh's plugins
-ZSH=$(antibody path ohmyzsh/ohmyzsh)
-plugins=(autojump git)
+source "$HOME/.local/antigen.zsh"
 
-source <(antibody init)
-antibody bundle zsh-users/zsh-completions
-antibody bundle ohmyzsh/ohmyzsh
-antibody bundle zsh-users/zsh-syntax-highlighting
-antibody bundle zsh-users/zsh-autosuggestions
-antibody bundle lukechilds/zsh-better-npm-completion
-antibody bundle MichaelAquilina/zsh-autoswitch-virtualenv
-# antibody bundle djui/alias-tips
+# use oh-my-zsh's plugins
+# plugins=(autojump git)
+
+antigen use oh-my-zsh
+
+antigen bundle git
+antigen bundle autojump
+
+antigen bundle zsh-users/zsh-completions
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
+antigen bundle lukechilds/zsh-better-npm-completion
+antigen bundle MichaelAquilina/zsh-autoswitch-virtualenv
+# antigen bundle djui/alias-tips
 
 # - color theme
 export TYPEWRITTEN_COLORS='arrow:yellow;symbol:yellow;symbol_root:magenta;current_directory:cyan;right_prompt_prefix:242'
 export TYPEWRITTEN_GIT_RELATIVE_PATH=false
 export TYPEWRITTEN_RIGHT_PROMPT_PREFIX="# "
 export TYPEWRITTEN_CURSOR="terminal"  # underscore / terminal
-antibody bundle reobin/typewritten
+antigen theme romkatv/powerlevel10k
+# antigen theme reobin/typewritten@main
 
-# END antibody config }}}
+antigen apply
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# END antigen config }}}
 
 # Settings & aliases {{{1
 
 # Neovim (nvim remote)
-# This prevents nested nvim
+# This prevents nested nvim in git commit etc.
 if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
     export VISUAL="nvr -cc tabedit --remote-wait +'set bufhidden=wipe'"
+    export MANPAGER="less -is"
 else
     export VISUAL="nvim"
+    export MANPAGER='nvim +Man!'
 fi
 export EDITOR="$VISUAL"
 export GIT_EDITOR="$VISUAL"
@@ -71,6 +90,7 @@ export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"
 # fzf & ripgrep
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
 export FZF_DEFAULT_COMMAND="rg --files"
+
 
 alias la="ls -Ah"
 alias lla="ls -lAh"

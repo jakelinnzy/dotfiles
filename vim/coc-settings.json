@@ -7,7 +7,7 @@
     }
   ],
   // -- coc
-  "coc.preferences.jumpCommand": "tab drop",
+  "coc.preferences.jumpCommand": "edit",
   "snippets.extends": {
     "cpp": ["c"]
   },
@@ -35,6 +35,12 @@
   "tsserver.formatOnType": false,
   // -- Prettier
   "prettier.formatterPriority": 1,
+  // -- Rust
+  "rust.all_features": true,
+  "rust-client.updateOnStartup": true,
+  "rust-client.trace.server": "verbose",
+  "rust-client.channel": "nightly",
+  "rust.racer_completion": true,
 
   "languageserver": {
     "haskell": {

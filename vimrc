@@ -568,23 +568,24 @@ let g:which_key_leader['<Tab>'] = 'Alt-file'
 noremap <silent> <Leader><CR> :<C-u>noh<CR>
 let g:which_key_leader['<CR>'] = 'No-highlight'
 
-let g:which_key_leader.p = ['Files', 'Find files']
+let g:which_key_leader.p = [':Files', 'Find files']
 if has('nvim')
-    let g:which_key_leader.o = ['OpenTerm', 'Open terminal']
+    let g:which_key_leader.o = [':OpenTerm', 'Open terminal']
 endif
 
-" <Space>s to save current file
-nnoremap <silent> <leader>s :w<cr>
-let g:which_key_leader.s = 'Save file'
+" <Space>s to save current file if dirty
+" This prevents unwanted undo history in undofile
+let g:which_key_leader.s =
+            \ [':if &modified | silent! undojoin | w | endif', 'Save file']
 
 " File
 let g:which_key_leader.f.e = {
             \ 'name': '+edit',
-            \ 'v': ['tab drop ~/.vimrc', 'Edit .vimrc'],
-            \ 'c': ['CocConfig', 'Edit coc_settings.json'],
-            \ 't': ['tab drop ~/.vim/tasks.ini', 'Edit global tasks'],
-            \ 'd': ['call execute("tab drop ".&spellfile)', 'Edit dictionary'],
-            \ 's': ['SnipEdit', 'Edit snippets']
+            \ 'v': [':tab drop ~/.vimrc', 'Edit .vimrc'],
+            \ 'c': [':CocConfig', 'Edit coc_settings.json'],
+            \ 't': [':tab drop ~/.vim/tasks.ini', 'Edit global tasks'],
+            \ 'd': [':call execute("tab drop ".&spellfile)', 'Edit dictionary'],
+            \ 's': [':SnipEdit', 'Edit snippets']
             \ }
 
 " File - Yank - Content (copy the whole file to system clipboard)
@@ -662,11 +663,11 @@ vmap <Leader>ef <Plug>(coc-format-selected)
 " Run
 let g:which_key_leader.r = {
             \ 'name': '+run',
-            \ 's': ['AsyncTaskFzf', 'Select task...'],
-            \ 'b': ['AsyncTask project-build', 'Build project'],
-            \ 'r': ['AsyncTask project-run', 'Run project'],
-            \ 't': ['AsyncTask project-test', 'Test project'],
-            \ 'f': ['AsyncTask file-run', 'Run current file'],
+            \ 's': [':AsyncTaskFzf', 'Select task...'],
+            \ 'b': [':AsyncTask project-build', 'Build project'],
+            \ 'r': [':AsyncTask project-run', 'Run project'],
+            \ 't': [':AsyncTask project-test', 'Test project'],
+            \ 'f': [':AsyncTask file-run', 'Run current file'],
             \ }
 
 " Goto - History
@@ -1409,7 +1410,16 @@ call textobj#user#plugin('file', {
 
 " - undotree {{{2
 
+let g:undotree_WindowLayout = 3
+let g:undotree_ShortIndicators = 1
+let g:undotree_SetFocusWhenToggle = 1
+let g:undotree_HelpLine = 0
 nnoremap <silent> U :<C-u>UndotreeToggle<CR>
+
+function! g:Undotree_CustomMap()
+    nmap <buffer> p <Plug>UndotreePreviousState
+    nmap <buffer> n <Plug>UndotreeNextState
+endfunction
 
 if has('persistent_undo')
     set undodir=$HOME/.undodir
@@ -1417,6 +1427,7 @@ if has('persistent_undo')
 
     augroup vimrc
         au BufWritePre /tmp/* setlocal noundofile
+        au FileType gitcommit setlocal noundofile
     augroup END
 endif
 

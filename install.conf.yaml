@@ -27,7 +27,7 @@
     ~/.config/ripgrep/ripgreprc: ripgrep/ripgreprc
     # zsh
     ~/.zshrc: zshrc
-    ~/.p10k.zsh: zsh-p10k/p10k.zsh
+    ~/.config/zsh: zsh
     # git & github-cli
     ~/.gitconfig: git/gitconfig
     ~/.config/git/ignore: git/ignore

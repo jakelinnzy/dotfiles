@@ -35,24 +35,25 @@ fpath=(~/.zfunc /usr/local/share/zsh-completions $fpath)
 
 source "$HOME/.local/antigen.zsh"
 
+
 # use oh-my-zsh's plugins
 antigen use oh-my-zsh
 antigen bundle git
 antigen bundle autojump
 
 antigen bundle zsh-users/zsh-completions
-antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle lukechilds/zsh-better-npm-completion
 antigen bundle MichaelAquilina/zsh-autoswitch-virtualenv
 antigen bundle MichaelAquilina/zsh-you-should-use
+antigen bundle zsh-users/zsh-syntax-highlighting
 
 antigen theme romkatv/powerlevel10k
 
 antigen apply
 
 # powerlevel10k customizations
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
 
 # END antigen config }}}
 

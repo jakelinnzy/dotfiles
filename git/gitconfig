@@ -5,6 +5,8 @@
     name = Ziyang Lin
 [core]
     excludesfile = ~/.config/git/ignore
+[difftool "nvimdiff"]
+    cmd = "nvim -d -u ~/.config/nvim/init.vim \"$LOCAL\" \"$REMOTE\""
 [difftool "sourcetree"]
     cmd = opendiff \"$LOCAL\" \"$REMOTE\"
     path =

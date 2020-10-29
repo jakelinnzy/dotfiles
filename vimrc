@@ -33,6 +33,7 @@ source ~/.vimrc_before
 " curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 call plug#begin('~/.vim/plugged')
+
 Plug 'junegunn/vim-plug'        " For help document
 Plug 'jakelinzy/delimitMate'    " my fork
 Plug 'jakelinzy/vim-easymotion' " my fork
@@ -85,6 +86,8 @@ if has('nvim')
 endif
 if has('nvim-0.5.0')
     Plug 'nvim-treesitter/nvim-treesitter'
+    Plug 'iamcco/markdown-preview.nvim',
+                \ { 'do': 'cd app && yarn install', 'for': ['markdown'] }
 endif
 
 " Languages
@@ -111,8 +114,6 @@ Plug 'junegunn/seoul256.vim'
 Plug 'fenetikm/falcon'
 Plug 'embark-theme/vim', { 'as': 'embark' }
 
-" Plug '~/repos/runscript.vim'
-
 call plug#end()
 " - END vim-plug setup }}}1
 
@@ -128,7 +129,7 @@ augroup vimrc
     au!
 augroup END
 
-set encoding=utf8   " Set default encoding to utf-8
+set encoding=utf-8  " Set default encoding to utf-8. No effect for Neovim.
 
 set number          " Show line numbers
 set relativenumber  " Relative line numbers
@@ -146,6 +147,7 @@ set linebreak       " Wrap lines only at word breaks to improve readability. The
                     " actual file is not changed.
 set hidden          " Enables hidden buffer
                     " :DH to close all saved hidden buffers (see below)
+set clipboard=unnamedplus  " yank into system clipboard by default
 
 " - Tab width & indentation {{{1
 
@@ -514,6 +516,12 @@ tnoremap <M-j> <C-\><C-n><C-W>j
 tnoremap <M-k> <C-\><C-n><C-W>k
 tnoremap <M-l> <C-\><C-n><C-W>l
 
+" Resize windows using Alt+Shift
+nnoremap <M-H> :vertical resize -2<CR>
+nnoremap <M-J> :resize -2<CR>
+nnoremap <M-K> :resize +2<CR>
+nnoremap <M-L> :vertical resize +2<CR>
+
 " Ctrl-W t to move window to a new tab
 nnoremap <C-w>t <C-w>T
 
@@ -532,8 +540,9 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 " <Leader> {{{2
 
 let g:which_key_leader = {
+            \ 'q': [ ':silent Sayonara', 'Quit' ],
+            \ 'Q': [ ':silent Sayonara!', 'Quit (preserve window)' ],
             \ 'f': { 'name': '+file/find',
-            \        'e': { 'name': '+edit' },
             \        'c': { 'name': '+find-coc' },
             \        'd': { 'name': '+delete' },
             \        'n': { 'name': '+new' },
@@ -549,18 +558,8 @@ let g:which_key_leader = {
             \        'm': { 'name': '+move' },
             \        'w': { 'name': '+width' },
             \        'h': { 'name': '+height' }, },
-            \ 't': { 'name': '+toggle',
-            \        't': {},
-            \        'a': { 'name': '+autoformat' },
-            \        'r': { 'name': '+relative...' },
-            \        'd': {},
-            \        'c': { 'name': '+cursor/coc' }, },
+            \ 'S': [':Startify', 'Startify'],
             \ }
-" <Leader>q to quit the current buffer with Sayonara
-nnoremap <silent> <Leader>q :Sayonara<CR>
-let g:which_key_leader.q = 'Quit'
-nnoremap <silent> <Leader>Q :Sayonara!<CR>
-let g:which_key_leader.Q = 'Quit (preserve window)'
 
 " <Leader><Tab> goes to the alternate file
 noremap <Leader><Tab> <C-^>
@@ -569,31 +568,25 @@ let g:which_key_leader['<Tab>'] = 'Alt-file'
 noremap <silent> <Leader><CR> :<C-u>noh<CR>
 let g:which_key_leader['<CR>'] = 'No-highlight'
 
-nnoremap <silent> <Leader>i  :Files<CR>
-let g:which_key_leader.i = 'Find files'
-
+let g:which_key_leader.p = ['Files', 'Find files']
 if has('nvim')
-    nnoremap <silent> <Leader>o  :OpenTerm<CR>
-    let g:which_key_leader.o = 'Open terminal'
+    let g:which_key_leader.o = ['OpenTerm', 'Open terminal']
 endif
 
-" File - Edit - Vimrc
-nnoremap <silent> <Leader>fev :silent tab drop ~/.vimrc<CR>
-let g:which_key_leader.f.e.v = 'Edit .vimrc'
-" File - Edit - Coc-settings
-"     :CocConfig doesn't let you choose the way to open it
-nnoremap <silent> <Leader>fec :silent tab drop
-            \ ~/.dotfiles/vim/coc-settings.json<CR>
-let g:which_key_leader.f.e.c = 'Edit coc-settings.json'
-" File - Edit - Tasks
-nnoremap <silent> <Leader>fet :silent tab drop ~/.dotfiles/vim/tasks.ini<CR>
-let g:which_key_leader.f.e.t = 'Edit global tasks'
-" File - Edit - Dictionary
-nnoremap <silent> <Leader>fed :silent call execute('tab drop '..&spellfile)<CR>
-let g:which_key_leader.f.e.d = 'Edit dictionary'
-" File - Edit - Snippet
-nnoremap <silent> <Leader>fes :silent SnipEdit<CR>
-let g:which_key_leader.f.e.s = 'Edit Snippets'
+" <Space>s to save current file
+nnoremap <silent> <leader>s :w<cr>
+let g:which_key_leader.s = 'Save file'
+
+" File
+let g:which_key_leader.f.e = {
+            \ 'name': '+edit',
+            \ 'v': ['tab drop ~/.vimrc', 'Edit .vimrc'],
+            \ 'c': ['CocConfig', 'Edit coc_settings.json'],
+            \ 't': ['tab drop ~/.vim/tasks.ini', 'Edit global tasks'],
+            \ 'd': ['call execute("tab drop ".&spellfile)', 'Edit dictionary'],
+            \ 's': ['SnipEdit', 'Edit snippets']
+            \ }
+
 " File - Yank - Content (copy the whole file to system clipboard)
 nnoremap <silent> <Leader>fyc gg"+yG<C-o>:<C-u>echom "Copied to clipboard"<CR>
 let g:which_key_leader.f.y.c = 'Copy file content'
@@ -601,9 +594,9 @@ let g:which_key_leader.f.y.c = 'Copy file content'
 nnoremap <silent> <Leader>fyp :<C-u>let @+ = expand("%:p") <Bar>
             \ echom "Copied "..@+.." to clipboard"<CR>
 let g:which_key_leader.f.y.p = 'Copy file path'
-" File - Close - Hidden
-nnoremap <silent> <Leader>fdh :<C-u>call DeleteHiddenBuffers()<CR>
-let g:which_key_leader.f.d.h = 'Delete hidden buffers'
+
+" File - Delete - Hidden
+let g:which_key_leader.f.d.h = [':call DeleteHiddenBuffers()', 'Delete hidden buffers']
 
 " File(buffer) - New (open an empty buffer that can be thrown away at any time)
 nnoremap <silent> <Leader>fnn :<C-u>Scratch<CR>
@@ -632,9 +625,6 @@ let g:which_key_leader.f.N.V = 'Open buffer with clipboard (vsplit)'
 " File - Tree
 nnoremap <silent> <Leader>ft  :<C-u>NERDTreeToggle<CR>
 let g:which_key_leader.f.t = 'NERDTree'
-" File - Startify
-nnoremap <silent> <Leader>fs :<C-u>Startify<CR>
-let g:which_key_leader.f.s = 'Startify'
 
 " Find - Files (search for files with fzf.vim)
 "     also <leader>i
@@ -659,39 +649,35 @@ let g:which_key_leader.f.c.o = 'outline'
 nnoremap <silent> <Leader>fcs :CocFzfList sources<CR>
 let g:which_key_leader.f.c.s = 'sources'
 
-" Edit - Trim (trailing whitespaces and newlines)
-nnoremap <silent> <Leader>et :<C-u>call TrimTrailingWhitespace()<CR>
-let g:which_key_leader.e.t = 'Trim'
+" Edit
+let g:which_key_leader.e = {
+            \ 'name': '+edit',
+            \ 't': [':call TrimTrailingWhitespace()', 'Trim'],
+            \ 'f': 'Format'
+            \ }
 " Edit - Format
 nmap <Leader>ef <Plug>(coc-format)
-let g:which_key_leader.e.f = 'Format'
 vmap <Leader>ef <Plug>(coc-format-selected)
 
-" Run - Select (search task to run with FZF)
-nnoremap <silent> <Leader>rs :<C-u>AsyncTaskFzf<CR>
-let g:which_key_leader.r.s = 'Select task...'
-" Run - Build
-nnoremap <silent> <Leader>rb :<C-u>AsyncTask project-build<CR>
-let g:which_key_leader.r.b = 'Build project'
-" Run (project by default)
-nnoremap <silent> <Leader>rr :<C-u>AsyncTask project-run<CR>
-let g:which_key_leader.r.r = 'Run project'
-" Run - Test
-nnoremap <silent> <Leader>rt :<C-u>AsyncTask project-test<CR>
-let g:which_key_leader.r.t = 'Test project'
-" Run - File
-nnoremap <silent> <Leader>rf :<C-u>AsyncTask file-run<CR>
-let g:which_key_leader.r.f = 'Run current file'
+" Run
+let g:which_key_leader.r = {
+            \ 'name': '+run',
+            \ 's': ['AsyncTaskFzf', 'Select task...'],
+            \ 'b': ['AsyncTask project-build', 'Build project'],
+            \ 'r': ['AsyncTask project-run', 'Run project'],
+            \ 't': ['AsyncTask project-test', 'Test project'],
+            \ 'f': ['AsyncTask file-run', 'Run current file'],
+            \ }
 
 " Goto - History
 nnoremap <silent> <Leader>gh  :<C-u>History<CR>
 let g:which_key_leader.g.h = 'History files'
 " Goto - Buffer
-nnoremap <silent> gb          :<C-u>silent Buffers<CR>
-nnoremap <silent> <Leader>gb  :<C-u>silent Buffers<CR>
+nnoremap <silent> gb          :<C-u>Buffers<CR>
+nnoremap <silent> <Leader>gb  :<C-u>Buffers<CR>
 let g:which_key_leader.g.b = 'Buffer'
 " Goto - Marks
-nnoremap <silent> <Leader>gm :<C-u>silent Marks<CR>
+nnoremap <silent> <Leader>gm :<C-u>Marks<CR>
 let g:which_key_leader.g.m = 'Mark'
 " Goto - tag
 "     Also works in visual mode
@@ -708,29 +694,23 @@ let g:which_key_leader.g.n = 'Next'
 nnoremap <silent> <Leader>gst :<C-u>Git status<CR>
 let g:which_key_leader.g.s.t = 'git status'
 
-" Language - Commands (coc)
-nnoremap <Leader>lc :CocFzfList commands<CR>
-" Language - Rename
-nmap <Leader>lr <Plug>(coc-rename)
-let g:which_key_leader.l.r = 'Rename'
-" Language - reFactor
-nmap <Leader>lf <Plug>(coc-refactor)
-let g:which_key_leader.l.f = 'Refactor'
-" Language - Go to definition
-nmap <silent> <Leader>lg <Plug>(coc-definition)
-let g:which_key_leader.l.g = 'Go to definition'
-" Language - go to Implementation
-nmap <silent> <Leader>li <Plug>(coc-implementation)
-let g:which_key_leader.l.i = 'Go to implementation'
+
+" Language
+let g:which_key_leader.l = {
+            \ 'name': '+language',
+            \ 'c': [':CocFzfList commands', 'List commands'],
+            \ 'r': ['<Plug>(coc-rename)', 'Rename'],
+            \ 'f': ['<Plug>(coc-refactor)', 'Refactor'],
+            \ 'g': ['<Plug>(coc-definition)', 'Go to definition'],
+            \ 'i': ['<Plug>(coc-implementation)', 'Go to implementation'],
+            \ 'd': [':CocFzfList diagnostics', 'Diagnostics'],
+            \ }
 " Language - Action
 "     Example: `<Leader>aap` for current paragraph
 xmap <Leader>la   <Plug>(coc-codeaction-selected)
 let g:which_key_leader.l.a = { 'name': 'Code Action' }
 "     for the current line
 nmap <Leader>lac  <Plug>(coc-codeaction)
-" Language - Diagnostics
-nnoremap <silent> <Leader>ld :<C-u>CocFzfList diagnostics<CR>
-let g:which_key_leader.l.d = 'Diagnostics'
 
 " Window - Move - h/j/k/l
 " Meta(Alt/Option) + h/j/k/l goes to window
@@ -747,33 +727,30 @@ nnoremap <Leader>wmx <C-w>x
 " Window - Equal size
 nnoremap <Leader>w=  <C-w>=
 let g:which_key_leader.w['='] = 'Equal size'
-" Window - Width/Height - Increase/Decreasl
-nnoremap <silent><expr> <Leader>wwi ':vertical resize +'..(v:count ? v:count : "3")..'<CR>'
-let g:which_key_leader.w.i = 'Increase width'
-nnoremap <silent><expr> <Leader>wwd ':vertical resize -'..(v:count ? v:count : "3")..'<CR>'
-let g:which_key_leader.w.i = 'Decrease width'
-nnoremap <silent><expr> <Leader>whi ':resize +'..(v:count ? v:count : "3")..'<CR>'
-let g:which_key_leader.w.i = 'Increase height'
-nnoremap <silent><expr> <Leader>whd ':resize -'..(v:count ? v:count : "3")..'<CR>'
-let g:which_key_leader.w.i = 'Decrease height'
 
-" <Space>s to save current file
-nnoremap <silent> <Leader>s :w<CR>
-let g:which_key_leader.s = 'Save file'
+" Toggle
+let g:which_key_leader.t = {
+    \ 'name': '+toggle',
+    \ 'w': [':set wrap! | set wrap?', 'wrap'],
+    \ 'l': [':set list! | set list?', 'list'],
+    \ 's': [':set spell! | set spell?', 'spellcheck'],
+    \ 'n': [':set number! | let &relativenumber = &number | set number?',
+    \       'number'],
+    \ 'r': { 'n': [':set relativenumber! | set relativenumber?',
+    \              'relativenumber'],
+    \        't': [':RooterToggleStatus', 'Rooter']
+    \      },
+    \ 't': {},
+    \ 'a': { 'name': '+autoformat' },
+    \ 'd': {},
+    \ 'c': { 'name': '+cursor/coc',
+    \        'o': [':call ToggleCoc()', 'coc'],
+    \        'l': [':set cursorline! | set cursorline?', 'cursorline'],
+    \        'c': [':set cursorcolumn! | set cursorcolumn?', 'cursorcolumn'],
+    \        'r': [':ColorizerToggle', 'colorizer']
+    \      },
+    \ }
 
-" Toggle - Wrap
-nnoremap <silent> <Leader>tw :<C-u>set wrap! <BAR> set wrap?<CR>
-let g:which_key_leader.t.w = 'wrap'
-" Toggle - TextWidth
-nnoremap <silent> <Leader>ttw :<C-u>let &tw = (&tw == 0) ? 80 : 0 <BAR>
-            \ set textwidth?<CR>
-let g:which_key_leader.t.t.w = 'wrap'
-" Toggle - List (display tabs, trailing whitespace, etc.)
-nnoremap <silent> <Leader>tl :<C-u>set list! <BAR> set list?<CR>
-let g:which_key_leader.t.l = 'list'
-" Toggle - Spellcheck
-nnoremap <silent> <Leader>ts :<C-u>set spell! <BAR> set spell?<CR>
-let g:which_key_leader.t.s = 'spellcheck'
 " Toggle - Autoformat
 "     If disabled, you still can format with `gq`
 nnoremap <silent> <Leader>taa :<C-u>call
@@ -794,15 +771,7 @@ let g:which_key_leader.t.a.c = 'Only format comment'
 " Toggle - Airline - Whitespace
 nnoremap <silent> <Leader>taw :AirlineToggleWhitespace<CR>
 let g:which_key_leader.t.a.w = 'Check WS'
-" Toggle - Number (both number and relativenumber)
-nnoremap <silent> <Leader>tn :<C-u>set number! <BAR>
-            \ let &relativenumber = &number <BAR> set number?<CR>
-let g:which_key_leader.t.n = 'Line number'
 
-" Toggle - Relative number
-nnoremap <silent> <Leader>trn :<C-u>set relativenumber! <BAR>
-            \ set relativenumber?<CR>
-let g:which_key_leader.t.r.n = 'Relative number'
 " Toggle - Display Long lines
 nnoremap <silent> <Leader>tdl
       \ :if exists('w:long_line_match') <Bar>
@@ -817,28 +786,22 @@ nnoremap <silent> <Leader>tdl
       \   echom "Highlighting lines longer than 80 characters. (default)" <Bar>
       \ endif<CR>
 let g:which_key_leader.t.d.l = 'Display long lines'
-" Toggle - RooteR
-nnoremap <silent> <Leader>trr :<C-u>RooterToggleStatus<CR>
-let g:which_key_leader.t.r.r = 'Rooter'
 " Toggle - autoPairs
 nmap <Leader>tp <M-p>
 let g:which_key_leader.t.p = 'AutoPairs'
-" Toggle - Cursor - Line
-nnoremap <silent> <Leader>tcl :<C-u>set cursorline! <BAR> set cursorline?<CR>
-let g:which_key_leader.t.c.l = 'Cursor line'
-" Toggle - Cursor - Column
-nnoremap <silent> <Leader>tcc :<C-u>set cursorcolumn!<BAR>set cursorcolumn?<CR>
-let g:which_key_leader.t.c.c = 'Cursor column'
-" Toggle - Colorizer
-nnoremap <silent> <Leader>tcr :<C-u>ColorizerToggle<CR>
-let g:which_key_leader.t.c.r = 'Colorizer'
 " Toggle - Conceal
-nnoremap <silent> <Leader>tcl :<C-u>
+nnoremap <silent> <Leader>tce :<C-u>
             \ let &conceallevel = (&conceallevel == 0) ? 2 : 0 <BAR>
             \ set conceallevel? <CR>
 
-" Toggle - Coc
-nnoremap <silent> <Leader>tco :<C-u>call ToggleCoc()<CR>
+" EasyMotion binds these. Don't show them in which-key
+let g:which_key_leader.j = 'which_key_ignore'
+let g:which_key_leader.k = 'which_key_ignore'
+let g:which_key_leader.n = 'which_key_ignore'
+let g:which_key_leader.N = 'which_key_ignore'
+let g:which_key_leader[','] = 'which_key_ignore'
+let g:which_key_leader[';'] = 'which_key_ignore'
+let g:which_key_leader['.'] = 'which_key_ignore'
 
 " \rl to save and reload vimrc
 augroup vimrc
@@ -1116,6 +1079,9 @@ let g:coc_global_extensions = [
             \ 'coc-prettier',
             \ ]
 
+" Option+Space triggers completion.
+inoremap <silent><expr> <M-Space> coc#refresh()
+
 " Use <tab> to select and accept the first completion item
 inoremap <silent><expr> <tab>
             \ pumvisible() ? coc#_select_confirm()
@@ -1173,7 +1139,7 @@ augroup END
 " - delimitMate {{{2
 
 " Allow triple quotes '''|'''
-let g:delimitMate_nesting_quotes = ['"', "'"]
+let g:delimitMate_nesting_quotes = ['"', "'", "`"]
 
 let g:delimitMate_expand_cr = 1
 let g:delimitMate_expand_space = 1
@@ -1306,7 +1272,10 @@ let g:NERDTreeShowHidden = 1
 let g:NERDTreeNaturalSort = 1
 " when deleting a file, also delete the buffer of the file
 let g:NERDTreeAutoDeleteBuffer = 1
+
+" Mappings
 " s to split and v to vsplit
+let g:NERDTreeMapPreview = "i"
 let g:NERDTreeMapOpenSplit = "s"
 let g:NERDTreeMapPreviewSplit = "gs"
 let g:NERDTreeMapOpenVSplit = "v"
@@ -1320,9 +1289,9 @@ let g:NERDTreeIgnore = ['\.DS_Store']
 let g:NERDTreeGitStatusConcealBrackets = 1 " don't show angle brackets
 let g:NERDTreeGitStatusShowIgnored = 1     " show ignored files
 let g:NERDTreeGitStatusIndicatorMapCustom = {
-            \ 'Modified'  :'✗',
+            \ 'Modified'  :'※',
             \ 'Staged'    :'✚',
-            \ 'Untracked' :'✭',
+            \ 'Untracked' :'¿',
             \ 'Renamed'   :'➜',
             \ 'Unmerged'  :'═',
             \ 'Deleted'   :'✖',
@@ -1471,9 +1440,15 @@ command! -range Emoji <line1>,<line2>
 let g:which_key_exit = ["\<C-[>", "\<Esc>", "\<C-c>"]
 let g:which_key_use_floating_win = 1
 let g:which_key_sep = '→'
+let g:which_key_display_names = {
+            \ ' ': 'SPC',
+            \ '<SPACE>': 'SPC',
+            \ '<Space>': 'SPC',
+            \ '<TAB>': 'TAB',
+            \ }
 let g:which_key_flatten = 1            " Try to flatten
 
-call which_key#register('<Space>', 'g:which_key_leader')
+call which_key#register(' ', 'g:which_key_leader')
 
 nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
 vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
@@ -1531,7 +1506,7 @@ let g:vimtex_compiler_latexmk_engines = {
 nnoremap <silent> <LocalLeader>lt
             \ :call vimtex#fzf#run('ctli', g:fzf_layout)<CR>
 
-" nvim-treesitter {{{2
+" - nvim-treesitter {{{2
 
 if has('nvim-0.5.0')
 lua <<EOF

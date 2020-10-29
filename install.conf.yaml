@@ -34,8 +34,8 @@
     ~/.config/gh: github-cli
     # vim
     ~/.config/nvim: nvim
-    ~/.vim/autoload/airline: vim/autoload/airline # airline custom theme
     ~/.config/coc/UltiSnips: vim/snippets
+    ~/.vim/autoload: vim/autoload
     ~/.vim/plugin: vim/plugin
     ~/.vim/spell: vim/spell
     ~/.vim/coc-settings.json: vim/coc-settings.json
@@ -60,12 +60,6 @@
     - ["git submodule update --init --recursive", "Installing submodules"]
     - ['[ -f ~/.local/antigen.sh ] ||
         curl -L git.io/antigen > ~/.local/antigen.zsh', "installing antigen"]
-    - [
-        '[ -f ~/.vim/autoload/plug.vim ] ||
-         curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim',
-        "Installing vim-plug"
-      ]
     - [
         'type nvim > /dev/null && nvim -es -u nvim/init.vim -i NONE -c
         "PlugInstall" -c "qa"',

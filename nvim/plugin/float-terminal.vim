@@ -47,7 +47,7 @@ function! s:float_terminal_open() abort
         setl bufhidden=hide
         au BufEnter <buffer>
                     \ startinsert
-        tnoremap <buffer> <Esc> <C-\><C-n>:close<CR>
+        tnoremap <buffer><silent> <Esc> <C-\><C-n>:close<CR>
     endif
     startinsert
 endfunction

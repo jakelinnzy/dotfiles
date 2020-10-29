@@ -1,4 +1,3 @@
-
 # zsh profiler
 # zmodload zsh/zprof
 # to use, add `zprof` to end of .zshrc
@@ -37,10 +36,7 @@ fpath=(~/.zfunc /usr/local/share/zsh-completions $fpath)
 source "$HOME/.local/antigen.zsh"
 
 # use oh-my-zsh's plugins
-# plugins=(autojump git)
-
 antigen use oh-my-zsh
-
 antigen bundle git
 antigen bundle autojump
 
@@ -49,14 +45,15 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle lukechilds/zsh-better-npm-completion
 antigen bundle MichaelAquilina/zsh-autoswitch-virtualenv
-# antigen bundle djui/alias-tips
+antigen bundle MichaelAquilina/zsh-you-should-use
 
 antigen theme romkatv/powerlevel10k
 
 antigen apply
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# powerlevel10k customizations
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
 # END antigen config }}}
 
 # Settings & aliases {{{1
@@ -69,6 +66,7 @@ if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
 else
     export VISUAL="nvim"
     export MANPAGER='nvim +Man!'
+    export MANWIDTH=80
 fi
 export EDITOR="$VISUAL"
 export GIT_EDITOR="$VISUAL"
@@ -85,13 +83,52 @@ export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
 export FZF_DEFAULT_COMMAND="rg --files"
 
-
 alias la="ls -Ah"
 alias lla="ls -lAh"
 alias coa="conda activate"
 alias cod="conda deactivate"
 alias coe="conda info --envs"
 alias glg="git log --graph --decorate --stat"
+
+# LSCOLORS {{{2
+
+# The color designators are as follows:
+#       a     black
+#       b     red
+#       c     green
+#       d     brown
+#       e     blue
+#       f     magenta
+#       g     cyan
+#       h     light grey
+#       A     bold black, usually shows up as dark grey
+#       B     bold red
+#       C     bold green
+#       D     bold brown, usually shows up as yellow
+#       E     bold blue
+#       F     bold magenta
+#       G     bold cyan
+#       H     bold light grey; looks like bright white
+#       x     default foreground or background
+
+# The order of the attributes are as follows:
+#       1.   directory
+#       2.   symbolic link
+#       3.   socket
+#       4.   pipe
+#       5.   executable
+#       6.   block special
+#       7.   character special
+#       8.   executable with setuid bit set
+#       9.   executable with setgid bit set
+#       10.  directory writable to others, with sticky bit
+#       11.  directory writable to others, without sticky bit
+
+#                                  1
+#                1 2 3 4 5 6 7 8 9 0 1
+export LSCOLORS="Gxfxcxdxbxegedabagacad"
+
+# END LSCOLORS }}}2
 
 # Bindings {{{1
 # Under iTerm2's CSI u mode, <S-Space> sends '^[[32;2u'. Neovim recognises this by
@@ -130,31 +167,12 @@ zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
 
-# conda {{{2
-
-# !! Contents within this block are managed by 'conda init' !!
-# __conda_setup="$('/Users/lin/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-# if [ $? -eq 0 ]; then
-#     eval "$__conda_setup"
-# else
-#     if [ -f "/Users/lin/opt/anaconda3/etc/profile.d/conda.sh" ]; then
-#         . "/Users/lin/opt/anaconda3/etc/profile.d/conda.sh"
-#     else
-#         export PATH="/Users/lin/opt/anaconda3/bin:$PATH"
-#     fi
-# fi
-# unset __conda_setup
-
-
 # iTerm2 shell integration {{{2
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # fzf {{{2
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-# direnv {{{2
-type direnv > /dev/null && eval "$(direnv hook zsh)"
-direnv() { asdf exec direnv "$@"; }
 
 # END Initialisation }}}1
 

@@ -1,6 +1,1 @@
-# vim runtime files
-vim/plugged
-vim/autoload/plug.vim
-vim/sessions
-
 github-cli/hosts.yml

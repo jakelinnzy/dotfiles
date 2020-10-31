@@ -1,11 +1,16 @@
 #+TITLE: My doom-emacs configuration
 #+AUTHOR: Lin Ziyang
+#+PROPERTY: header-args    :results silent
+
+* Meta
+Use ~SPC m E~ to reload this file after making changes ([[Execute all code blocks in the org buffer][Remapped here]]). Also ~SPC q r~ restarts emacs (may take a few seconds).
+To show literal link in org-mode, press ~SPC m l t~.
 
 * Doom core configuration
 
 ** Enable lexical scoping
 #+begin_src elisp
-;;; config.el -*- lexical-binding: t -*-
+;; Generated with doom-emacs/config.org    -*- lexical-binding: t -*-
 #+end_src
 
 ** Personal Information
@@ -72,48 +77,67 @@ And evil-snipe is not needed.
     (evil-snipe-mode -1))
 #+end_src
 
-
 * Mappings
 
+** Use ~M-h/j/k/l~ to move between split windows.
+Some major or minor modes may override this binding, so I decided to define a minor mode for this and make it take precedence over any other mode to get a consistent behaviour.
+
 #+begin_src elisp
+(defvar my-top-level-mode-map (make-sparse-keymap)
+  "M-h/j/k/l to move between split windows.")
 (map!
-    :n   "f"   #'avy-goto-char
-    :n   "s"   #'avy-goto-char-2
-    :nm  "M"   #'evil-set-marker
-    :nm  "m"   #'evil-scroll-down
-    :nm  ","   #'evil-scroll-up
-    :n   "RET" #'evil-ex-nohighlight
-    :n   "H"   #'beginning-of-line-text
-    :n   "L"   #'end-of-line
-    ;; M-h/j/k/l moves between splits
+ (:map my-top-level-mode-map
     :nvm "M-h" #'windmove-left
     :nvm "M-j" #'windmove-down
     :nvm "M-k" #'windmove-up
     :nvm "M-l" #'windmove-right
+  ))
+(define-minor-mode my-top-level-mode
+  "Allows to use M-h/j/k/l to move between split windows."
+  ;; The initial value
+  :init-value t
+  ;; Indicator for mode line
+  :lighter " my-top-level"
+  ;; The minor mode map
+  :keymap my-top-level-mode-map
+  )
+(define-globalized-minor-mode global-my-top-level-mode
+  my-top-level-mode my-top-level-mode)
+(add-to-list 'emulation-mode-map-alists
+             `((my-top-level-mode . ,my-top-level-mode-map)))
+(provide 'my-top-level-mode)
+#+end_src
+
+** Some common mappings
+#+begin_src elisp
+(map!
+    ;; map j and k only in normal mode, so v10j works as expected.
+    :n   "j"   #'evil-next-visual-line
+    :n   "k"   #'evil-previous-visual-line
+    ;; Use m and , to scroll
+    :nm  "m"   #'evil-scroll-down
+    :nm  ","   #'evil-scroll-up
+    :n   "f"   #'avy-goto-char
+    :n   "s"   #'avy-goto-char-2
+    :nm  "M"   #'evil-set-marker
+    :n   "RET" #'evil-ex-nohighlight
+    :nvm "H"   #'beginning-of-line-text
+    :nvm "L"   #'end-of-line
     ;; Use C-f/b/p/n in Insert mode
     :i   "C-p" #'previous-line
-    :i   "C-n" #'next-line
-    ;; SPC l g - Go to definition
-    (:leader
-        :desc "Format buffer"            "c f" #'lsp-format-buffer
-        :desc "Go to definition"         "c g" #'evil-goto-definition
-        :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized))
-;; Override evil-org's default bahaviour.
-(add-hook! 'evil-org-mode-hook
-    (defun my-org-mode-bindings ()
-        (map!
-            (:mode evil-org-mode
-                :nvm "M-h" #'windmove-left
-                :nvm "M-j" #'windmove-down
-                :nvm "M-k" #'windmove-up
-                :nvm "M-l" #'windmove-right))))
+    :i   "C-n" #'next-line)
 
 (map!
     ;; evil-scroll-up/down and Info-scroll-up/down are the opposite. wtf?
     (:mode Info-mode
         :nvm "m" #'Info-scroll-up
         :nvm "," #'Info-scroll-down)
-
+    ;; Why the f**k is this called pdf-tools not pdf
+    (:after pdf-tools
+        (:map pdf-view-mode-map
+            :nm "m" #'pdf-view-scroll-up-or-next-page
+            :nm "," #'pdf-view-scroll-down-or-previous-page))
+ 
     ;; company-mode for completion
     (:after company
         :i "C-x C-x" #'company-complete
@@ -141,19 +165,24 @@ And evil-snipe is not needed.
     (:after dired
         (:map dired-mode-map
             :nm "c" #'dired-create-empty-file
-            :nm "C" #'dired-create-directory))
-
+            :nm "C" #'dired-create-directory)))
+#+end_src
+** <Leader>
+#+begin_src elisp
+(map!
+    ;; SPC l g - Go to definition
+    (:leader
+        :desc "Format buffer"            "c f" #'lsp-format-buffer
+        :desc "Go to definition"         "c g" #'evil-goto-definition
+        :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized)
+    ;; Python's language server doens't support formatting, so a dedicated
+    ;; plugin is needed.
     (:after python
         (:map python-mode-map
             :localleader
-            :desc "Format with autopep8" "f" #'py-autopep8-buffer))
-
-    ;; Why the f**k is this called pdf-tools not pdf
-    (:after pdf-tools
-        (:map pdf-view-mode-map
-            :nm "m" #'pdf-view-scroll-up-or-next-page
-            :nm "," #'pdf-view-scroll-down-or-previous-page)))
+            :desc "Format with autopep8" "f" #'py-autopep8-buffer)))
 #+end_src
+
 
 * Plugins
 
@@ -165,15 +194,15 @@ Make which-key appear quicker.
 #+end_src
 
 ** ivy, a search engine for love and life
-Load with ~+fuzzy +icons~.
+Load with ~+fuzzy +icons~. Currently ~+childframe~ has bugs on macOS and is disabled.
 Customize the size of popup window.
 #+begin_src elisp
 (setq ivy-posframe-width     100
       ivy-posframe-min-width 100
       ivy-posframe-height     25
       ivy-posframe-min-height 25)
-(after! ivy
-    (ivy-posframe-mode -1))
+;; (after! ivy
+;;     (ivy-posframe-mode -1))
 #+end_src
 
 ** LSP-mode
@@ -203,6 +232,13 @@ Manages projects with ~SPC p~.
 
 * Org Mode
 
+** Execute all code blocks in the org buffer
+Use ~SPC m E~
+#+begin_src elisp
+(map! :mode org-mode
+      (:localleader
+       :desc "Execute buffer" "E" #'org-babel-execute-buffer))
+#+end_src
 
 ** Toggle visibility of current block
 #+begin_src elisp
@@ -215,7 +251,6 @@ Note this has to be set before org loads.
 #+begin_src elisp
 (setq org-directory "~/Documents/org/")
 #+end_src
-
 ** Hide block delimiters
 #+begin_src elisp
 (with-eval-after-load 'org
@@ -290,4 +325,9 @@ Note this has to be set before org loads.
           ;;(add-hook 'post-command-hook 'rasmus/org-prettify-src t t)
           )
 (add-hook 'org-mode-hook #'rasmus/org-prettify-symbols))
+#+end_src
+
+* Done
+#+begin_src elisp
+"Done."
 #+end_src

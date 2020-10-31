@@ -1,4 +1,4 @@
-;;; config.el -*- lexical-binding: t -*-
+;; Generated with doom-emacs/config.org    -*- lexical-binding: t -*-
 
 (setq user-full-name    "Ziyang Lin"
       user-mail-address "jakelinnzy@gmail.com")
@@ -34,44 +34,58 @@
 (after! evil-snipe
     (evil-snipe-mode -1))
 
+(defvar my-top-level-mode-map (make-sparse-keymap)
+  "M-h/j/k/l to move between split windows.")
 (map!
-    :n   "f"   #'avy-goto-char
-    :n   "s"   #'avy-goto-char-2
-    :nm  "M"   #'evil-set-marker
-    :nm  "m"   #'evil-scroll-down
-    :nm  ","   #'evil-scroll-up
-    :n   "RET" #'evil-ex-nohighlight
-    :n   "H"   #'beginning-of-line-text
-    :n   "L"   #'end-of-line
-    ;; M-h/j/k/l moves between splits
+ (:map my-top-level-mode-map
     :nvm "M-h" #'windmove-left
     :nvm "M-j" #'windmove-down
     :nvm "M-k" #'windmove-up
     :nvm "M-l" #'windmove-right
+  ))
+(define-minor-mode my-top-level-mode
+  "Allows to use M-h/j/k/l to move between split windows."
+  ;; The initial value
+  :init-value t
+  ;; Indicator for mode line
+  :lighter " my-top-level"
+  ;; The minor mode map
+  :keymap my-top-level-mode-map
+  )
+(define-globalized-minor-mode global-my-top-level-mode
+  my-top-level-mode my-top-level-mode)
+(add-to-list 'emulation-mode-map-alists
+             `((my-top-level-mode . ,my-top-level-mode-map)))
+(provide 'my-top-level-mode)
+
+(map!
+    ;; map j and k only in normal mode, so v10j works as expected.
+    :n   "j"   #'evil-next-visual-line
+    :n   "k"   #'evil-previous-visual-line
+    ;; Use m and , to scroll
+    :nm  "m"   #'evil-scroll-down
+    :nm  ","   #'evil-scroll-up
+    :n   "f"   #'avy-goto-char
+    :n   "s"   #'avy-goto-char-2
+    :nm  "M"   #'evil-set-marker
+    :n   "RET" #'evil-ex-nohighlight
+    :nvm "H"   #'beginning-of-line-text
+    :nvm "L"   #'end-of-line
     ;; Use C-f/b/p/n in Insert mode
     :i   "C-p" #'previous-line
-    :i   "C-n" #'next-line
-    ;; SPC l g - Go to definition
-    (:leader
-        :desc "Format buffer"            "c f" #'lsp-format-buffer
-        :desc "Go to definition"         "c g" #'evil-goto-definition
-        :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized))
-;; Override evil-org's default bahaviour.
-(add-hook! 'evil-org-mode-hook
-    (defun my-org-mode-bindings ()
-        (map!
-            (:mode evil-org-mode
-                :nvm "M-h" #'windmove-left
-                :nvm "M-j" #'windmove-down
-                :nvm "M-k" #'windmove-up
-                :nvm "M-l" #'windmove-right))))
+    :i   "C-n" #'next-line)
 
 (map!
     ;; evil-scroll-up/down and Info-scroll-up/down are the opposite. wtf?
     (:mode Info-mode
         :nvm "m" #'Info-scroll-up
         :nvm "," #'Info-scroll-down)
-
+    ;; Why the f**k is this called pdf-tools not pdf
+    (:after pdf-tools
+        (:map pdf-view-mode-map
+            :nm "m" #'pdf-view-scroll-up-or-next-page
+            :nm "," #'pdf-view-scroll-down-or-previous-page))
+ 
     ;; company-mode for completion
     (:after company
         :i "C-x C-x" #'company-complete
@@ -99,18 +113,20 @@
     (:after dired
         (:map dired-mode-map
             :nm "c" #'dired-create-empty-file
-            :nm "C" #'dired-create-directory))
+            :nm "C" #'dired-create-directory)))
 
+(map!
+    ;; SPC l g - Go to definition
+    (:leader
+        :desc "Format buffer"            "c f" #'lsp-format-buffer
+        :desc "Go to definition"         "c g" #'evil-goto-definition
+        :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized)
+    ;; Python's language server doens't support formatting, so a dedicated
+    ;; plugin is needed.
     (:after python
         (:map python-mode-map
             :localleader
-            :desc "Format with autopep8" "f" #'py-autopep8-buffer))
-
-    ;; Why the f**k is this called pdf-tools not pdf
-    (:after pdf-tools
-        (:map pdf-view-mode-map
-            :nm "m" #'pdf-view-scroll-up-or-next-page
-            :nm "," #'pdf-view-scroll-down-or-previous-page)))
+            :desc "Format with autopep8" "f" #'py-autopep8-buffer)))
 
 (setq which-key-idle-delay 0.5
       which-key-idle-secondary-delay 0)
@@ -119,8 +135,8 @@
       ivy-posframe-min-width 100
       ivy-posframe-height     25
       ivy-posframe-min-height 25)
-(after! ivy
-    (ivy-posframe-mode -1))
+;; (after! ivy
+;;     (ivy-posframe-mode -1))
 
 (setq lsp-enable-snippet t
       lsp-idle-delay 0.2)
@@ -138,6 +154,10 @@
 (defun projectile-ignored-project-function (filepath)
     "Return t if FILEPATH is within any of `projectile-ignored-projects'"
     (or (mapcar (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
+
+(map! :mode org-mode
+      (:localleader
+       :desc "Execute buffer" "E" #'org-babel-execute-buffer))
 
 (map! :mode org-mode
       (:localleader
@@ -217,3 +237,5 @@
           ;;(add-hook 'post-command-hook 'rasmus/org-prettify-src t t)
           )
 (add-hook 'org-mode-hook #'rasmus/org-prettify-symbols))
+
+"Done."

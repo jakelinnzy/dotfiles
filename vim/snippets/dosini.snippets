@@ -31,3 +31,43 @@ cwd="$(VIM_ROOT)"
 output=terminal
 save=2
 endsnippet
+
+snippet proj "Essential tasks for project" b
+[project-run]
+command=${1:command}
+cwd="$(VIM_ROOT)"
+output=terminal
+save=2
+
+[project-build]
+command=${2:command}
+cwd="$(VIM_ROOT)"
+output=terminal
+save=2
+
+[project-test]
+command=${3:command}
+cwd="$(VIM_ROOT)"
+output=terminal
+save=2
+endsnippet
+
+snippet cargo "cargo build/run/test" b
+[project-run]
+command=cargo run
+cwd="$(VIM_ROOT)"
+output=terminal
+save=2
+
+[project-build]
+command=cargo build
+cwd="$(VIM_ROOT)"
+output=terminal
+save=2
+
+[project-test]
+command=cargo test
+cwd="$(VIM_ROOT)"
+output=terminal
+save=2
+endsnippet

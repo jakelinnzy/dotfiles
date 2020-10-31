@@ -1,63 +1,68 @@
 // vi: ft=jsonc
 {
-  "json.schemas": [
-    {
-      "fileMatch": ["coc-settings.json"],
-      "schema": { "allowTrailingCommas": true }
-    }
-  ],
-  // -- coc
-  "coc.preferences.jumpCommand": "edit",
-  "snippets.extends": {
-    "cpp": ["c"]
-  },
-  // -- coc diagnostics
-  "diagnostic.enable": true,
-  "diagnostic.level": "hint",
-  "diagnostic.messageTarget": "float",
-  "diagnostic.refreshAfterSave": true,
-  // "diagnostic.virtualText": true,
-  "diagnostic.errorSign": "🔴",
-  "diagnostic.warningSign": "🟠",
-  "diagnostic.infoSign": "🟢",
-  "diagnostic.hintSign": "🔵",
-  // -- Python
-  // This enables Microsoft's Python Language Server
-  "python.jediEnabled": false,
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": true,
-  "python.linting.pylintUseMinimalCheckers": false,
-  "python.linting.pylintPath": "python3 -m pylint",
-  // -- C/C++
-  "clangd.arguments": ["-header-insertion=never"],
-  "clangd.fallbackFlags": ["-Wall", "-Ilib"],
-  // -- TSServer
-  "tsserver.formatOnType": false,
-  // -- Prettier
-  "prettier.formatterPriority": 1,
-  // -- Rust
-  "rust.all_features": true,
-  "rust-client.updateOnStartup": true,
-  "rust-client.trace.server": "verbose",
-  "rust-client.channel": "nightly",
-  "rust.racer_completion": true,
-
-  "languageserver": {
-    "haskell": {
-      "command": "haskell-language-server-wrapper",
-      "args": ["--lsp"],
-      "rootPatterns": [
-        "*.cabal",
-        "stack.yaml",
-        "cabal.project",
-        "package.yaml",
-        "hie.yaml"
-      ],
-      "filetypes": ["haskell", "lhaskell"]
+    "json.schemas": [
+        {
+            "fileMatch": ["coc-settings.json"],
+            "schema": { "allowTrailingCommas": true }
+        }
+    ],
+    // -- coc
+    "coc.preferences.jumpCommand": "edit",
+    "snippets.extends": {
+        "cpp": ["c"]
     },
-    "digestif": {
-      "command": "digestif",
-      "filetypes": ["tex", "plaintex", "context"]
+    // -- coc diagnostics
+    "diagnostic.enable": true,
+    "diagnostic.level": "hint",
+    "diagnostic.messageTarget": "float",
+    "diagnostic.refreshAfterSave": true,
+    // "diagnostic.virtualText": true,
+    "diagnostic.errorSign": "🔴",
+    "diagnostic.warningSign": "🟠",
+    "diagnostic.infoSign": "🟢",
+    "diagnostic.hintSign": "🔵",
+    // -- Python
+    // This enables Microsoft's Python Language Server
+    "python.jediEnabled": false,
+    "python.linting.enabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintUseMinimalCheckers": false,
+    "python.linting.pylintPath": "python3 -m pylint",
+    // -- C/C++
+    "clangd.arguments": ["-header-insertion=never"],
+    "clangd.fallbackFlags": ["-Wall", "-Ilib"],
+    // -- TSServer
+    "tsserver.formatOnType": false,
+    // -- Prettier
+    "prettier.formatterPriority": 1,
+
+    "languageserver": {
+        "haskell": {
+            "command": "haskell-language-server-wrapper",
+            "args": ["--lsp"],
+            "rootPatterns": [
+                "*.cabal",
+                "stack.yaml",
+                "cabal.project",
+                "package.yaml",
+                "hie.yaml"
+            ],
+            "filetypes": ["haskell", "lhaskell"]
+        },
+        "digestif": {
+            "command": "digestif",
+            "filetypes": ["tex", "plaintex", "context"]
+        },
+        // coc-rls is kind of buggy. rls w/o extension works better.
+        "rls": {
+            "command": "rls",
+            "filetypes": ["rust"],
+            "rootPatterns": ["Cargo.toml"],
+            "initializationOptions": {
+                "all_features": true,
+                "unstable_features": true,
+                "clippy_preference": "on"
+            }
+        }
     }
-  }
 }

@@ -16,8 +16,10 @@ let s:windows = has('win32') || has('win64')
 let s:linux = has('linux')
 if $TERM_PROGRAM =~# '\v(kitty|iTerm)'
     let s:patched_font = 1
+    let s:termguicolors = 1
 else
     let s:patched_font = 0
+    let s:termguicolors = 0
 endif
 
 source ~/.vimrc_before
@@ -34,7 +36,6 @@ source ~/.vimrc_before
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'junegunn/vim-plug'        " For help document
 Plug 'jakelinzy/delimitMate'    " my fork
 Plug 'jakelinzy/vim-easymotion' " my fork
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -145,9 +146,11 @@ set laststatus=2    " Always show the status line at the bottom
 set wrap            " Wrap text at window width. The actual file is unchanged.
 set linebreak       " Wrap lines only at word breaks to improve readability. The
                     " actual file is not changed.
+set breakindent     " Indent wrapped line the same amount as last line.
 set hidden          " Enables hidden buffer
                     " :DH to close all saved hidden buffers (see below)
-set clipboard=unnamedplus  " yank into system clipboard by default
+set swapfile
+" set clipboard=unnamedplus  " yank into system clipboard by default
 
 " - Tab width & indentation {{{1
 
@@ -169,7 +172,7 @@ set pumheight=20           " Display at most 20 completion items
 set shortmess=filmntToOF   " Shorten various messages, see :h 'shortmess'
 set shortmess+=rxc         " Avoids hit-enter prompts
 
-if has('nvim')
+if has('nvim') && s:termguicolors
     " Make pum and floating windows pseudo-transparent
     set pumblend=15
     set winblend=15
@@ -179,7 +182,11 @@ if has('nvim')
 endif
 
 " Display signcolumn (coc's diagnostics) in the number column
-set signcolumn=number
+if has('nvim-0.5.0') || v:version > 800
+    set signcolumn=number
+else
+    set signcolumn=no
+endif
 
 set title                  " Displays terminal title
 
@@ -244,7 +251,7 @@ set backspace=indent,eol,start
 " Disable audible bell because it's annoying.
 set noerrorbells visualbell t_vb=
 set report=0        " Always report the number of lines changed
-set updatetime=500  " Reduce update time to enhance coc's experience
+set updatetime=300  " Reduce update time to enhance coc's experience
 
 " Automatically check if file is modified outside Vim
 set autoread
@@ -270,12 +277,9 @@ endif
 " - Color Scheme {{{1
 
 " Use true colors in terminal
-if exists("+termguicolors")
+if exists("+termguicolors") && s:termguicolors
     set termguicolors
     " nvim-colorizer.lua
-    if has('nvim')
-        lua require'colorizer'.setup()
-    endif
 endif
 
 set background=dark
@@ -335,16 +339,23 @@ function! s:semshi_overrides()
     " hi semshiErrorChar       ctermfg=231 guifg=#ffffff ctermbg=160 guibg=#d70000
     " sign define semshiError text=E> texthl=semshiErrorSign
 endfunction
-au vimrc ColorScheme * call s:semshi_overrides()
+" au vimrc ColorScheme * call s:semshi_overrides()
 
 " Apply color scheme
 try
-    colorscheme ayu
+    if s:termguicolors
+        colorscheme ayu
+    else
+        colorscheme wombat256mod
+    endif
 catch /^Vim\%((\a\+)\)\=:E185/
     " Color scheme not found
     echom 'Color scheme not found.'
 endtry
 
+if has('nvim') && s:termguicolors
+    lua require'colorizer'.setup()
+endif
 
 " Highlight common operators in most languages {{{2
 function! s:syn_operator()
@@ -500,6 +511,9 @@ inoremap <M-O> <C-o>O
 
 " Manage windows {{{2
 
+" Goto - Buffer
+nnoremap <silent> gb :<C-u>Buffers<CR>
+
 " Better way to move between windows
 noremap <M-h> <C-W>h
 noremap <M-j> <C-W>j
@@ -543,266 +557,133 @@ let g:which_key_leader = {
             \ 'q': [ ':silent Sayonara', 'Quit' ],
             \ 'Q': [ ':silent Sayonara!', 'Quit (preserve window)' ],
             \ 'f': { 'name': '+file/find',
-            \        'c': { 'name': '+find-coc' },
-            \        'd': { 'name': '+delete' },
-            \        'n': { 'name': '+new' },
-            \        'N': { 'name': '+new from clipboard' },
-            \        'y': { 'name': '+yank' },
-            \        'g': {}, },
-            \ 'r': { 'name': '+run' },
-            \ 'e': { 'name': '+editing' },
+            \        'e': { 'name': '+edit',
+            \               'v': [':drop ~/.vimrc', 'Edit .vimrc'],
+            \               'c': [':CocConfig', 'Edit coc_settings.json'],
+            \               't': [':drop ~/.vim/tasks.ini', 'Edit global tasks'],
+            \               'd': [':call execute("drop ".&spellfile)', 'Edit dictionary'],
+            \               's': [':SnipEdit', 'Edit snippets'] },
+            \        's': [ ':if &modified | silent! undojoin | w | endif', 'Save buffer' ],
+            \        'n': { 'name': '+new',
+            \               'n': [':Scratch', 'Open empty buffer'],
+            \               't': [':TScratch', 'Open empty tab'],
+            \               'v': [':VScratch', 'Open empty vsplit'], },
+            \        'N': { 'name': '+new from clipboard',
+            \               'n': [':Scratch | put +', 'Open empty buffer from clipboard'],
+            \               't': [':TScratch | put +', 'Open empty tab from clipboard'],
+            \               'v': [':VScratch | put +', 'Open empty vsplit from clipboard']},
+            \        'y': { 'name': '+yank',
+            \               'c': 'Copy file content',
+            \               'p': 'Copy file path'},
+            \        'd': { 'name': '+prefix',
+            \               'h': [':call DeleteHiddenBuffers()',
+            \                     'Delete hidden buffers']},
+            \        't': [ ':NERDTreeCWD', 'NERDTree' ],
+            \        'g': {},
+            \        'r': [ ':FRg', 'Find with rg' ],
+            \        'f': [ ':Files', 'Find files' ],
+            \        'h': [ ':Helptags', 'Find help' ],
+            \        'c': { 'name': '+find-coc',
+            \               'l': [ ':CocFzfList', 'Find coc...' ],
+            \               'c': [ ':CocFzfList commands', 'Coc commands' ],
+            \               'o': [ ':CocFzfList outline', 'Coc outline' ],
+            \               's': [ ':CocFzfList sources', 'Coc sources' ]},
+            \ },
+            \ 'r': { 'name': '+run',
+            \        's': [ ':AsyncTaskFzf', 'Select task...' ],
+            \        'b': [ ':AsyncTask project-build', 'Build project' ],
+            \        'r': [ ':AsyncTask project-run', 'Run project' ],
+            \        't': [ ':AsyncTask project-test', 'Test project' ],
+            \        'f': [ ':AsyncTask file-run', 'Run current file' ]},
+            \ 'e': { 'name': '+edit',
+            \        't': [ ':call TrimTrailingWhitespace()', 'Trim' ],
+            \        'f': [ '<Plug>(coc-format)', 'Format' ],
+            \ },
             \ 'g': { 'name': '+goto/git',
-            \        's': {} },
-            \ 'l': { 'name': '+language', },
+            \        'h': [ ':History', 'History' ],
+            \        'b': [ ':Buffers', 'Buffers' ],
+            \        'm': [ ':Marks', 'Marks' ],
+            \        's': { 't': [':Git status', 'git status']} },
+            \ 'l': { 'name': '+language',
+            \        'a': { 'name': 'Code Action' },
+            \        'c': [ ':CocFzfList commands', 'List commands' ],
+            \        'r': [ '<Plug>(coc-rename)', 'Rename' ],
+            \        'f': [ '<Plug>(coc-refactor)', 'Refactor' ],
+            \        'g': [ '<Plug>(coc-definition)', 'Go to definition' ],
+            \        'i': [ '<Plug>(coc-implementation)', 'Go to implementation' ],
+            \        'd': [ ':CocFzfList diagnostics', 'Diagnostics' ],
+            \ },
+            \ 't': { 'name': '+toggle',
+            \        'a': { 'name': '+autoformat',
+            \               'a': [ ':Leadertaa', 'Formatting while typing' ],
+            \               'j': [ ':Leadertaj', 'Join lines' ],
+            \               'c': [ ':Leadertac', 'Only format comment' ],
+            \               'w': [ ':AirlineToggleWhitespace', 'Airline-checkWS'],
+            \ },
+            \        'w': [':set wrap! | set wrap?', 'wrap'],
+            \        'l': [':set list! | set list?', 'list'],
+            \        's': [':set spell! | set spell?', 'spellcheck'],
+            \        'n': [':set number! | let &relativenumber = &number | set number?',
+            \              'number'],
+            \        'r': { 'n': [':set relativenumber! | set relativenumber?',
+            \                     'relativenumber'],
+            \               't': [':RooterToggleStatus', 'Rooter'] },
+            \        'd': { 'l': [':call ToggleDisplayLongLines()', 'Display long lines'] },
+            \        'c': { 'name': '+cursor/coc',
+            \               'o': [':call ToggleCoc()', 'coc'],
+            \               'l': [':set cursorline! | set cursorline?', 'cursorline'],
+            \               'c': [':set cursorcolumn! | set cursorcolumn?', 'cursorcolumn'],
+            \               'r': [':ColorizerToggle', 'colorizer'],
+            \               'e': [':ToggleConceal', 'conceal']},
+            \         'p': [ '<M-p>', 'Auto-pairs' ]},
             \ 'w': { 'name': '+window',
-            \        'm': { 'name': '+move' },
+            \        'm': { 'name': '+move',
+            \               'h': [ '<C-w>H', 'move left' ],
+            \               'j': [ '<C-w>J', 'move down' ],
+            \               'k': [ '<C-w>K', 'move up' ],
+            \               'l': [ '<C-w>L', 'move right' ],
+            \               't': [ '<C-w>T', 'move to tab' ],
+            \               'o': [ '<C-w>o', 'maximize' ],
+            \               'x': [ '<C-w>x', 'exchange' ],
+            \               '=': [ '<C-w>=', 'equal size' ], },
             \        'w': { 'name': '+width' },
-            \        'h': { 'name': '+height' }, },
+            \        'h': { 'name': '+height' },
+            \        's': [ ':split', 'Split' ],
+            \        'v': [ ':vsplit', 'VSplit' ],
+            \        't': [ ':tabnew', 'VSplit' ],
+            \ },
+            \ 's': [':if &modified | silent! undojoin | w | endif', 'Save buffer'],
+            \ 'p': [':Files', 'Find files'],
             \ 'S': [':Startify', 'Startify'],
+            \ '<Tab>': ['<C-^>', 'Alt-file'],
+            \ '<CR>': 'No-highlight',
+            \ 'j': 'which_key_ignore',
+            \ 'k': 'which_key_ignore',
+            \ 'n': 'which_key_ignore',
+            \ 'N': 'which_key_ignore',
+            \ ',': 'which_key_ignore',
+            \ ';': 'which_key_ignore',
+            \ '.': 'which_key_ignore',
             \ }
 
-" <Leader><Tab> goes to the alternate file
-noremap <Leader><Tab> <C-^>
-let g:which_key_leader['<Tab>'] = 'Alt-file'
-" <Leader><CR> stops search highlight
-noremap <silent> <Leader><CR> :<C-u>noh<CR>
-let g:which_key_leader['<CR>'] = 'No-highlight'
-
-let g:which_key_leader.p = [':Files', 'Find files']
 if has('nvim')
     let g:which_key_leader.o = [':OpenTerm', 'Open terminal']
 endif
-
-" <Space>s to save current file if dirty
-" This prevents unwanted undo history in undofile
-let g:which_key_leader.s =
-            \ [':if &modified | silent! undojoin | w | endif', 'Save file']
-
-" File
-let g:which_key_leader.f.e = {
-            \ 'name': '+edit',
-            \ 'v': [':tab drop ~/.vimrc', 'Edit .vimrc'],
-            \ 'c': [':CocConfig', 'Edit coc_settings.json'],
-            \ 't': [':tab drop ~/.vim/tasks.ini', 'Edit global tasks'],
-            \ 'd': [':call execute("tab drop ".&spellfile)', 'Edit dictionary'],
-            \ 's': [':SnipEdit', 'Edit snippets']
-            \ }
-
+nnoremap <silent> <Leader><CR> :nohlsearch<CR>
 " File - Yank - Content (copy the whole file to system clipboard)
 nnoremap <silent> <Leader>fyc gg"+yG<C-o>:<C-u>echom "Copied to clipboard"<CR>
-let g:which_key_leader.f.y.c = 'Copy file content'
 " File - Yank - Path (copy the full path to system clipboard)
 nnoremap <silent> <Leader>fyp :<C-u>let @+ = expand("%:p") <Bar>
             \ echom "Copied "..@+.." to clipboard"<CR>
-let g:which_key_leader.f.y.p = 'Copy file path'
-
-" File - Delete - Hidden
-let g:which_key_leader.f.d.h = [':call DeleteHiddenBuffers()', 'Delete hidden buffers']
-
-" File(buffer) - New (open an empty buffer that can be thrown away at any time)
-nnoremap <silent> <Leader>fnn :<C-u>Scratch<CR>
-let g:which_key_leader.f.n.n = 'Open empty buffer'
-" File(buffer) - New (with content of system clipboard), case of the last key
-" doesn't matter.
-nnoremap <silent> <Leader>fNN :<C-u>Scratch<CR>"+P
-let g:which_key_leader.f.N.N = 'Open buffer with clipboard'
-nnoremap <silent> <Leader>fNn :<C-u>Scratch<CR>"+P
-let g:which_key_leader.f.N.n = 'Open buffer with clipboard'
-" File(buffer) - New - Tab
-nnoremap <silent> <Leader>fnt :<C-u>TScratch<CR>
-let g:which_key_leader.f.n.t = 'Open empty buffer (tab)'
-nnoremap <silent> <Leader>fNt :<C-u>TScratch<CR>"+P
-let g:which_key_leader.f.N.t = 'Open buffer with clipboard (tab)'
-nnoremap <silent> <Leader>fNT :<C-u>TScratch<CR>"+P
-let g:which_key_leader.f.N.T = 'Open buffer with clipboard (tab)'
-" File(buffer) - New - Vsplit
-nnoremap <silent> <Leader>fnv :<C-u>VScratch<CR>
-let g:which_key_leader.f.n.v = 'Open empty buffer (vsplit)'
-nnoremap <silent> <Leader>fNv :<C-u>VScratch<CR>"+P
-let g:which_key_leader.f.N.v = 'Open buffer with clipboard (vsplit)'
-nnoremap <silent> <Leader>fNV :<C-u>VScratch<CR>"+P
-let g:which_key_leader.f.N.V = 'Open buffer with clipboard (vsplit)'
-
-" File - Tree
-nnoremap <silent> <Leader>ft  :<C-u>NERDTreeToggle<CR>
-let g:which_key_leader.f.t = 'NERDTree'
-
-" Find - Files (search for files with fzf.vim)
-"     also <leader>i
-nnoremap <silent> <Leader>ff  :<C-u>Files<CR>
-let g:which_key_leader.f.f = 'Find files'
-" Find - Ripgrep <Leader>fr to call ripgrep
-nnoremap <silent> <Leader>fr  :<C-u>silent FRg<CR>
-let g:which_key_leader.f.r = 'Find with Rg'
-" Find - Git - Commits
-nnoremap <silent> <Leader>fgc :<C-u>silent Commits<CR>
-let g:which_key_leader.f.g.c = 'Commits'
-" Find - Helptags
-nnoremap <silent> <Leader>fh  :<C-u>silent Helptags<CR>
-let g:which_key_leader.f.h = 'Find Helptags'
-" Find - CocCommands
-nnoremap <silent> <Leader>fcl :CocFzfList<CR>
-let g:which_key_leader.f.c.l = 'CocFzfList'
-nnoremap <silent> <Leader>fcc :CocFzfList commands<CR>
-let g:which_key_leader.f.c.c = 'commands'
-nnoremap <silent> <Leader>fco :CocFzfList outline<CR>
-let g:which_key_leader.f.c.o = 'outline'
-nnoremap <silent> <Leader>fcs :CocFzfList sources<CR>
-let g:which_key_leader.f.c.s = 'sources'
 
 " Edit
-let g:which_key_leader.e = {
-            \ 'name': '+edit',
-            \ 't': [':call TrimTrailingWhitespace()', 'Trim'],
-            \ 'f': 'Format'
-            \ }
-" Edit - Format
-nmap <Leader>ef <Plug>(coc-format)
 vmap <Leader>ef <Plug>(coc-format-selected)
 
-" Run
-let g:which_key_leader.r = {
-            \ 'name': '+run',
-            \ 's': [':AsyncTaskFzf', 'Select task...'],
-            \ 'b': [':AsyncTask project-build', 'Build project'],
-            \ 'r': [':AsyncTask project-run', 'Run project'],
-            \ 't': [':AsyncTask project-test', 'Test project'],
-            \ 'f': [':AsyncTask file-run', 'Run current file'],
-            \ }
-
-" Goto - History
-nnoremap <silent> <Leader>gh  :<C-u>History<CR>
-let g:which_key_leader.g.h = 'History files'
-" Goto - Buffer
-nnoremap <silent> gb          :<C-u>Buffers<CR>
-nnoremap <silent> <Leader>gb  :<C-u>Buffers<CR>
-let g:which_key_leader.g.b = 'Buffer'
-" Goto - Marks
-nnoremap <silent> <Leader>gm :<C-u>Marks<CR>
-let g:which_key_leader.g.m = 'Mark'
-" Goto - tag
-"     Also works in visual mode
-noremap <Leader>gt <C-]>
-let g:which_key_leader.g.t = 'Tags'
-" Goto - previous / next
-"     Not really necessary since <C-o> and <C-i> aren't hard to press
-nnoremap <Leader>gp <C-o>
-let g:which_key_leader.g.p = 'Previous'
-nnoremap <Leader>gn <C-i>
-let g:which_key_leader.g.n = 'Next'
-
-" Git - STatus
-nnoremap <silent> <Leader>gst :<C-u>Git status<CR>
-let g:which_key_leader.g.s.t = 'git status'
-
-
-" Language
-let g:which_key_leader.l = {
-            \ 'name': '+language',
-            \ 'c': [':CocFzfList commands', 'List commands'],
-            \ 'r': ['<Plug>(coc-rename)', 'Rename'],
-            \ 'f': ['<Plug>(coc-refactor)', 'Refactor'],
-            \ 'g': ['<Plug>(coc-definition)', 'Go to definition'],
-            \ 'i': ['<Plug>(coc-implementation)', 'Go to implementation'],
-            \ 'd': [':CocFzfList diagnostics', 'Diagnostics'],
-            \ }
 " Language - Action
 "     Example: `<Leader>aap` for current paragraph
 xmap <Leader>la   <Plug>(coc-codeaction-selected)
-let g:which_key_leader.l.a = { 'name': 'Code Action' }
 "     for the current line
 nmap <Leader>lac  <Plug>(coc-codeaction)
-
-" Window - Move - h/j/k/l
-" Meta(Alt/Option) + h/j/k/l goes to window
-nnoremap <Leader>wmh <C-w>H
-nnoremap <Leader>wmj <C-w>J
-nnoremap <Leader>wmk <C-w>K
-nnoremap <Leader>wml <C-w>L
-" Window - Move - Tab
-nnoremap <Leader>wmt <C-w>T
-" Window - Move - Only (maximize window)
-nnoremap <Leader>wmo <C-w>o
-" Window - Move - Exchange (with the next one)
-nnoremap <Leader>wmx <C-w>x
-" Window - Equal size
-nnoremap <Leader>w=  <C-w>=
-let g:which_key_leader.w['='] = 'Equal size'
-
-" Toggle
-let g:which_key_leader.t = {
-    \ 'name': '+toggle',
-    \ 'w': [':set wrap! | set wrap?', 'wrap'],
-    \ 'l': [':set list! | set list?', 'list'],
-    \ 's': [':set spell! | set spell?', 'spellcheck'],
-    \ 'n': [':set number! | let &relativenumber = &number | set number?',
-    \       'number'],
-    \ 'r': { 'n': [':set relativenumber! | set relativenumber?',
-    \              'relativenumber'],
-    \        't': [':RooterToggleStatus', 'Rooter']
-    \      },
-    \ 't': {},
-    \ 'a': { 'name': '+autoformat' },
-    \ 'd': {},
-    \ 'c': { 'name': '+cursor/coc',
-    \        'o': [':call ToggleCoc()', 'coc'],
-    \        'l': [':set cursorline! | set cursorline?', 'cursorline'],
-    \        'c': [':set cursorcolumn! | set cursorcolumn?', 'cursorcolumn'],
-    \        'r': [':ColorizerToggle', 'colorizer']
-    \      },
-    \ }
-
-" Toggle - Autoformat
-"     If disabled, you still can format with `gq`
-nnoremap <silent> <Leader>taa :<C-u>call
-            \ ToggleSetFlag
-            \ ('formatoptions', 'a',
-            \ 'Enabled formatting while typing.',
-            \ 'Disabled formatting while typing.'
-            \ )<CR>
-let g:which_key_leader.t.a.a = 'Formatting while typing'
-" Toggle - Autoformat - Join lines
-nnoremap <silent> <Leader>taj :<C-u>call ToggleSetFlag('formatoptions', 'w',
-            \ 'Enabled "gq" joining lines.', 'Disabled "gq" joining lines.')<CR>
-let g:which_key_leader.t.a.j = 'Join lines'
-" Toggle - Autoformat - Comment only
-nnoremap <silent> <Leader>tac :<C-u>call ToggleSetFlag('formatoptions', 't',
-            \ 'Format both comment and code', 'Only format comment.')<CR>
-let g:which_key_leader.t.a.c = 'Only format comment'
-" Toggle - Airline - Whitespace
-nnoremap <silent> <Leader>taw :AirlineToggleWhitespace<CR>
-let g:which_key_leader.t.a.w = 'Check WS'
-
-" Toggle - Display Long lines
-nnoremap <silent> <Leader>tdl
-      \ :if exists('w:long_line_match') <Bar>
-      \   silent! call matchdelete(w:long_line_match) <Bar>
-      \   unlet w:long_line_match <Bar>
-      \   echom "Disabled highlighting long lines." <Bar>
-      \ elseif &textwidth > 0 <Bar>
-      \   let w:long_line_match = matchadd('ErrorMsg','\%>'.&tw.'v.\+',-1) <Bar>
-      \   echom "Highlighting lines longer than "..&tw.." characters." <Bar>
-      \ else <Bar>
-      \   let w:long_line_match = matchadd('ErrorMsg', '\%>80v.\+', -1) <Bar>
-      \   echom "Highlighting lines longer than 80 characters. (default)" <Bar>
-      \ endif<CR>
-let g:which_key_leader.t.d.l = 'Display long lines'
-" Toggle - autoPairs
-nmap <Leader>tp <M-p>
-let g:which_key_leader.t.p = 'AutoPairs'
-" Toggle - Conceal
-nnoremap <silent> <Leader>tce :<C-u>
-            \ let &conceallevel = (&conceallevel == 0) ? 2 : 0 <BAR>
-            \ set conceallevel? <CR>
-
-" EasyMotion binds these. Don't show them in which-key
-let g:which_key_leader.j = 'which_key_ignore'
-let g:which_key_leader.k = 'which_key_ignore'
-let g:which_key_leader.n = 'which_key_ignore'
-let g:which_key_leader.N = 'which_key_ignore'
-let g:which_key_leader[','] = 'which_key_ignore'
-let g:which_key_leader[';'] = 'which_key_ignore'
-let g:which_key_leader['.'] = 'which_key_ignore'
 
 " \rl to save and reload vimrc
 augroup vimrc
@@ -825,8 +706,7 @@ command! DH call DeleteHiddenBuffers()
 command! HiTest source $VIMRUNTIME/syntax/hitest.vim
 
 " :Scratch to open a scratch buffer that can be discarded at any time
-command! MakeScratch setlocal nobuflisted buftype=nofile bufhidden=delete
-            \ noswapfile
+command! MakeScratch setlocal nobuflisted buftype=nofile bufhidden=delete noswapfile
 command! Scratch <mods>new +MakeScratch
 command! VScratch vnew +MakeScratch
 command! TScratch tabnew +MakeScratch
@@ -836,6 +716,58 @@ command! TScratch tabnew +MakeScratch
 " file it was loaded from, thus the changes you made.
 command! DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
             \ | wincmd p | diffthis
+
+" Toggle settings, etc. Used by which-key
+command! Leadertaa call
+            \ ToggleSetFlag
+            \ ('formatoptions', 'a',
+            \ 'Enabled formatting while typing.',
+            \ 'Disabled formatting while typing.'
+            \ )
+command! Leadertaj call ToggleSetFlag('formatoptions', 'w',
+            \ 'Enabled "gq" joining lines.', 'Disabled "gq" joining lines.')
+command! Leadertac call ToggleSetFlag('formatoptions', 't',
+            \ 'Format both comment and code', 'Only format comment.')
+
+command! ToggleConceal
+            \ let &conceallevel = (&conceallevel == 0) ? 2 : 0 |
+            \ set conceallevel?
+
+function! ToggleDisplayLongLines()
+    if exists('w:long_line_match')
+        silent! call matchdelete(w:long_line_match)
+        unlet w:long_line_match
+        echom "Disabled highlighting long lines."
+    elseif &textwidth > 0
+        let w:long_line_match = matchadd('ErrorMsg','\%>'.&tw.'v.\+',-1)
+        echom "Highlighting lines longer than "..&tw.." characters."
+    else
+        let w:long_line_match = matchadd('ErrorMsg', '\%>80v.\+', -1)
+        echom "Highlighting lines longer than 80 characters. (default)"
+    endif
+endfunction
+
+" Toggle a flag in an option
+" e.g. 'formatoptions'
+" :call ToggleSetFlag('formatoptions', 'a', 'Auto-formatting')
+" echoes 'Auto-formatting Enabled.' / 'Auto-formatting Disabled.'
+function! ToggleSetFlag(option, flag, pos_description, neg_description) abort
+    if stridx(execute('echo &'..a:option), a:flag) == -1
+        execute 'set '..a:option..'+='..a:flag
+        echom a:pos_description
+    else
+        execute 'set '..a:option..'-='..a:flag
+        echom a:neg_description
+    endif
+endfunction
+
+function! ToggleCoc() abort
+    if get(g:, 'coc_enabled', 0) == 1
+        CocDisable
+    else
+        CocEnable
+    endif
+endfunction
 
 " }}}
 
@@ -1074,7 +1006,6 @@ let g:coc_global_extensions = [
             \ 'coc-toml',
             \ 'coc-python',
             \ 'coc-vimtex',
-            \ 'coc-rls',
             \ 'coc-vimlsp',
             \ 'coc-emoji',
             \ 'coc-prettier',
@@ -1097,6 +1028,14 @@ function! s:show_documentation()
         call CocActionAsync('doHover')
     endif
 endfunction
+
+" Use Ctrl-P and Ctrl-N to scroll the popup window
+if has('nvim-0.4.3')
+    nnoremap <nowait><expr> <C-p> coc#float#has_scroll() ?
+                \ coc#float#scroll(0) : '<C-p>'
+    nnoremap <nowait><expr> <C-n> coc#float#has_scroll() ?
+                \ coc#float#scroll(1) : '<C-n>'
+endif
 
 " Custom text objects provided by coc (:h text-objects)
 " if / af to select a function
@@ -1170,6 +1109,7 @@ augroup END
 
 " The key at the back (;) will be used to start a pair
 let g:EasyMotion_keys = 'asdfghjklqwertyuiopzxcvbnm;'
+let g:EasyMotion_smartcase = 1
 
 " Changes the default binding from <Leader><Leader> to <Leader>
 " map <Leader> <Plug>(easymotion-prefix)
@@ -1285,7 +1225,7 @@ let g:NERDTreeMapPreviewVSplit = "gv"
 let g:NERDTreeMapMenu = "a"
 let g:NERDTreeMapChangeRoot = "cd"
 " list of ignore files
-let g:NERDTreeIgnore = ['\.DS_Store']
+let g:NERDTreeIgnore = ['\.DS_Store', 'Icon']
 
 let g:NERDTreeGitStatusConcealBrackets = 1 " don't show angle brackets
 let g:NERDTreeGitStatusShowIgnored = 1     " show ignored files
@@ -1481,6 +1421,10 @@ let g:vim_markdown_frontmatter = 1
 let g:vim_markdown_toml_frontmatter = 1
 let g:vim_markdown_json_frontmatter = 1
 
+augroup vimrc
+    au FileType markdown nmap <LocalLeader>r <Plug>MarkdownPreviewToggle
+augroup END
+
 
 " - vimtex {{{2
 
@@ -1521,15 +1465,17 @@ nnoremap <silent> <LocalLeader>lt
 
 if has('nvim-0.5.0')
 lua <<EOF
+
+local blackList = { "bash", "zsh", "rust" }
 require'nvim-treesitter.configs'.setup {
     ensure_installed = "maintained",
     highlight = {
         enable = true,
-        disable = { "bash", "zsh" },
+        disable = blackList,
     },
     indent = {
         enable = true,
-        disable = { "bash", "zsh" },
+        disable = blackList,
     },
 }
 EOF
@@ -1568,6 +1514,7 @@ augroup vimrc
     " Markdown
     " au FileType markdown setlocal conceallevel=2
     au FileType markdown setlocal foldlevel=999
+    au FileType markdown setlocal textwidth=80
 
     " Python
     " \i to set coc-python's interpreter
@@ -1575,6 +1522,9 @@ augroup vimrc
                 \ :CocCommand python.setInterpreter<CR>
     au FileType python   map <buffer><silent> <LocalLeader>l
                 \ :CocCommand python.enableLinting<CR>
+
+    " Rust
+    au FileType rust setlocal textwidth=99
 augroup END
 
 " END File type settings }}}1
@@ -1627,27 +1577,6 @@ function! TrimTrailingWhitespace() abort
     echom "Removed trailing spaces & newlines."
 endfunction
 
-" Toggle a flag in an option
-" e.g. 'formatoptions'
-" :call ToggleSetFlag('formatoptions', 'a', 'Auto-formatting')
-" echoes 'Auto-formatting Enabled.' / 'Auto-formatting Disabled.'
-function! ToggleSetFlag(option, flag, pos_description, neg_description) abort
-    if stridx(execute('echo &'..a:option), a:flag) == -1
-        execute 'set '..a:option..'+='..a:flag
-        echom a:pos_description
-    else
-        execute 'set '..a:option..'-='..a:flag
-        echom a:neg_description
-    endif
-endfunction
-
-function! ToggleCoc() abort
-    if get(g:, 'coc_enabled', 0) == 1
-        CocDisable
-    else
-        CocEnable
-    endif
-endfunction
 " }}}1
 
 " Done. {{{1

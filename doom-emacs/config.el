@@ -1,128 +1,219 @@
-;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;;; config.el -*- lexical-binding: t -*-
 
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
-
-
-;; Some functionality uses this to identify you, e.g. GPG configuration, email
-;; clients, file templates and snippets.
 (setq user-full-name    "Ziyang Lin"
       user-mail-address "jakelinnzy@gmail.com")
-
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
-;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
 
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 13 :weight 'regular)
     doom-variable-pitch-font (font-spec :family "Noto Sans"))
 
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-one
       doom-one-brighter-comments t)
 
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/org/")
-
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 
-
-;; Here are some additional functions/macros that could help you configure Doom:
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package!' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', relative to
-;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
-;; - `map!' for binding new keys
-;;
-;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
-;; This will open documentation for it, including demos of how they are used.
-;;
-;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
-;; they are implemented.
-
-(setq undo-limit 100000000            ;; Raise undo limit to 100MB
-      ;; -want-fine-undo t           ;; More granular undo
-      truncate-string-ellipsis "…")   ;; Display unicode clipsis
-
-;; Maximize the Emacs window on startup
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-(setq evil-shift-width 4
-      evil-split-window-below t
+(setq undo-limit 100000000            ;; Raise undo limit to 100MB
+      evil-want-fine-undo t           ;; More granular undo
+      truncate-string-ellipsis "…")   ;; Display unicode clipsis
+
+(setq tab-width 4
+      evil-shift-width 4)
+(setq-default indent-tabs-mode nil)
+
+(setq evil-split-window-below t
       evil-vsplit-window-right t)
 
-;; which-key
-(setq which-key-idle-delay 0.5
-      which-key-idle-secondary-delay 0)
+(modify-syntax-entry ?_ "w")
 
-
-;; lsp-mode
-(setq lsp-enable-snippet t
-    lsp-idle-delay 0.2)
-
-;; ivy
-(setq ivy-posframe-width 100
-    ivy-posframe-height 25)
-
-;; projectile
-;; Where to find projects
-(setq projectile-project-search-path
-    '("~/repos/"))
-;; Project root patterns
-(setq projectile-project-root-files
-    '(".root" "Cargo.toml" "requirements.txt"))
-;; Don't automatically add emacs sources into project list.
-(setq projectile-ignored-projects
-    '("~/" "/tmp" "~/.emacs.d/.local/straight/repos/"))
-(defun projectile-ignored-project-function (filepath)
-    "Return t if FILEPATH is within any of `projectile-ignored-projects'"
-    (or (mapcar (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
-
-;; avy (Emacs style EasyMotion equivalent)
-;; Use all lowercase leters plus semicolon
 (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l
                  ?q ?w ?e ?r ?t ?y ?u ?i ?o ?p
                  ?z ?x ?c ?v ?b ?n ?m 59))
 
-;; duplicate functionality as avy
 (after! evil-snipe
     (evil-snipe-mode -1))
 
-;; ;; Show snippets in company's completion list
-;; (after! yasnippet
-;;     (defvar company-mode/enable-yas t
-;;         "Enable yasnippet for all backends")
-;;     (defun company-mode/backend-with-yas (backend)
-;;         (if (or (not company-mode/enable-yas)
-;;                 (and (listp backend) (member 'company-yasnippet backend)))
-;;             backend
-;;             (append (if (consp backend) backend (list backend))
-;;                 '(:with company-yasnippet))))
-;;     (setq company-backends
-;;         (mapcar #'company-mode/backend-with-yas company-backends)))
+(map!
+    :n   "f"   #'avy-goto-char
+    :n   "s"   #'avy-goto-char-2
+    :nm  "M"   #'evil-set-marker
+    :nm  "m"   #'evil-scroll-down
+    :nm  ","   #'evil-scroll-up
+    :n   "RET" #'evil-ex-nohighlight
+    :n   "H"   #'beginning-of-line-text
+    :n   "L"   #'end-of-line
+    ;; M-h/j/k/l moves between splits
+    :nvm "M-h" #'windmove-left
+    :nvm "M-j" #'windmove-down
+    :nvm "M-k" #'windmove-up
+    :nvm "M-l" #'windmove-right
+    ;; Use C-f/b/p/n in Insert mode
+    :i   "C-p" #'previous-line
+    :i   "C-n" #'next-line
+    ;; SPC l g - Go to definition
+    (:leader
+        :desc "Format buffer"            "c f" #'lsp-format-buffer
+        :desc "Go to definition"         "c g" #'evil-goto-definition
+        :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized))
+;; Override evil-org's default bahaviour.
+(add-hook! 'evil-org-mode-hook
+    (defun my-org-mode-bindings ()
+        (map!
+            (:mode evil-org-mode
+                :nvm "M-h" #'windmove-left
+                :nvm "M-j" #'windmove-down
+                :nvm "M-k" #'windmove-up
+                :nvm "M-l" #'windmove-right))))
 
-;; don't show fill column indicator by default
-(setq display-fill-column-indicator nil)
+(map!
+    ;; evil-scroll-up/down and Info-scroll-up/down are the opposite. wtf?
+    (:mode Info-mode
+        :nvm "m" #'Info-scroll-up
+        :nvm "," #'Info-scroll-down)
 
-;; Treat underscore as a part of word
-(modify-syntax-entry ?_ "w")
+    ;; company-mode for completion
+    (:after company
+        :i "C-x C-x" #'company-complete
+        (:map company-active-map
+            ;; Tab accepts completion
+            "TAB" #'company-complete-selection
+            [tab] #'company-complete-selection
+            ;; Return always inserts newline
+            "RET"    #'newline-and-indent
+            [return] #'newline-and-indent))
 
-(load! "+bindings")
+    ;; treemacs: NERDTree-like file explorer
+    ;; C-t or SPC f t to open treemacs
+    :nm "C-t" #'treemacs
+    (:leader
+        (:prefix ("f" . "file")
+            :desc "Open treemacs" "t" #'treemacs))
+    (:after treemacs
+        (:map treemacs-mode-map
+            "p"    nil
+            "p a"  #'treemacs-add-project-to-workspace
+            "p d"  #'treemacs-remove-project-from-workspace
+            "m"    #'treemacs-move-file))
+
+    (:after dired
+        (:map dired-mode-map
+            :nm "c" #'dired-create-empty-file
+            :nm "C" #'dired-create-directory))
+
+    (:after python
+        (:map python-mode-map
+            :localleader
+            :desc "Format with autopep8" "f" #'py-autopep8-buffer))
+
+    ;; Why the f**k is this called pdf-tools not pdf
+    (:after pdf-tools
+        (:map pdf-view-mode-map
+            :nm "m" #'pdf-view-scroll-up-or-next-page
+            :nm "," #'pdf-view-scroll-down-or-previous-page)))
+
+(setq which-key-idle-delay 0.5
+      which-key-idle-secondary-delay 0)
+
+(setq ivy-posframe-width     100
+      ivy-posframe-min-width 100
+      ivy-posframe-height     25
+      ivy-posframe-min-height 25)
+(after! ivy
+    (ivy-posframe-mode -1))
+
+(setq lsp-enable-snippet t
+      lsp-idle-delay 0.2)
+
+(setq
+      ;; Where to find projects
+      projectile-project-search-path
+          '("~/repos/")
+      ;; Project root patterns
+      projectile-project-root-files
+          '(".root" "Cargo.toml" "requirements.txt")
+      ;; Don't automatically add emacs sources into project list.
+      projectile-ignored-projects
+          '("~/" "/tmp" "~/.emacs.d/.local/straight/repos/"))
+(defun projectile-ignored-project-function (filepath)
+    "Return t if FILEPATH is within any of `projectile-ignored-projects'"
+    (or (mapcar (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
+
+(map! :mode org-mode
+      (:localleader
+       :desc "Toggle visibility of block" "v" #'org-hide-block-toggle))
+
+(setq org-directory "~/Documents/org/")
+
+(with-eval-after-load 'org
+  (defvar-local rasmus/org-at-src-begin -1
+    "Variable that holds whether last position was a ")
+
+  (defvar rasmus/ob-header-symbol ?☰
+    "Symbol used for babel headers")
+
+  (defun rasmus/org-prettify-src--update ()
+    (let ((case-fold-search t)
+          (re "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*")
+          found)
+      (save-excursion
+        (goto-char (point-min))
+        (while (re-search-forward re nil t)
+          (goto-char (match-end 0))
+          (let ((args (org-trim
+                       (buffer-substring-no-properties (point)
+                                                       (line-end-position)))))
+            (when (org-string-nw-p args)
+              (let ((new-cell (cons args rasmus/ob-header-symbol)))
+                (cl-pushnew new-cell prettify-symbols-alist :test #'equal)
+                (cl-pushnew new-cell found :test #'equal)))))
+        (setq prettify-symbols-alist
+              (cl-set-difference prettify-symbols-alist
+                                 (cl-set-difference
+                                  (cl-remove-if-not
+                                   (lambda (elm)
+                                     (eq (cdr elm) rasmus/ob-header-symbol))
+                                   prettify-symbols-alist)
+                                  found :test #'equal)))
+        ;; Clean up old font-lock-keywords.
+        (font-lock-remove-keywords nil prettify-symbols--keywords)
+        (setq prettify-symbols--keywords (prettify-symbols--make-keywords))
+        (font-lock-add-keywords nil prettify-symbols--keywords)
+        (while (re-search-forward re nil t)
+          (font-lock-flush (line-beginning-position) (line-end-position))))))
+
+  (defun rasmus/org-prettify-src ()
+    "Hide src options via `prettify-symbols-mode'.
+  `prettify-symbols-mode' is used because it has uncollpasing. It's
+  may not be efficient."
+    (let* ((case-fold-search t)
+           (at-src-block (save-excursion
+                           (beginning-of-line)
+                           (looking-at "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*"))))
+      ;; Test if we moved out of a block.
+      (when (or (and rasmus/org-at-src-begin
+                     (not at-src-block))
+                ;; File was just opened.
+                (eq rasmus/org-at-src-begin -1))
+        (rasmus/org-prettify-src--update))
+      ;; Remove composition if at line; doesn't work properly.
+      ;; (when at-src-block
+      ;;   (with-silent-modifications
+      ;;     (remove-text-properties (match-end 0)
+      ;;                             (1+ (line-end-position))
+      ;;                             '(composition))))
+      (setq rasmus/org-at-src-begin at-src-block)))
+
+  (defun rasmus/org-prettify-symbols ()
+    (mapc (apply-partially 'add-to-list 'prettify-symbols-alist)
+          (cl-reduce 'append
+                     (mapcar (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+                             `(("#+begin_src" . ?➤) ;; ➤ 🖝 ➟ ➤ ✎
+                               ("#+end_src"   . ?¶) ;; ⏹
+                               ("#+header:" . ,rasmus/ob-header-symbol)
+                               ("#+begin_quote" . ?»)
+                               ("#+end_quote" . ?«)))))
+          (turn-on-prettify-symbols-mode)
+          ;;(add-hook 'post-command-hook 'rasmus/org-prettify-src t t)
+          )
+(add-hook 'org-mode-hook #'rasmus/org-prettify-symbols))

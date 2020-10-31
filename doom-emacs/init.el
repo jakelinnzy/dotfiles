@@ -24,7 +24,7 @@
     ;;helm              ; the *other* search engine for love and life
     ;;ido               ; the other *other* search engine...
                                         ; a search engine for love and life
-    (ivy +fuzzy +childframe +icons)
+    (ivy +fuzzy +icons)
 
     :ui
     ;;deft              ; notational velocity for Emacs
@@ -182,5 +182,5 @@
     ;;twitter           ; twitter client https://twitter.com/vnought
 
     :config
-    ;;literate
+    literate
     (default +bindings +smartparens))

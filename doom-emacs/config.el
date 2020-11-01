@@ -17,9 +17,12 @@
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-(setq undo-limit 100000000            ;; Raise undo limit to 100MB
+(setq fancy-splash-image
+      (concat doom-private-dir "assets/emacs-icon-200x200.png"))
+
+(setq undo-limit (* 100 1024 1024)    ;; Raise undo limit to 100MB
       evil-want-fine-undo t           ;; More granular undo
-      truncate-string-ellipsis "…")   ;; Display unicode clipsis
+      truncate-string-ellipsis "…")   ;; Display unicode elipsis
 
 (setq tab-width 4
       evil-shift-width 4)
@@ -46,8 +49,7 @@
   :nvm "M-h" #'windmove-left
   :nvm "M-j" #'windmove-down
   :nvm "M-k" #'windmove-up
-  :nvm "M-l" #'windmove-right
-  ))
+  :nvm "M-l" #'windmove-right))
 (define-minor-mode my-top-level-mode
   "Allows to use M-h/j/k/l to move between split windows."
   ;; The initial value
@@ -55,8 +57,7 @@
   ;; Indicator for mode line
   :lighter " my-top-level"
   ;; The minor mode map
-  :keymap my-top-level-mode-map
-  )
+  :keymap my-top-level-mode-map)
 (define-globalized-minor-mode global-my-top-level-mode
   my-top-level-mode my-top-level-mode)
 ;; This makes it take precedence over any other minor mode.
@@ -65,32 +66,36 @@
 (provide 'my-top-level-mode)
 
 (map!
- ;; map j and k only in normal mode, so v10j works as expected.
- :n   "j"   #'evil-next-visual-line
- :n   "k"   #'evil-previous-visual-line
- ;; Use m and , to scroll
  :nm  "m"   #'evil-scroll-down
  :nm  ","   #'evil-scroll-up
- :n   "f"   #'avy-goto-char
- :n   "s"   #'avy-goto-char-2
+ ;; m sets marker by default, move it to M
  :nm  "M"   #'evil-set-marker
- :n   "RET" #'evil-ex-nohighlight
- :nvm "H"   #'beginning-of-line-text
- :nvm "L"   #'end-of-line
- ;; Use C-f/b/p/n in Insert mode
- :i   "C-p" #'previous-line
- :i   "C-n" #'next-line)
 
-(map!
- ;; evil-scroll-up/down and Info-scroll-up/down are the opposite. wtf?
- (:mode Info-mode
-  :nvm "m" #'Info-scroll-up
-  :nvm "," #'Info-scroll-down)
+ (:after info
+  (:mode Info-mode
+   :nm "m" #'evil-scroll-down
+   :nm "," #'evil-scroll-up))
+
  ;; Why the f**k is this called pdf-tools not pdf
  (:after pdf-tools
   (:map pdf-view-mode-map
    :nm "m" #'pdf-view-scroll-up-or-next-page
-   :nm "," #'pdf-view-scroll-down-or-previous-page))
+   :nm "," #'pdf-view-scroll-down-or-previous-page)))
+
+(map!
+ ;; map j and k only in normal mode, so v10j works as expected.
+ :n   "j"   #'evil-next-visual-line
+ :n   "k"   #'evil-previous-visual-line
+ :n   "RET" #'evil-ex-nohighlight
+ ;; Home row keys jump to beginning and end of line
+ :nvm "H"   #'beginning-of-line-text
+ :nvm "L"   #'end-of-line
+
+ :n   "f"   #'avy-goto-char
+ :n   "s"   #'avy-goto-char-2
+ ;; Use C-f/b/p/n in Insert mode
+ :i   "C-p" #'previous-line
+ :i   "C-n" #'next-line
 
  ;; company-mode for completion
  (:after company
@@ -114,23 +119,34 @@
    "p"    nil
    "p a"  #'treemacs-add-project-to-workspace
    "p d"  #'treemacs-remove-project-from-workspace
-   "m"    #'treemacs-move-file))
+   "y"    nil
+   "y y"  #'treemacs-copy-file
+   "y m"  #'treemacs-move-file))
 
+ ;; Dired: 'c f' creates empty file, 'c d' creates directory
+ ;; Make it consistent with treemacs
  (:after dired
   (:map dired-mode-map
-   :nm "c" #'dired-create-empty-file
-   :nm "C" #'dired-create-directory)))
+   :nm "c"   nil
+   :nm "c f" #'dired-create-empty-file
+   :nm "c d" #'dired-create-directory)))
 
 (map!
  ;; SPC l g - Go to definition
  (:leader
   :desc "Format buffer"            "c f" #'lsp-format-buffer
   :desc "Go to definition"         "c g" #'evil-goto-definition
-  :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized)
- )
+  :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized))
 
 (setq which-key-idle-delay 0.5
       which-key-idle-secondary-delay 0)
+
+(setq which-key-allow-multiple-replacements t)
+(after! which-key
+  (pushnew!
+   which-key-replacement-alist
+   '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
+   '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))))
 
 (setq ivy-posframe-width     100
       ivy-posframe-min-width 100

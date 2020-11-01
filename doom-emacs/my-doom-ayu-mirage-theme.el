@@ -1,5 +1,6 @@
 ;;; my-doom-ayu-mirage-theme.el -*- no-byte-compile: t; -*-
-;;; Based on ayu-mirage color scheme and doom-one
+;;; Based on Ayu Mirage color scheme
+;;; Simple, Bright, and Elegant theme for Doom Emacs
 (require 'doom-themes)
 
 ;;
@@ -54,10 +55,11 @@ determine the exact padding."
    (teal       '("#95e6cb" "#44b9b1" "brightgreen"  ))
    (yellow     '("#ffd580" "#ECBE7B" "yellow"       ))
    (blue       '("#73d0ff" "#51afef" "brightblue"   ))
-   (dark-blue  '("#39bae6" "#2257A0" "blue"         ))
+   (dark-blue  '("#399EE6" "#2257A0" "blue"         ))
    (magenta    '("#f28779" "#c678dd" "brightmagenta"))
    (coral      '("#f29e74" "#ff8787" "brightmagenta"))
    (violet     '("#d4bfff" "#a9a1e1" "magenta"      ))
+   (dark-violet '("#a37acc" "#a9a1e1" "magenta"     ))
    (cyan       '("#5ccfe6" "#46D9FF" "brightcyan"   ))
    (dark-cyan  '("#39bae6" "#5699AF" "cyan"         ))
 
@@ -84,7 +86,6 @@ determine the exact padding."
    (vc-modified    orange)
    (vc-added       green)
    (vc-deleted     red)
-
    ;; custom categories
    (hidden     `(,(car bg) "black" "black"))
    (-modeline-pad
@@ -106,13 +107,25 @@ determine the exact padding."
    (modeline-bg-inactive-l `(,(car bg-alt) ,@(cdr base1))))
 
 
+
   ;; --- extra faces ------------------------
   ((elscreen-tab-other-screen-face :background "#353a42" :foreground "#1e2022")
+   (hl-line :background bg-alt)
+
+   ;; evil state indicators (the small circle at left of modeline)
+   (doom-modeline-evil-normal-state :foreground blue)
+   (doom-modeline-evil-insert-state :foreground green)
+   (doom-modeline-evil-visual-state :foreground yellow)
+   (doom-modeline-evil-operator-state :foreground dark-violet)
+   (doom-modeline-evil-motion-state :foreground magenta)
+   (doom-modeline-evil-replace-state :foreground red)
+
 
    (evil-goggles-default-face :inherit 'region :background (doom-blend region bg 0.5))
+   (evil-ex-lazy-highlight :background dark-blue :foreground bg)
 
    ((line-number &override) :foreground base4)
-   ((line-number-current-line &override) :foreground fg)
+   ((line-number-current-line &override) :foreground accent)
 
    ;; (font-lock-comment-face
    ;;  :foreground comments
@@ -146,7 +159,11 @@ determine the exact padding."
    (doom-modeline-buffer-project-root :foreground green :weight 'bold)
 
    ;; ivy-mode
-   (ivy-current-match :background dark-blue :distant-foreground base0 :weight 'normal)
+   (ivy-current-match :background (doom-darken violet 0.1) :foreground bg :weight 'normal)
+   (ivy-minibuffer-match-face-1 :background base5 :weight 'normal)
+   (ivy-minibuffer-match-face-2 :foreground accent :weight 'normal)
+   (ivy-minibuffer-match-face-3 :foreground accent :weight 'normal)
+   (ivy-minibuffer-match-face-4 :foreground accent :weight 'normal)
 
    ;; --- major-mode faces -------------------
    ;; css-mode / scss-mode
@@ -163,7 +180,12 @@ determine the exact padding."
    ((markdown-code-face &override) :background (doom-lighten base3 0.05))
 
    ;; org-mode
+   (org-level-1 :foreground blue   :weight 'bold)
+   (org-level-2 :foreground coral  :weight 'bold)
+   (org-level-3 :foreground violet :weight 'bold)
    (org-hide :foreground hidden)
+   ;; (org-block-begin-line :foreground base5 :background base3)
+   ;; (org-block-end-line :foreground base5 :background base3)
    (solaire-org-hide-face :foreground hidden))
 
 

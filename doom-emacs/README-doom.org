@@ -1,22 +1,4 @@
 #+TITLE: My doom-emacs config
 
 * Installation
-See [[https://github.com/hlissner/doom-emacs][doom-emacs repository]] for complete guide.
-
-** Dependencies
-#+begin_src
-brew install coreutils cmake fd git llvm ripgrep
-#+end_src
-
-Run =doom doctor= to find missing dependencies.
-
-** Install Doom
-#+begin_src
-git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
-~/.emacs.d/bin/doom install
-#+end_src
-
-Put the Doom config file under =~/.doom.d/=.
-
 * Customisation
-Remember to run =doom sync= after modifying the =doom!= block in =init.el=.

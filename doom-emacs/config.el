@@ -5,7 +5,15 @@
 
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font"
                            :size 13 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Noto Sans"))
+      ;; doom-variable-pitch-font (font-spec :family "sans")
+      doom-unicode-font (font-spec :family "SF Mono" :size 13))
+
+;; (mapc (lambda (x)
+;;         (add-to-list 'doom-unicode-extra-fonts x))
+;;       '("PingFang SC" "Input Mono"))
+
+(setq face-font-rescale-alist
+      (list (cons doom-unicode-font 1.2)))
 
 ;; load theme from user config directory
 (add-to-list 'custom-theme-load-path doom-private-dir)
@@ -22,7 +30,9 @@
 
 (setq undo-limit (* 100 1024 1024)    ;; Raise undo limit to 100MB
       evil-want-fine-undo t           ;; More granular undo
-      truncate-string-ellipsis "…")   ;; Display unicode elipsis
+      truncate-string-ellipsis "…"    ;; Display unicode elipsis
+      save-interprogram-paste-before-kill t ;; con't pollute the system clipboard
+      )
 
 (setq tab-width 4
       evil-shift-width 4)
@@ -41,6 +51,10 @@
 
 (after! evil-snipe
     (evil-snipe-mode -1))
+
+;; In packages.el:
+;;     (package! smartparens)
+(require 'smartparens-config)
 
 (defvar my-top-level-mode-map (make-sparse-keymap)
   "M-h/j/k/l to move between split windows.")
@@ -121,7 +135,11 @@
    "p d"  #'treemacs-remove-project-from-workspace
    "y"    nil
    "y y"  #'treemacs-copy-file
-   "y m"  #'treemacs-move-file))
+   "y m"  #'treemacs-move-file
+   "M-h"  nil
+   "M-j"  nil
+   "M-k"  nil
+   "M-l"  nil))
 
  ;; Dired: 'c f' creates empty file, 'c d' creates directory
  ;; Make it consistent with treemacs
@@ -147,6 +165,8 @@
    which-key-replacement-alist
    '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
    '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))))
+
+(setq treemacs-width 30)
 
 (setq ivy-posframe-width     100
       ivy-posframe-min-width 100
@@ -178,11 +198,19 @@
   ;; rls for rust
   (set-lsp-priority! 'rls    1))
 
+(after! yasnippet
+  (add-to-list 'yas-snippet-dirs (concat doom-private-dir "snippets")))
+
+;; (setq-hook! 'python-mode-hook +format-with-lsp nil)
 (map!
  (:after python
   (:map python-mode-map
    :localleader
    :desc "Format with autopep8" "f" #'py-autopep8-buffer)))
+
+(add-to-list 'load-path "~/.doom.d/vendor/arduino-mode")
+(setq auto-mode-alist (cons '("\\.\\(pde\\|ino\\)$" . arduino-mode) auto-mode-alist))
+(autoload 'arduino-mode "arduino-mode" "Arduino editing mode." t)
 
 (map! :mode org-mode
       (:localleader
@@ -261,7 +289,10 @@
                                ("#+end_src"   . ?¶) ;; ⏹
                                ("#+header:" . ,rasmus/ob-header-symbol)
                                ("#+begin_quote" . ?»)
-                               ("#+end_quote" . ?«)))))
+                               ("#+end_quote" . ?«)
+                               ("#+begin_example" . ?➟)
+                               ("#+end_example" . ?¶)
+                               ))))
     (turn-on-prettify-symbols-mode)
     ;;(add-hook 'post-command-hook 'rasmus/org-prettify-src t t)
     )

@@ -5,8 +5,10 @@ set output-meta on
 
 "\M-b": backward-word
 "\M-f": forward-word
-"\C-p":history-search-backward
-"\C-n":history-search-forward
+"\C-p": history-search-backward
+"\C-n": history-search-forward
+# shift-space isnerts space
+"\e[32;2u": " "
 
 set colored-stats on
 set completion-ignore-case on

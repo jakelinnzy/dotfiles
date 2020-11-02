@@ -63,4 +63,4 @@ zsh -i -c exit  0.09s user 0.08s system 92% cpu 0.191 total
 
 ## Emacs
 
-See `doom-emacs/README-doom.org`
+See `doom-emacs/config.org`

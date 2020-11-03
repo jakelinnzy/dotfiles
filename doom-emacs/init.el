@@ -39,7 +39,7 @@
     ligatures         ; ligatures and symbols to make your code pretty again
     ;;minimap           ; show a map of the code on the side
     modeline          ; snazzy, Atom-inspired modeline, plus API
-    ;;nav-flash         ; blink cursor line after big motions
+    nav-flash         ; blink cursor line after big motions
     ;; neotree           ; a project drawer, like NERDTree for vim
     ophints           ; highlight the region an operation acts on
     (popup +defaults)   ; tame sudden yet inevitable temporary windows
@@ -47,7 +47,7 @@
     treemacs          ; a project drawer, like neotree but cooler
     unicode           ; extended unicode support for various languages
     vc-gutter         ; vcs diff in the fringe
-    vi-tilde-fringe   ; fringe tildes to mark beyond EOB
+    ;; vi-tilde-fringe   ; fringe tildes to mark beyond EOB
     window-select     ; visually switch windows
     workspaces        ; tab emulation, persistence & separate workspaces
     ;;zen               ; distraction-free coding or writing
@@ -94,7 +94,7 @@
     (eval +overlay)     ; run code, run (also, repls)
     ;;gist              ; interacting with github gists
     lookup              ; navigate your code and its documentation
-    lsp
+    (lsp +peek)
     magit               ; a git porcelain for Emacs
     ;;make              ; run make tasks from Emacs
     ;;pass              ; password manager for nerds

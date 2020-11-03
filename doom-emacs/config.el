@@ -25,10 +25,13 @@
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
+(setq frame-title-format '("%b [%m] - Emacs"))
+
 (setq fancy-splash-image
       (concat doom-private-dir "assets/emacs-icon-200x200.png"))
 
-(setq undo-limit (* 100 1024 1024)    ;; Raise undo limit to 100MB
+(setq auto-save-default t
+      undo-limit (* 100 1024 1024)    ;; Raise undo limit to 100MB
       evil-want-fine-undo t           ;; More granular undo
       truncate-string-ellipsis "…"    ;; Display unicode elipsis
       save-interprogram-paste-before-kill t ;; con't pollute the system clipboard
@@ -102,14 +105,15 @@
  :n   "k"   #'evil-previous-visual-line
  :n   "RET" #'evil-ex-nohighlight
  ;; Home row keys jump to beginning and end of line
- :nvm "H"   #'beginning-of-line-text
- :nvm "L"   #'end-of-line
+ :nvm "H"   #'doom/backward-to-bol-or-indent
+ :nvm "L"   #'doom/forward-to-last-non-comment-or-eol
 
  :n   "f"   #'avy-goto-char
  :n   "s"   #'avy-goto-char-2
  ;; Use C-f/b/p/n in Insert mode
  :i   "C-p" #'previous-line
  :i   "C-n" #'next-line
+
 
  ;; company-mode for completion
  (:after company
@@ -149,12 +153,26 @@
    :nm "c f" #'dired-create-empty-file
    :nm "c d" #'dired-create-directory)))
 
+(defun my/toggle-vterm ()
+  (interactive)
+  (evil-force-normal-state)
+  (+vterm/toggle nil)
+  ;; Enter insert state if a terminal is on
+  (when (eq major-mode 'vterm-mode)
+    (evil-insert-state)))
+
+(map!
+ ;; nvim
+ :nvim "s-`" #'my/toggle-vterm)
+
 (map!
  ;; SPC l g - Go to definition
  (:leader
   :desc "Format buffer"            "c f" #'lsp-format-buffer
   :desc "Go to definition"         "c g" #'evil-goto-definition
-  :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized))
+  :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized
+  :desc "Move workspace left"  "TAB C-h" #'+workspace/swap-left
+  :desc "Move workspace right" "TAB C-l" #'+workspace/swap-right))
 
 (setq which-key-idle-delay 0.5
       which-key-idle-secondary-delay 0)
@@ -175,6 +193,20 @@
 ;; (after! ivy
 ;;   (ivy-posframe-mode -1))
 
+(after! magit
+  (map! :mode magit-mode
+        :g "m" #'evil-scroll-down
+        :g "," #'evil-scroll-up
+        :g "M" #'magit-merge
+        :g "R" #'magit-remote))
+(map! :leader
+      :desc "Magit push" "g p" #'magit-push)
+
+(after! ibuffer
+  (map! :mode ibuffer-mode
+        :i "j" #'evil-next-line
+        :i "k" #'evil-previous-line))
+
 (setq
  ;; Where to find projects
  projectile-project-search-path '("~/repos/")
@@ -188,15 +220,16 @@
   (or (mapcar (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
 
 (setq lsp-enable-snippet t
-      lsp-idle-delay 0.2)
-;; set priorities of language servers
-(after! lsp-mode
-  ;; mspyls for python
-  (set-lsp-priority! 'mspyls 1)
-  ;; clangd for C/C++
-  (set-lsp-priority! 'clangd 1)
-  ;; rls for rust
-  (set-lsp-priority! 'rls    1))
+      lsp-idle-delay 1.0
+      lsp-modeline-diagnostics-message t
+      lsp-modeline-diagnostics-scope :file
+      ;; improve performance by deferring gc & allowing to read more frequently
+      gc-cons-threshold (* 300 1024 1024)
+      read-process-output-max (* 5 1024 1024))
+
+(after! spell-fu
+  (remove-hook 'text-mode-hook
+               #'spell-fu-mode))
 
 (after! yasnippet
   (add-to-list 'yas-snippet-dirs (concat doom-private-dir "snippets")))

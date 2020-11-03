@@ -160,12 +160,20 @@ determine the exact padding."
         (doom-modeline-project-dir :inherit 'doom-modeline-buffer-file)
         (doom-modeline-project-root-dir :inherit 'doom-modeline-buffer-file)
 
+        ;; nav-flash
+        (nav-flash-face :background base5)
+
         ;; ivy-mode
         (ivy-current-match :background (doom-darken violet 0.1) :foreground bg :weight 'normal)
         (ivy-minibuffer-match-face-1 :background base5 :weight 'normal)
         (ivy-minibuffer-match-face-2 :foreground accent :weight 'normal)
         (ivy-minibuffer-match-face-3 :foreground accent :weight 'normal)
         (ivy-minibuffer-match-face-4 :foreground accent :weight 'normal)
+
+        ;; lsp-mode
+        (lsp-face-highlight-read :background base4 :weight 'bold)
+        (lsp-face-highlight-write :background base4 :weight 'bold)
+        (lsp-face-highlight-textual :background base4 :weight 'bold)
 
         ;; --- major-mode faces -------------------
         ;; css-mode / scss-mode

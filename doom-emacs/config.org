@@ -14,16 +14,15 @@ brew install coreutils cmake fd git llvm ripgrep
 Run =doom doctor= to find missing dependencies.
 
 ** Installing Doom
-#+begin_example
+#+begin_example sh
 git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
 ~/.emacs.d/bin/doom install
-
 #+end_example
 Add ~export PATH="$PATH:$HOME/.emacs.d/bin"~ to bashrc or zshrc file.
 Put the Doom config file under =~/.doom.d/=.
 
-** Switching Emacs versions on macOS
-#+begin_example
+** TODO Switching Emacs versions on macOS
+#+begin_example sh
 brew tap d12frosted/emacs-plus
 brew install emacs-plus@27    # if already installed, use `brew link` instead
 rm /Applications/Emacs.app    # if Emacs.app is not a symlink, add -rf flag
@@ -87,6 +86,11 @@ Maximize window on startup
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 #+end_src
 
+Display buffer name and major mode in the window title
+#+begin_src elisp
+(setq frame-title-format '("%b [%m] - Emacs"))
+#+end_src
+
 Show a image on splash screen
 #+begin_src elisp
 (setq fancy-splash-image
@@ -100,7 +104,8 @@ Haven't figured out if Emacs can achieve this. Current workaround is to run Emac
 
 ** Change some behaviours
 #+begin_src elisp
-(setq undo-limit (* 100 1024 1024)    ;; Raise undo limit to 100MB
+(setq auto-save-default t
+      undo-limit (* 100 1024 1024)    ;; Raise undo limit to 100MB
       evil-want-fine-undo t           ;; More granular undo
       truncate-string-ellipsis "…"    ;; Display unicode elipsis
       save-interprogram-paste-before-kill t ;; con't pollute the system clipboard
@@ -207,14 +212,15 @@ IMO it's far more ergonomic to scroll with a single key than combinations such a
  :n   "k"   #'evil-previous-visual-line
  :n   "RET" #'evil-ex-nohighlight
  ;; Home row keys jump to beginning and end of line
- :nvm "H"   #'beginning-of-line-text
- :nvm "L"   #'end-of-line
+ :nvm "H"   #'doom/backward-to-bol-or-indent
+ :nvm "L"   #'doom/forward-to-last-non-comment-or-eol
 
  :n   "f"   #'avy-goto-char
  :n   "s"   #'avy-goto-char-2
  ;; Use C-f/b/p/n in Insert mode
  :i   "C-p" #'previous-line
  :i   "C-n" #'next-line
+
 
  ;; company-mode for completion
  (:after company
@@ -255,6 +261,22 @@ IMO it's far more ergonomic to scroll with a single key than combinations such a
    :nm "c d" #'dired-create-directory)))
 #+end_src
 
+** Use cmd+` to toggle the vterm buffer
+
+#+begin_src elisp
+(defun my/toggle-vterm ()
+  (interactive)
+  (evil-force-normal-state)
+  (+vterm/toggle nil)
+  ;; Enter insert state if a terminal is on
+  (when (eq major-mode 'vterm-mode)
+    (evil-insert-state)))
+
+(map!
+ ;; nvim
+ :nvim "s-`" #'my/toggle-vterm)
+#+end_src
+
 ** <Leader>
 #+begin_src elisp
 (map!
@@ -262,7 +284,9 @@ IMO it's far more ergonomic to scroll with a single key than combinations such a
  (:leader
   :desc "Format buffer"            "c f" #'lsp-format-buffer
   :desc "Go to definition"         "c g" #'evil-goto-definition
-  :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized))
+  :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized
+  :desc "Move workspace left"  "TAB C-h" #'+workspace/swap-left
+  :desc "Move workspace right" "TAB C-l" #'+workspace/swap-right))
 #+end_src
 
 * Plugins
@@ -313,6 +337,27 @@ Customize the size of popup window.
 ;;   (ivy-posframe-mode -1))
 #+end_src
 
+** Magit
+#+begin_src elisp
+(after! magit
+  (map! :mode magit-mode
+        :g "m" #'evil-scroll-down
+        :g "," #'evil-scroll-up
+        :g "M" #'magit-merge
+        :g "R" #'magit-remote))
+(map! :leader
+      :desc "Magit push" "g p" #'magit-push)
+#+end_src
+
+** IBuffer
+Use j and k for navigating in this mode.
+#+begin_src elisp
+(after! ibuffer
+  (map! :mode ibuffer-mode
+        :i "j" #'evil-next-line
+        :i "k" #'evil-previous-line))
+#+end_src
+
 ** projectile
 Manages projects with ~SPC p~.
 #+begin_src elisp
@@ -333,15 +378,21 @@ Manages projects with ~SPC p~.
 ** LSP-mode
 #+begin_src elisp
 (setq lsp-enable-snippet t
-      lsp-idle-delay 0.2)
-;; set priorities of language servers
-(after! lsp-mode
-  ;; mspyls for python
-  (set-lsp-priority! 'mspyls 1)
-  ;; clangd for C/C++
-  (set-lsp-priority! 'clangd 1)
-  ;; rls for rust
-  (set-lsp-priority! 'rls    1))
+      lsp-idle-delay 1.0
+      lsp-modeline-diagnostics-message t
+      lsp-modeline-diagnostics-scope :file
+      ;; improve performance by deferring gc & allowing to read more frequently
+      gc-cons-threshold (* 300 1024 1024)
+      read-process-output-max (* 5 1024 1024))
+#+end_src
+
+** Spell checker
+Only enable spell checking when I press ~SPC t s~ to avoid red underlines.
+
+#+begin_src elisp
+(after! spell-fu
+  (remove-hook 'text-mode-hook
+               #'spell-fu-mode))
 #+end_src
 
 ** YASnippet

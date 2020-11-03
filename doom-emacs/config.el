@@ -5,24 +5,15 @@
 
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font"
                            :size 13 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Avenir Next"
-                                          :size 13)
+      doom-variable-pitch-font (font-spec :family "Avenir Next" :size 13)
       ;; doom-variable-pitch-font (font-spec :family "sans")
       ;; This fixes CJK alignment issues
       doom-unicode-extra-fonts
-      '("Source Han Sans-16" "PingFang SC-16"
+      '("PingFang SC"
         "Weather Icons" "github-octicons" "FontAwesome"
-        "all-the-icons" "file-icons" "Menlo"))
-
-;; (after! unicode
-;;   (add-to-list 'unicode-fonts-fallback-font-list "PingFang SC-16"))
-
-;; (mapc (lambda (x)
-;;         (add-to-list 'doom-unicode-extra-fonts x))
-;;       '("PingFang SC" "Input Mono"))
-
-;; (setq face-font-rescale-alist
-;;       (list (cons doom-unicode-font 1.2)))
+        "all-the-icons" "file-icons" "Menlo")
+      face-font-rescale-alist '(("PingFang SC" . 1.25)))
+;; (doom/reload-font)
 
 ;; load theme from user config directory
 (add-to-list 'custom-theme-load-path doom-private-dir)
@@ -58,6 +49,11 @@
       ring-bell-function #'ignore     ;; Disable bell completely
       )
 
+;; Enable soft wrapping by default (toggle with SPC t w), except in temp
+;; buffers e.g. Dired, ibuffer
+(add-hook! '(prog-mode-hook text-mode-hook)
+           #'visual-line-mode)
+
 (setq tab-width 4
       evil-shift-width 4)
 (setq-default indent-tabs-mode nil)
@@ -81,6 +77,9 @@
 ;; In packages.el:
 ;;     (package! smartparens)
 (require 'smartparens-config)
+
+      ;; Yes I'm lazy
+(setq company-minimum-prefix-length 1)
 
 (add-hook 'doom-scratch-buffer-hook #'text-mode)
 
@@ -213,8 +212,8 @@
 
 (setq treemacs-width 30)
 
-(setq ivy-posframe-width     100
-      ivy-posframe-min-width 100
+(setq ivy-posframe-width     130
+      ivy-posframe-min-width 130
       ivy-posframe-height     25
       ivy-posframe-min-height 25)
 ;; (after! ivy
@@ -303,15 +302,16 @@
 (setq auto-mode-alist (cons '("\\.\\(pde\\|ino\\)$" . arduino-mode) auto-mode-alist))
 (autoload 'arduino-mode "arduino-mode" "Arduino editing mode." t)
 
-(map! :mode org-mode
-      (:localleader
-       :desc "Execute buffer" "E" #'org-babel-execute-buffer))
-
-(map! :mode org-mode
-      (:localleader
-       :desc "Toggle visibility of block" "v" #'org-hide-block-toggle))
-
 (setq org-directory "~/Documents/org/")
+
+(setq org-ellipsis "…")
+
+(map! :mode org-mode
+      (:localleader
+       ;; Toggle visibility of current block
+       :desc "Toggle visibility of block" "v" #'org-hide-block-toggle
+       ;; Execute all code blocks in the org buffer
+       :desc "Execute buffer" "E" #'org-babel-execute-buffer))
 
 (after! org
   (load! "vendor/org-prettify-source-block")

@@ -60,6 +60,9 @@
 (package! magit-delta
     :recipe (:host github :repo "dandavison/magit-delta"))
 
+;; Display proportional font but use monospace for code, tables, etc
+(package! mixed-pitch)
+
 (package! smartparens)
 (package! arduino-mode
     :recipe (:host github :repo "bookest/arduino-mode"))

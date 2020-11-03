@@ -65,7 +65,9 @@
 (setq evil-split-window-below t
       evil-vsplit-window-right t
       ;; :s command has the global flag by default, adding /g cancels the flag.
-      evil-ex-substitute-global t)
+      evil-ex-substitute-global t
+      ;; keep 5 lines from the margin
+      scroll-margin 5)
 
 (modify-syntax-entry ?_ "w")
 
@@ -163,6 +165,7 @@
    "y"    nil
    "y y"  #'treemacs-copy-file
    "y m"  #'treemacs-move-file
+   :nmg "v" #'treemacs-peek
    "M-h"  nil
    "M-j"  nil
    "M-k"  nil
@@ -182,7 +185,6 @@
   (+vterm/toggle nil)
   ;; Scroll to bottom and enter insert state when switching into the terminal
   (when (eq major-mode 'vterm-mode)
-    (evil-goto-line)
     (evil-insert-state)))
 
 (map!
@@ -195,6 +197,7 @@
   :desc "Format buffer"            "c f" #'lsp-format-buffer
   :desc "Go to definition"         "c g" #'evil-goto-definition
   :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized
+  :desc "Toggle monospace font"    "t m" #'mixed-pitch-mode
   :desc "Move workspace left"  "TAB <" #'+workspace/swap-left
   :desc "Move workspace right" "TAB >" #'+workspace/swap-right))
 

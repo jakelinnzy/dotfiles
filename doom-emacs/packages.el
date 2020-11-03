@@ -49,10 +49,27 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
                                         ;(unpin! t)
 
-;; (package! ayu-theme)
+;; not needed
+(package! evil-snipe :disable t)
 
 ;; Python LSP doesn't support formatting
 ;; Use SPC m f to format python code instead.
 (package! py-autopep8)
 
+;; View magit diffs with delta
+(package! magit-delta
+    :recipe (:host github :repo "dandavison/magit-delta"))
+
 (package! smartparens)
+(package! arduino-mode
+    :recipe (:host github :repo "bookest/arduino-mode"))
+(package! resize-window
+    :recipe (:host github :repo "dpsutton/resize-window"))
+(package! org-pretty-table
+    :recipe (:host github :repo "Fuco1/org-pretty-table"))
+
+;; Write emails in org mode
+;; (package! org-msg)
+
+;; webcomics in text editor. nice.
+(package! xkcd)

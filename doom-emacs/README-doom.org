@@ -1,4 +1,0 @@
-#+TITLE: My doom-emacs config
-
-* Installation
-* Customisation

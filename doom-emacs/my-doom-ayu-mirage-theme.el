@@ -49,7 +49,7 @@ determine the exact padding."
         (accent3    '("#ffae57" "#ffaf87" "yellow"       ))
 
         (grey       base4)
-        (red        '("#ff3333" "#ff6655" "red"          ))
+        (red        '("#ff6655" "#ff6655" "red"          ))
         (orange     '("#ffa759" "#dd8844" "brightred"    ))
         (green      '("#bae67e" "#99bb66" "green"        ))
         (teal       '("#95e6cb" "#44b9b1" "brightgreen"  ))

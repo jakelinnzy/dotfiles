@@ -39,7 +39,7 @@ source "$HOME/.local/antigen.zsh"
 # use oh-my-zsh's plugins
 antigen use oh-my-zsh
 antigen bundle git
-antigen bundle autojump
+# antigen bundle autojump
 
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
@@ -88,6 +88,10 @@ export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"
 # fzf & ripgrep
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
 export FZF_DEFAULT_COMMAND="rg --files"
+
+# fasd: more powerful autojump
+alias j="fasd_cd -d"
+alias jj="fasd_cd -di"
 
 alias la="ls -Ah"
 alias lla="ls -lAh"
@@ -172,6 +176,8 @@ pastefinish() {
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
+# fasd
+eval "$(fasd --init auto)"
 
 # iTerm2 shell integration {{{2
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

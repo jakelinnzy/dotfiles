@@ -62,7 +62,10 @@
     :recipe (:host github :repo "dpsutton/resize-window"))
 (package! org-pretty-table
     :recipe (:host github :repo "Fuco1/org-pretty-table"))
+(package! pdf-continuous-scroll-mode
+    :recipe (:host github :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
 
+;; Arduino
 (package! arduino-mode
     :recipe (:host github :repo "bookest/arduino-mode"))
 ;; Python LSP doesn't support formatting

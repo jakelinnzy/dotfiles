@@ -5,13 +5,13 @@
 
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font"
                            :size 13 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Avenir Next" :size 13)
+      doom-variable-pitch-font (font-spec :family "Apercu" :size 13)
       ;; doom-variable-pitch-font (font-spec :family "sans")
       ;; This fixes CJK alignment issues
       doom-unicode-extra-fonts
       '("PingFang SC"
         "Weather Icons" "github-octicons" "FontAwesome"
-        "all-the-icons" "file-icons" "Menlo")
+        "all-the-icons" "file-icons" "Apple Color Emoji" "Menlo")
       face-font-rescale-alist '(("PingFang SC" . 1.25)))
 ;; (doom/reload-font)
 
@@ -28,6 +28,8 @@
 
 (setq fancy-splash-image
       (concat doom-private-dir "assets/emacs-icon-200x200.png"))
+
+(setq indent-guide-char "│")
 
 (defun my/doom-modeline-conditional-buffer-encoding ()
   "Hide the encoding information when it is not LF UTF-8."
@@ -53,6 +55,11 @@
 ;; buffers e.g. Dired, ibuffer
 (add-hook! '(prog-mode-hook text-mode-hook)
            #'visual-line-mode)
+
+;; This makes emacs-mac-port behave like any other Mac app in multiple
+;; workspaces. e.g. when you are in another workspace and click Emacs' icon
+;; in the Dock, you switch to the workspace Emacs is in.
+(menu-bar-mode 1)
 
 (setq tab-width 4
       evil-shift-width 4)
@@ -270,6 +277,10 @@
 ;;   Main data structure of the dispatcher with the form:
 ;;   \(char function documentation match-capitals\)
 
+;; (after! pdf-view
+;;   (require 'pdf-continuous-scroll-mode)
+;;   (add-hook 'pdf-view-mode-hook #'pdf-continuous-scroll-mode))
+
 (setq lsp-enable-snippet t
       lsp-idle-delay 1.0
       lsp-modeline-diagnostics-message t
@@ -304,7 +315,9 @@
 
 (setq org-directory "~/Documents/org/")
 
-(setq org-ellipsis "…")
+(setq org-ellipsis "…"
+      ;; Hides *bold* /italic/ etc.
+      org-hide-emphasis-markers nil)
 
 (map! :mode org-mode
       (:localleader
@@ -313,8 +326,21 @@
        ;; Execute all code blocks in the org buffer
        :desc "Execute buffer" "E" #'org-babel-execute-buffer))
 
+;; (after! org
+;;   (load! "vendor/org-prettify-source-block")
+;;   (add-hook 'org-mode-hook #'rasmus/org-prettify-symbols))
 (after! org
-  (load! "vendor/org-prettify-source-block")
-  (add-hook 'org-mode-hook #'rasmus/org-prettify-symbols))
+  (defun my/prettify-org-setup ()
+    (setq prettify-symbols-alist
+          '(("#+begin_src" . ?➤) ;; ➤ 🖝 ➟ ➤ ✎
+            ("#+end_src"   . ?¶) ;; ⏹
+            ("#+header:" . ,rasmus/ob-header-symbol)
+            ("#+begin_quote" . ?»)
+            ("#+end_quote" . ?«)
+            ("#+begin_example" . ?➟)
+            ("#+end_example" . ?¶))
+          prettify-symbols-unprettify-at-point 'right-edge)
+    (prettify-symbols-mode 1))
+  (add-hook 'org-mode-hook #'my/prettify-org-setup))
 
 "Done."

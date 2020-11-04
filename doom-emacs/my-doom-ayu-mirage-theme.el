@@ -165,7 +165,7 @@ determine the exact padding."
 
         ;; ivy-mode
         (ivy-current-match :background (doom-darken violet 0.1) :foreground bg :weight 'normal)
-        (ivy-minibuffer-match-face-1 :background base5 :weight 'normal)
+        (ivy-minibuffer-match-face-1 :foreground accent :weight 'normal)
         (ivy-minibuffer-match-face-2 :foreground accent :weight 'normal)
         (ivy-minibuffer-match-face-3 :foreground accent :weight 'normal)
         (ivy-minibuffer-match-face-4 :foreground accent :weight 'normal)

@@ -138,7 +138,7 @@
     ;;julia             ; a better, faster MATLAB
     ;;kotlin            ; a better, slicker Java(Script)
                                         ; writing papers in Emacs has never been so fun
-    ;; (latex +latexmk +lsp +fold)
+    (latex +latexmk +lsp +fold)
     ;;lean
     ;;factor
     ;;ledger            ; an accounting system in Emacs
@@ -147,7 +147,8 @@
     ;;nim               ; python + lisp at the speed of c
     ;;nix               ; I hereby declare "nix geht mehr!"
     ;;ocaml             ; an objective camel
-    (org +brain +dragndrop +pretty) ; organize your plain life in plain text
+    (org +brain +dragndrop +pandoc ; organize your plain life in plain text
+        +present +pretty)
     ;;php               ; perl's insecure younger brother
     ;;plantuml          ; diagrams for confusing people more
     ;;purescript        ; javascript, but functional

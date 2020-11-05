@@ -36,7 +36,7 @@ Environment version management: check [asdf](https://asdf-vm.com) and
 
 ## Emacs
 
-See `doom-emacs/config.org`
+See [doom-emacs/config.org](doom-emacs/config.org)
 
 ## Shell prompt
 

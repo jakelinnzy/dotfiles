@@ -31,8 +31,8 @@ npm install -g neovim
 ```
 
 Environment version management: check [asdf](https://asdf-vm.com) and
-[asdf-direnv](https://github.com/asdf-community/asdf-direnv). Install both to
-`~/.zshrc_after`.
+[asdf-direnv](https://github.com/asdf-community/asdf-direnv). Configure both
+in `~/.zshrc_after`.
 
 Homebrew provides a way to save all installed packages (including cask) to a
 file. Run `brew bundle dump`.
@@ -64,17 +64,18 @@ zsh -i -c exit  0.09s user 0.08s system 92% cpu 0.191 total
 ## Vim
 
 The vimrc is meant to be used with Neovim 0.5+, although it also works on
-Vim with some plugins disabled.
+Vim 8 with some plugins disabled.
 
-Some settings I really like:
+Some highlights:
 
-- Use `,` and `m` for scrolling.
+- Use `,` and `m` for scrolling. Way more ergonomic than pressing `C-d` and
+  `C-u` repeatedly.
     ```
     noremap , <C-u>
     noremap m <C-d>
     ```
-- `Alt + h/j/k/l` moves cursor between split windows in any mode.
-- Use space bar as the leader key and have logical mappings.
+- `Alt + h/j/k/l` moves cursor between split windows.
+- Use space bar as the leader key.
 
 ## Useful programs
 

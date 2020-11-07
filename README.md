@@ -34,9 +34,20 @@ Environment version management: check [asdf](https://asdf-vm.com) and
 [asdf-direnv](https://github.com/asdf-community/asdf-direnv). Install both to
 `~/.zshrc_after`.
 
+Homebrew provides a way to save all installed packages (including cask) to a
+file. Run `brew bundle dump`.
+
+To install all packages with Homebrew, run (this may take a while)
+```
+brew bundle --file=./Brewfile
+```
+
 ## Emacs
 
-See [doom-emacs/config.org](doom-emacs/config.org)
+See [doom-emacs/config.org](doom-emacs/config.org).
+
+Installing Doom Emacs is really slow. To quickly start working, use Vim / Neovim
+instead.
 
 ## Shell prompt
 

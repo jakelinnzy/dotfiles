@@ -530,6 +530,15 @@ Manages projects with =SPC p=.
   (or (mapcar (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
 #+end_src
 
+** Make
+Run make with =SPC c m=.
+#+begin_src elisp
+(map! :map prog-mode-map
+      :leader
+      :desc "Run last make task" "c m" #'+make/run-last
+      :desc "Run make task" "c M" #'+make/run)
+#+end_src
+
 ** TODO taskrunner
 Doesn't work for some reason. Need to figure out.
 

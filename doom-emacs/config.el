@@ -264,6 +264,11 @@
   "Return t if FILEPATH is within any of `projectile-ignored-projects'"
   (or (mapcar (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
 
+(map! :map prog-mode-map
+      :leader
+      :desc "Run last make task" "c m" #'+make/run-last
+      :desc "Run make task" "c M" #'+make/run)
+
 ;; (use-package taskrunner
 ;;   :commands (ivy-taskrunner))
 

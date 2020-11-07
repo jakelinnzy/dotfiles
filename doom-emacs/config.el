@@ -370,4 +370,16 @@
     (prettify-symbols-mode 1))
   (add-hook 'org-mode-hook #'my/prettify-org-setup))
 
+(after! org
+  (load! "vendor/org-return-dwim" doom-private-dir)
+  (map! :map evil-org-mode-map  ;; this overrides evil's default binding
+        :i "RET"    #'unpackaged/org-return-dwim
+        :i [return] #'unpackaged/org-return-dwim))
+
+(after! org
+  (load! "vendor/org-fix-blank-lines" doom-private-dir)
+  (map! :mode org-mode
+        :localleader
+        :desc "Fix blank lines" "z" #'unpackaged/org-fix-blank-lines))
+
 "Done."

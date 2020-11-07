@@ -1,9 +1,6 @@
 # My dotfiles backup
 
-Managed with [dotbot](https://github.com/anishathalye/dotbot). To install,
-clone the repo and run `./install`. To add a file/directory, move it into the
-repo (delete/rename the original), modify `install.conf.yaml`, and run
-`./install`.
+Managed with [dotbot](https://github.com/anishathalye/dotbot). To install, clone the repo and run `./install`. To add a file/directory, move it into the repo (delete/rename the original), modify `install.conf.yaml`, and run `./install`.
 
 ## Minimal dependencies to get started
 
@@ -30,12 +27,9 @@ pip3 install pynvim neovim-remote pylint
 npm install -g neovim
 ```
 
-Environment version management: check [asdf](https://asdf-vm.com) and
-[asdf-direnv](https://github.com/asdf-community/asdf-direnv). Configure both
-in `~/.zshrc_after`.
+Environment version management: check [asdf](https://asdf-vm.com) and [asdf-direnv](https://github.com/asdf-community/asdf-direnv). Configure both in `~/.zshrc_after`.
 
-Homebrew provides a way to save all installed packages (including cask) to a
-file. Run `brew bundle dump`.
+Homebrew provides a way to save all installed packages (including cask) to a file. Run `brew bundle dump`.
 
 To install all packages with Homebrew, run (this may take a while)
 ```
@@ -46,13 +40,11 @@ brew bundle --file=./Brewfile
 
 See [doom-emacs/config.org](doom-emacs/config.org).
 
-Installing Doom Emacs is really slow. To quickly start working, use Vim / Neovim
-instead.
+Installing Doom Emacs is really slow. To quickly start working, use Vim / Neovim instead.
 
 ## Shell prompt
 
-[powerlevel10k](https://github.com/romkatv/powerlevel10k), customizable and
-really fast.
+[powerlevel10k](https://github.com/romkatv/powerlevel10k), customizable and really fast.
 
 > Other themes increase Zsh startup lag -- some by a lot, others by a just a
 > little. Powerlevel10k removes it outright.
@@ -63,13 +55,11 @@ zsh -i -c exit  0.09s user 0.08s system 92% cpu 0.191 total
 
 ## Vim
 
-The vimrc is meant to be used with Neovim 0.5+, although it also works on
-Vim 8 with some plugins disabled.
+The vimrc is meant to be used with Neovim 0.5+, although it also works on Vim 8 with some plugins disabled.
 
 Some highlights:
 
-- Use `,` and `m` for scrolling. Way more ergonomic than pressing `C-d` and
-  `C-u` repeatedly.
+- Use `,` and `m` for scrolling. Way more ergonomic than pressing `C-d` and `C-u` repeatedly.
     ```
     noremap , <C-u>
     noremap m <C-d>

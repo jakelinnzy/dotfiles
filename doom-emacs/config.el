@@ -316,6 +316,13 @@
    :localleader
    :desc "Format with autopep8" "f" #'py-autopep8-buffer)))
 
+(setq +latex-viewers '(skim evince sumatrapdf zathura okular pdf-tools))
+(after! latex
+  (map! :mode latex-mode
+        :localleader
+        "a" #'TeX-command-run-all
+        "b" #'TeX-command-buffer))
+
 (after! markdown-mode
   (map! :mode markdown-mode
         :localleader

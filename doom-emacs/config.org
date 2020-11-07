@@ -612,6 +612,17 @@ Python's language server doens't support formatting, so a dedicated plugin (~py-
    :desc "Format with autopep8" "f" #'py-autopep8-buffer)))
 #+end_src
 
+** LaTeX
+Modify ~TeX-command-list~ to define programs for TeX.
+#+begin_src elisp
+(setq +latex-viewers '(skim evince sumatrapdf zathura okular pdf-tools))
+(after! latex
+  (map! :mode latex-mode
+        :localleader
+        "a" #'TeX-command-run-all
+        "b" #'TeX-command-buffer))
+#+end_src
+
 ** Markdown
 #+begin_src elisp
 (after! markdown-mode

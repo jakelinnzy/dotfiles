@@ -751,7 +751,7 @@ Use =SPC m E=
 
 ** Fix blank lines
 
-Use =SPC u SPC m z=.
+=SPC m z= for the current tree, =SPC u SPC m z= for the whole buffer.
 #+begin_src elisp
 (after! org
   (load! "vendor/org-fix-blank-lines" doom-private-dir)

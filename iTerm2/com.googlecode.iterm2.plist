@@ -20,6 +20,8 @@
 	<false/>
 	<key>CloseBookmarksWindowAfterOpening</key>
 	<true/>
+	<key>Command</key>
+	<string></string>
 	<key>Control</key>
 	<integer>1</integer>
 	<key>CopyLastNewline</key>
@@ -1215,7 +1217,7 @@
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>410 377 620 392 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>22 70 1418 807 0 0 1440 877 </string>
+	<string>0 82 1290 790 0 0 1440 877 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
 	<string>168 129 970 622 0 0 1440 877 </string>
 	<key>New Bookmarks</key>
@@ -1597,7 +1599,7 @@
 			<key>Initial Text</key>
 			<string></string>
 			<key>Initial Use Transparency</key>
-			<true/>
+			<false/>
 			<key>Jobs to Ignore</key>
 			<array>
 				<string>rlogin</string>
@@ -1720,7 +1722,7 @@
 			<key>Title Components</key>
 			<integer>3</integer>
 			<key>Transparency</key>
-			<real>0.22749841370558377</real>
+			<real>0.0</real>
 			<key>Unicode Normalization</key>
 			<integer>0</integer>
 			<key>Unicode Version</key>
@@ -1750,7 +1752,7 @@
 			<key>Window Type</key>
 			<integer>0</integer>
 			<key>Working Directory</key>
-			<string>/Users/lin</string>
+			<string>/Users/zlin</string>
 		</dict>
 	</array>
 	<key>NoSyncAllAppVersions</key>
@@ -1782,7 +1784,7 @@
 		<key>screenFrame</key>
 		<string>{{0, 0}, {1440, 900}}</string>
 		<key>topLeft</key>
-		<string>{429, 716}</string>
+		<string>{290, 740}</string>
 	</dict>
 	<key>NoSyncHaveUsedCopyMode</key>
 	<true/>
@@ -1791,7 +1793,7 @@
 	<key>NoSyncLastTipTime</key>
 	<real>625435370.292575</real>
 	<key>NoSyncLaunchExperienceControllerRunCount</key>
-	<integer>69</integer>
+	<integer>77</integer>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile</key>
 	<true/>
 	<key>NoSyncNeverRemindPrefsChangesLostForFile_selection</key>
@@ -2714,7 +2716,7 @@
 		</dict>
 	</dict>
 	<key>PrefsCustomFolder</key>
-	<string>/Users/lin/repos/dotfiles/iTerm2</string>
+	<string>/Users/zlin/repos/dotfiles/iTerm2</string>
 	<key>PreserveWindowSizeWhenTabBarVisibilityChanges</key>
 	<false/>
 	<key>Print In Black And White</key>
@@ -2732,7 +2734,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2020-10-28T20:02:51Z</date>
+	<date>2020-11-07T15:20:52Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SUUpdateGroupIdentifier</key>

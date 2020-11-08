@@ -141,11 +141,11 @@
  :n   "k"   #'evil-previous-visual-line
  :n   "RET" #'evil-ex-nohighlight
  ;; Home row keys jump to beginning and end of line
- :nvm "H"   #'doom/backward-to-bol-or-indent
- :nvm "L"   #'doom/forward-to-last-non-comment-or-eol
+ :nvmo "H"   #'doom/backward-to-bol-or-indent
+ :nvmo "L"   #'doom/forward-to-last-non-comment-or-eol
 
- :n   "f"   #'avy-goto-char
- :n   "s"   #'avy-goto-char-2
+ :nvo "f"   #'evil-avy-goto-char
+ :n   "s"   #'evil-avy-goto-char-2
  ;; Use C-f/b/p/n in Insert mode
  :i   "C-p" #'previous-line
  :i   "C-n" #'next-line
@@ -167,7 +167,8 @@
  :nm "C-t" #'treemacs
  (:leader
   (:prefix ("f" . "file")
-   :desc "Open treemacs" "t" #'treemacs))
+   :desc "Open treemacs"           "t" #'treemacs
+   :desc "Add project to treemacs" "T" #'treemacs-add-project-to-workspace))
  (:after treemacs
   (:map treemacs-mode-map
    "p"    nil
@@ -311,12 +312,11 @@
 (after! yasnippet
   (add-to-list 'yas-snippet-dirs (concat doom-private-dir "snippets")))
 
-;; (setq-hook! 'python-mode-hook +format-with-lsp nil)
-(map!
- (:after python
-  (:map python-mode-map
-   :localleader
-   :desc "Format with autopep8" "f" #'py-autopep8-buffer)))
+(after! python
+  (setq python-prettify-symbols-alist '(("lambda" . 955)))
+  (map! :map python-mode-map
+        :leader
+        :desc "Format with autopep8" "c f" #'py-autopep8-buffer))
 
 (setq +latex-viewers '(skim evince sumatrapdf zathura okular pdf-tools))
 (after! latex

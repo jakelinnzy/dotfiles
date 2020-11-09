@@ -36,8 +36,8 @@ source ~/.vimrc_before
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'jakelinzy/delimitMate'    " my fork
-Plug 'jakelinzy/vim-easymotion' " my fork
+Plug 'jakelinnzy/delimitMate'    " my fork
+Plug 'jakelinnzy/vim-easymotion' " my fork
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 " auto-pairs prevents <CR> from expanding abbreviations

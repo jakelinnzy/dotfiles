@@ -461,9 +461,9 @@ IMO it's far more ergonomic to scroll with a single key than combinations such a
 M-x vterm-module-compile
   #+end_example
 - PDF Tools
-#+begin_example
+  #+begin_example
 M-x pdf-tools-install
-#+end_example
+  #+end_example
 
 ** which-key
 

@@ -134,7 +134,7 @@ Desired behaviour: CJK characters are displayed exactly twice as wide as ASCII c
 The quick brown|||||fox jumps over the lazy dog||||||
 #+end_example
 
-See[[http://baohaojun.github.io/perfect-emacs-chinese-font.html][ this blog]] for more information.
+See [[http://baohaojun.github.io/perfect-emacs-chinese-font.html][this blog]] for more information.
 
 *Outdated* Another (presumably better) workaround is to pair specific CJK font size with ASCII font size (works on Mac). Looks like the ~doom-unicode-extra-fonts~ list matches from right to left.
 #+begin_example elisp
@@ -509,6 +509,8 @@ Customize the size of popup window.
 
 #+begin_src elisp
 (after! magit
+  ;; log output of all git commands
+  (setq magit-git-debug nil)
   (map! :mode magit-mode
         :g "m" #'evil-scroll-down
         :g "," #'evil-scroll-up
@@ -654,7 +656,7 @@ Modify ~TeX-command-list~ to define programs for TeX.
 #+begin_src elisp
 (setq +latex-viewers '(skim evince sumatrapdf zathura okular pdf-tools))
 (after! latex
-  (map! :mode latex-mode
+  (map! :map latex-mode-map
         :localleader
         "a" #'TeX-command-run-all
         "b" #'TeX-command-buffer))

@@ -233,6 +233,8 @@
 ;;   (ivy-posframe-mode -1))
 
 (after! magit
+  ;; log output of all git commands
+  (setq magit-git-debug nil)
   (map! :mode magit-mode
         :g "m" #'evil-scroll-down
         :g "," #'evil-scroll-up
@@ -320,7 +322,7 @@
 
 (setq +latex-viewers '(skim evince sumatrapdf zathura okular pdf-tools))
 (after! latex
-  (map! :mode latex-mode
+  (map! :map latex-mode-map
         :localleader
         "a" #'TeX-command-run-all
         "b" #'TeX-command-buffer))

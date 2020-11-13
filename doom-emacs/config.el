@@ -91,7 +91,7 @@
 ;;     (package! smartparens)
 (require 'smartparens-config)
 
-;; Yes I'm lazy
+      ;; Yes I'm lazy
 (setq company-minimum-prefix-length 1)
 
 (add-hook 'doom-scratch-buffer-hook #'text-mode)
@@ -307,6 +307,11 @@
       ;; improve performance by allowing to read more frequently
       ;; doom already takes care of gc
       read-process-output-max (* 5 1024 1024))
+
+(require 'tree-sitter)
+(require 'tree-sitter-langs)
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
 (after! spell-fu
   (remove-hook 'text-mode-hook

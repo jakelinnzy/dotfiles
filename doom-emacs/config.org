@@ -623,6 +623,16 @@ A plugin for quickly resizing window.
       read-process-output-max (* 5 1024 1024))
 #+end_src
 
+** tree-sitter
+
+Enable tree-sitter highlighting for all supported modes.
+#+begin_src elisp
+(require 'tree-sitter)
+(require 'tree-sitter-langs)
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+#+end_src
+
 ** Spell checker
 
 Only enable spell checking when I press =SPC t s= to avoid red underlines.

@@ -76,7 +76,8 @@
       evil-ex-substitute-global t
       ;; keep 5 lines from the margin
       scroll-margin 5
-      scroll-step 1)
+      ;; scroll-step 1
+      )
 
 (modify-syntax-entry ?_ "w")
 
@@ -372,7 +373,7 @@
 ;;   (add-hook 'org-mode-hook #'rasmus/org-prettify-symbols))
 (after! org
   (defun my/prettify-org-setup ()
-    (setq prettify-symbols-alist
+    (setq-local prettify-symbols-alist
           '(("#+begin_src" . ?➤) ;; ➤ 🖝 ➟ ➤ ✎
             ("#+end_src"   . ?¶) ;; ⏹
             ("#+header:" . ,rasmus/ob-header-symbol)

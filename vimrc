@@ -482,13 +482,13 @@ noremap m <C-d>
 " Move the mark key to M
 noremap M m
 
-" Provide hjkl movements in Insert mode via ctrl key
-inoremap <C-h> <Left>
-inoremap <C-j> <C-o>gj
-inoremap <C-k> <C-o>gk
-inoremap <C-l> <Right>
-inoremap <M-b> <S-Left>
+" Use Emacs movement keybindings in insert mode
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
+inoremap <C-p> <C-o>gk
+inoremap <C-n> <C-o>gj
 inoremap <M-f> <S-Right>
+inoremap <M-b> <S-Left>
 
 cnoremap <C-h> <Left>
 cnoremap <C-j> <Down>

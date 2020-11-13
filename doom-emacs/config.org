@@ -264,7 +264,8 @@ Default settings
       ;; :s command has the global flag by default, adding /g cancels the flag.
       evil-ex-substitute-global t
       ;; keep 5 lines from the margin
-      scroll-margin 5)
+      scroll-margin 5
+      scroll-step 1)
 #+end_src
 
 Treat underscore as part of a word.
@@ -641,13 +642,13 @@ Only enable spell checking when I press =SPC t s= to avoid red underlines.
 
 ** Python
 
-Python's language server doens't support formatting, so a dedicated plugin (~py-autopep8~) is needed.
+Python's language server doesn't support formatting, so a dedicated plugin (~py-autopep8~) is needed.
 #+begin_src elisp
 (after! python
   (setq python-prettify-symbols-alist '(("lambda" . 955)))
-  (map! :map python-mode-map
-        :leader
-        :desc "Format with autopep8" "c f" #'py-autopep8-buffer))
+  (map! :mode python-mode
+        :localleader
+        "f" #'py-autopep8-buffer))
 #+end_src
 
 ** LaTeX
@@ -656,10 +657,16 @@ Modify ~TeX-command-list~ to define programs for TeX.
 #+begin_src elisp
 (setq +latex-viewers '(skim evince sumatrapdf zathura okular pdf-tools))
 (after! latex
-  (map! :map latex-mode-map
-        :localleader
-        "a" #'TeX-command-run-all
-        "b" #'TeX-command-buffer))
+  (defun my/apply-tex-mode-maps ()
+    "Apply tex-mode maps"
+    (map! :map evil-tex-mode-map
+          :nm "m" #'evil-scroll-down
+          :nm "," #'evil-scroll-up
+          :nm "M" #'evil-scroll-down
+          (:localleader
+           "a" #'TeX-command-run-all
+           "b" #'TeX-command-buffer)))
+  (add-hook 'LaTeX-mode-hook #'my/apply-tex-mode-maps))
 #+end_src
 
 ** Markdown

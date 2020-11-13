@@ -75,7 +75,8 @@
       ;; :s command has the global flag by default, adding /g cancels the flag.
       evil-ex-substitute-global t
       ;; keep 5 lines from the margin
-      scroll-margin 5)
+      scroll-margin 5
+      scroll-step 1)
 
 (modify-syntax-entry ?_ "w")
 
@@ -90,7 +91,7 @@
 ;;     (package! smartparens)
 (require 'smartparens-config)
 
-      ;; Yes I'm lazy
+;; Yes I'm lazy
 (setq company-minimum-prefix-length 1)
 
 (add-hook 'doom-scratch-buffer-hook #'text-mode)
@@ -316,16 +317,22 @@
 
 (after! python
   (setq python-prettify-symbols-alist '(("lambda" . 955)))
-  (map! :map python-mode-map
-        :leader
-        :desc "Format with autopep8" "c f" #'py-autopep8-buffer))
+  (map! :mode python-mode
+        :localleader
+        "f" #'py-autopep8-buffer))
 
 (setq +latex-viewers '(skim evince sumatrapdf zathura okular pdf-tools))
 (after! latex
-  (map! :map latex-mode-map
-        :localleader
-        "a" #'TeX-command-run-all
-        "b" #'TeX-command-buffer))
+  (defun my/apply-tex-mode-maps ()
+    "Apply tex-mode maps"
+    (map! :map evil-tex-mode-map
+          :nm "m" #'evil-scroll-down
+          :nm "," #'evil-scroll-up
+          :nm "M" #'evil-scroll-down
+          (:localleader
+           "a" #'TeX-command-run-all
+           "b" #'TeX-command-buffer)))
+  (add-hook 'LaTeX-mode-hook #'my/apply-tex-mode-maps))
 
 (after! markdown-mode
   (map! :mode markdown-mode

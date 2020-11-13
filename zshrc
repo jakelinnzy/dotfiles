@@ -6,13 +6,15 @@
 
 # PATH {{{1
 
-if [ "$(uname)" = "Linux" ]; then
+if [[ "$(uname)" = "Linux" ]]; then
     export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 fi
 export PATH="$PATH:/usr/local/sbin"
 export PATH="$PATH:$HOME/opt/bin:$HOME/.local/bin"
 export PATH="$PATH:$HOME/.cargo/bin" # cargo
 export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH" # ghc
+
+# export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH" # brew coreutils
 
 # END PATH }}}
 

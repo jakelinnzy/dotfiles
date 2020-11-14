@@ -47,7 +47,8 @@ antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle lukechilds/zsh-better-npm-completion
 antigen bundle MichaelAquilina/zsh-autoswitch-virtualenv
-antigen bundle MichaelAquilina/zsh-you-should-use
+export YSU_IGNORED_ALIASES=("python")
+antigen bundle MichaelAquilina/zsh-you-should-use # prompt for available aliases
 antigen bundle zsh-users/zsh-syntax-highlighting
 
 antigen theme romkatv/powerlevel10k
@@ -101,6 +102,10 @@ alias coa="conda activate"
 alias cod="conda deactivate"
 alias coe="conda info --envs"
 alias glg="git log --graph --decorate --stat"
+
+# Who still uses Python 2?
+alias python="python3"
+alias pip="pip3"
 
 # LSCOLORS {{{2
 

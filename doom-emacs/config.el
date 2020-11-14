@@ -92,7 +92,7 @@
 ;;     (package! smartparens)
 (require 'smartparens-config)
 
-      ;; Yes I'm lazy
+;; Yes I'm lazy
 (setq company-minimum-prefix-length 1)
 
 (add-hook 'doom-scratch-buffer-hook #'text-mode)

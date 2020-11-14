@@ -660,6 +660,8 @@ Python's language server doesn't support formatting, so a dedicated plugin (~py-
   (map! :mode python-mode
         :localleader
         "f" #'py-autopep8-buffer))
+(after! lsp-python-ms
+  (set-lsp-priority! 'mspyls 1))
 #+end_src
 
 ** LaTeX

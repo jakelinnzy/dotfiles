@@ -143,8 +143,8 @@
  :n   "k"   #'evil-previous-visual-line
  :n   "RET" #'evil-ex-nohighlight
  ;; Home row keys jump to beginning and end of line
- :nvmo "H"   #'doom/backward-to-bol-or-indent
- :nvmo "L"   #'doom/forward-to-last-non-comment-or-eol
+ :nvmo "H"   #'evil-first-non-blank
+ :nvmo "L"   #'evil-end-of-line
 
  :nvo "f"   #'evil-avy-goto-char
  :n   "s"   #'evil-avy-goto-char-2
@@ -326,6 +326,8 @@
   (map! :mode python-mode
         :localleader
         "f" #'py-autopep8-buffer))
+(after! lsp-python-ms
+  (set-lsp-priority! 'mspyls 1))
 
 (setq +latex-viewers '(skim evince sumatrapdf zathura okular pdf-tools))
 (after! latex

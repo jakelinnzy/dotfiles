@@ -237,8 +237,8 @@
 
 (setq ivy-posframe-width     130
       ivy-posframe-min-width 130
-      ivy-posframe-height     25
-      ivy-posframe-min-height 25)
+      ivy-posframe-height     18
+      ivy-posframe-min-height 10)
 ;; (after! ivy
 ;;   (ivy-posframe-mode -1))
 

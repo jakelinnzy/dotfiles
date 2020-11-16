@@ -23,6 +23,8 @@
       my-doom-ayu-mirage-brighter-comments t)
 
 (setq display-line-numbers-type 'relative)
+;; Disable line number for text mode
+;; (remove-hook! '(text-mode-hook) #'display-line-numbers-mode)
 
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
@@ -91,6 +93,14 @@
 ;; In packages.el:
 ;;     (package! smartparens)
 (require 'smartparens-config)
+(after! smartparens-config
+  ;; Enable triple backtick (markdown style quote)
+  (sp-with-modes '(prog-mode text-mode)
+    (sp-local-pair "```" "```")))
+(after! smartparens-org
+  ;; Disable ' in org-mode
+  (sp-with-modes 'org-mode
+    (sp-local-pair "'" nil :actions nil)))
 
 ;; Yes I'm lazy
 (setq company-minimum-prefix-length 1)
@@ -172,14 +182,12 @@
    :desc "Open treemacs"           "t" #'treemacs
    :desc "Add project to treemacs" "T" #'treemacs-add-project-to-workspace))
  (:after treemacs
-  (:map treemacs-mode-map
+  (:map evil-treemacs-state-map
    "p"    nil
    "p a"  #'treemacs-add-project-to-workspace
    "p d"  #'treemacs-remove-project-from-workspace
-   "y"    nil
-   "y y"  #'treemacs-copy-file
-   "y m"  #'treemacs-move-file
-   :nmg "v" #'treemacs-peek
+   "m"    #'treemacs-move-file
+   "v"    #'treemacs-peek
    "M-h"  nil
    "M-j"  nil
    "M-k"  nil
@@ -233,6 +241,11 @@
       ivy-posframe-min-height 25)
 ;; (after! ivy
 ;;   (ivy-posframe-mode -1))
+
+(after! ivy
+  (map! :map ivy-minibuffer-map
+        "C-d" #'ivy-immediate-done
+        "<S-Return>" #'ivy-immediate-done))
 
 (after! magit
   ;; log output of all git commands
@@ -354,7 +367,7 @@
 
 (setq org-directory "~/Documents/org/")
 
-(setq org-ellipsis "…"
+(setq org-ellipsis "▼"
       ;; Hides *bold* /italic/ etc.
       org-hide-emphasis-markers nil)
 
@@ -370,20 +383,30 @@
   (add-hook! '(org-mode-hook dired-mode-hook)
              #'org-download-enable))
 
-;; (after! org
-;;   (load! "vendor/org-prettify-source-block")
-;;   (add-hook 'org-mode-hook #'rasmus/org-prettify-symbols))
+(setq my/enable-org-title-size nil)
 (after! org
+  ;; give titles different font size
+  (when my/enable-org-title-size
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.0)
+                    (org-level-6 . 1.0)
+                    (org-level-7 . 1.0)
+                    (org-level-8 . 1.0)))
+      (set-face-attribute (car face) nil :font doom-variable-pitch-font :weight 'bold :height (cdr face))))
+  ;; prettify symbols
   (defun my/prettify-org-setup ()
     (setq-local prettify-symbols-alist
-          '(("#+begin_src" . ?➤) ;; ➤ 🖝 ➟ ➤ ✎
-            ("#+end_src"   . ?¶) ;; ⏹
-            ("#+header:" . ,rasmus/ob-header-symbol)
-            ("#+begin_quote" . ?»)
-            ("#+end_quote" . ?«)
-            ("#+begin_example" . ?➟)
-            ("#+end_example" . ?¶))
-          prettify-symbols-unprettify-at-point 'right-edge)
+                '(("#+begin_src" . ?➤) ;; ➤ 🖝 ➟ ➤ ✎
+                  ("#+end_src"   . ?¶) ;; ⏹
+                  ("#+header:" . ,rasmus/ob-header-symbol)
+                  ("#+begin_quote" . ?»)
+                  ("#+end_quote" . ?«)
+                  ("#+begin_example" . ?➟)
+                  ("#+end_example" . ?¶))
+                prettify-symbols-unprettify-at-point 'right-edge)
     (prettify-symbols-mode 1))
   (add-hook 'org-mode-hook #'my/prettify-org-setup))
 

@@ -74,7 +74,7 @@ doom sync
 
 ** Remember to run =doom sync= after modifying in =init.el= and =packages.el=.
 
-Use =SPC m E= to reload this file after making changes ([[Execute all code blocks in the org buffer][Remapped here]]). Also =SPC q r= restarts emacs (may take a few seconds).
+Use =SPC m E= to reload this file after making changes. Also =SPC q r= restarts emacs (may take a few seconds).
 
 To show /literal/ link in org-mode, press =SPC m l t=.
 
@@ -183,6 +183,8 @@ Set theme to [[file:my-doom-ayu-mirage-theme.el][my custom color theme]] based o
 Display relative line numbers. To cycle between (none, numbers, relative numbers), use =SPC t l= (doom/toggle-line-numbers)
 #+begin_src elisp
 (setq display-line-numbers-type 'relative)
+;; Disable line number for text mode
+;; (remove-hook! '(text-mode-hook) #'display-line-numbers-mode)
 #+end_src
 
 Maximize window on startup
@@ -293,6 +295,14 @@ Enable smartparens-mode by default. Looks like it has some issues on Emacs 28.
 ;; In packages.el:
 ;;     (package! smartparens)
 (require 'smartparens-config)
+(after! smartparens-config
+  ;; Enable triple backtick (markdown style quote)
+  (sp-with-modes '(prog-mode text-mode)
+    (sp-local-pair "```" "```")))
+(after! smartparens-org
+  ;; Disable ' in org-mode
+  (sp-with-modes 'org-mode
+    (sp-local-pair "'" nil :actions nil)))
 #+end_src
 
 ** Completion (company-mode)
@@ -400,14 +410,12 @@ IMO it's far more ergonomic to scroll with a single key than combinations such a
    :desc "Open treemacs"           "t" #'treemacs
    :desc "Add project to treemacs" "T" #'treemacs-add-project-to-workspace))
  (:after treemacs
-  (:map treemacs-mode-map
+  (:map evil-treemacs-state-map
    "p"    nil
    "p a"  #'treemacs-add-project-to-workspace
    "p d"  #'treemacs-remove-project-from-workspace
-   "y"    nil
-   "y y"  #'treemacs-copy-file
-   "y m"  #'treemacs-move-file
-   :nmg "v" #'treemacs-peek
+   "m"    #'treemacs-move-file
+   "v"    #'treemacs-peek
    "M-h"  nil
    "M-j"  nil
    "M-k"  nil
@@ -505,6 +513,14 @@ Customize the size of popup window.
       ivy-posframe-min-height 25)
 ;; (after! ivy
 ;;   (ivy-posframe-mode -1))
+#+end_src
+
+Finish search with current input by pressing =C-d= or =S-Return=
+#+begin_src elisp
+(after! ivy
+  (map! :map ivy-minibuffer-map
+        "C-d" #'ivy-immediate-done
+        "<S-Return>" #'ivy-immediate-done))
 #+end_src
 
 ** Magit
@@ -713,7 +729,7 @@ This has to be set before org loads.
 ** Various settings
 
 #+begin_src elisp
-(setq org-ellipsis "…"
+(setq org-ellipsis "▼"
       ;; Hides *bold* /italic/ etc.
       org-hide-emphasis-markers nil)
 
@@ -740,23 +756,33 @@ Use =SPC m E=
              #'org-download-enable))
 #+end_src
 
-** Hide block delimiters
+** Display settings
 
 #+begin_src elisp
-;; (after! org
-;;   (load! "vendor/org-prettify-source-block")
-;;   (add-hook 'org-mode-hook #'rasmus/org-prettify-symbols))
+(setq my/enable-org-title-size nil)
 (after! org
+  ;; give titles different font size
+  (when my/enable-org-title-size
+    (dolist (face '((org-level-1 . 1.2)
+                    (org-level-2 . 1.1)
+                    (org-level-3 . 1.05)
+                    (org-level-4 . 1.0)
+                    (org-level-5 . 1.0)
+                    (org-level-6 . 1.0)
+                    (org-level-7 . 1.0)
+                    (org-level-8 . 1.0)))
+      (set-face-attribute (car face) nil :font doom-variable-pitch-font :weight 'bold :height (cdr face))))
+  ;; prettify symbols
   (defun my/prettify-org-setup ()
     (setq-local prettify-symbols-alist
-          '(("#+begin_src" . ?➤) ;; ➤ 🖝 ➟ ➤ ✎
-            ("#+end_src"   . ?¶) ;; ⏹
-            ("#+header:" . ,rasmus/ob-header-symbol)
-            ("#+begin_quote" . ?»)
-            ("#+end_quote" . ?«)
-            ("#+begin_example" . ?➟)
-            ("#+end_example" . ?¶))
-          prettify-symbols-unprettify-at-point 'right-edge)
+                '(("#+begin_src" . ?➤) ;; ➤ 🖝 ➟ ➤ ✎
+                  ("#+end_src"   . ?¶) ;; ⏹
+                  ("#+header:" . ,rasmus/ob-header-symbol)
+                  ("#+begin_quote" . ?»)
+                  ("#+end_quote" . ?«)
+                  ("#+begin_example" . ?➟)
+                  ("#+end_example" . ?¶))
+                prettify-symbols-unprettify-at-point 'right-edge)
     (prettify-symbols-mode 1))
   (add-hook 'org-mode-hook #'my/prettify-org-setup))
 #+end_src
@@ -781,6 +807,7 @@ Use =SPC m E=
         :localleader
         :desc "Fix blank lines" "z" #'unpackaged/org-fix-blank-lines))
 #+end_src
+
 
 * Done
 

@@ -114,7 +114,7 @@ determine the exact padding."
 
         ;; evil state indicators (the small circle at left of modeline)
         (doom-modeline-evil-normal-state :foreground blue)
-        (doom-modeline-evil-insert-state :foreground green)
+        (doom-modeline-evil-insert-state :foreground (doom-darken green 0.2))
         (doom-modeline-evil-visual-state :foreground yellow)
         (doom-modeline-evil-operator-state :foreground dark-violet)
         (doom-modeline-evil-motion-state :foreground magenta)

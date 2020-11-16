@@ -95,12 +95,10 @@
 (require 'smartparens-config)
 (after! smartparens-config
   ;; Enable triple backtick (markdown style quote)
-  (sp-with-modes '(prog-mode text-mode)
-    (sp-local-pair "```" "```")))
+  (sp-local-pair '(prog-mode text-mode) "```" "```"))
 (after! smartparens-org
   ;; Disable ' in org-mode
-  (sp-with-modes 'org-mode
-    (sp-local-pair "'" nil :actions nil)))
+  (sp-local-pair 'org-mode "'" nil :actions nil))
 
 ;; Yes I'm lazy
 (setq company-minimum-prefix-length 1)

@@ -297,12 +297,10 @@ Enable smartparens-mode by default. Looks like it has some issues on Emacs 28.
 (require 'smartparens-config)
 (after! smartparens-config
   ;; Enable triple backtick (markdown style quote)
-  (sp-with-modes '(prog-mode text-mode)
-    (sp-local-pair "```" "```")))
+  (sp-local-pair '(prog-mode text-mode) "```" "```"))
 (after! smartparens-org
   ;; Disable ' in org-mode
-  (sp-with-modes 'org-mode
-    (sp-local-pair "'" nil :actions nil)))
+  (sp-local-pair 'org-mode "'" nil :actions nil))
 #+end_src
 
 ** Completion (company-mode)

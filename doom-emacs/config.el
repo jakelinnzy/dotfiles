@@ -336,6 +336,10 @@
 
 (after! python
   (setq python-prettify-symbols-alist '(("lambda" . 955)))
+  ;; Use Doom's format plugin instead of LSP
+  (setq-hook! 'python-mode-hook
+    +format-with-lsp nil
+    +format-with 'black)
   (map! :mode python-mode
         :localleader
         "f" #'py-autopep8-buffer))

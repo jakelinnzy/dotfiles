@@ -484,7 +484,6 @@ Or run in terminal:
 emacs -nw --eval '(vterm-module-compile) (pdf-tools-install)'
 #+end_example
 
-
 ** which-key
 
 Make which-key appear quicker.

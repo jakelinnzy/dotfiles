@@ -59,6 +59,12 @@ git clone --depth 1 https://github.com/hlissner/doom-emacs ~/.emacs.d
 Add ~export PATH="$PATH:$HOME/.emacs.d/bin"~ to bashrc or zshrc file.
 Put the Doom config file under =~/.doom.d/=.
 
+Manually compiling some plugins:
+
+#+begin_example
+emacs -nw --eval '(vterm-module-compile) (pdf-tools-install)'
+#+end_example
+
 ** Switching Emacs versions on macOS
 
 #+begin_example sh
@@ -472,6 +478,12 @@ M-x vterm-module-compile
   #+begin_example
 M-x pdf-tools-install
   #+end_example
+
+Or run in terminal:
+#+begin_example
+emacs -nw --eval '(vterm-module-compile) (pdf-tools-install)'
+#+end_example
+
 
 ** which-key
 

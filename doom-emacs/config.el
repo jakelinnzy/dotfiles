@@ -100,7 +100,7 @@
   ;; Disable ' in org-mode
   (sp-local-pair 'org-mode "'" nil :actions nil))
 
-;; Yes I'm lazy
+      ;; Yes I'm lazy
 (setq company-minimum-prefix-length 1)
 
 (add-hook 'doom-scratch-buffer-hook #'text-mode)
@@ -313,9 +313,28 @@
 ;;   (add-hook 'pdf-view-mode-hook #'pdf-continuous-scroll-mode))
 
 (setq lsp-enable-snippet t
-      lsp-idle-delay 1.0
+      lsp-idle-delay 0.5
       lsp-modeline-diagnostics-message t
       lsp-modeline-diagnostics-scope :file
+      ;; enable lens if server supports
+      ;; lsp-lens-auto-enable t
+
+      ;; sideline code actions & diagnostics
+      lsp-ui-sideline-enable t
+      lsp-ui-sideline-show-hover nil
+      lsp-ui-sideline-show-code-actions t
+      lsp-ui-sideline-show-diagnostics t
+
+      ;; hover window
+      lsp-ui-doc-enable 1
+      lsp-ui-doc-delay 0.5
+
+      ;; disable the large window at the bottom that appears when I insert a
+      ;; function call
+      lsp-signature-auto-activate t
+      lsp-signature-render-documentation nil
+      lsp-eldoc-enable-hover nil
+
       ;; improve performance by allowing to read more frequently
       ;; doom already takes care of gc
       read-process-output-max (* 5 1024 1024))
@@ -329,8 +348,9 @@
   (remove-hook 'text-mode-hook
                #'spell-fu-mode))
 
-(after! yasnippet
-  (add-to-list 'yas-snippet-dirs (concat doom-private-dir "snippets")))
+
+
+
 
 (after! python
   (setq python-prettify-symbols-alist '(("lambda" . 955)))

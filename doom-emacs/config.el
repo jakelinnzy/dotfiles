@@ -100,7 +100,7 @@
   ;; Disable ' in org-mode
   (sp-local-pair 'org-mode "'" nil :actions nil))
 
-      ;; Yes I'm lazy
+;; Yes I'm lazy
 (setq company-minimum-prefix-length 1)
 
 (add-hook 'doom-scratch-buffer-hook #'text-mode)

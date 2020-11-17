@@ -312,7 +312,7 @@ Enable smartparens-mode by default. Looks like it has some issues on Emacs 28.
 ** Completion (company-mode)
 
 #+begin_src elisp
-      ;; Yes I'm lazy
+;; Yes I'm lazy
 (setq company-minimum-prefix-length 1)
 #+end_src
 

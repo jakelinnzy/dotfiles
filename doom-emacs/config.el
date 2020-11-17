@@ -193,6 +193,8 @@
 
  ;; Dired: 'c f' creates empty file, 'c d' creates directory
  ;; Make it consistent with treemacs
+ ;; See mappings for dired under Evil mode at
+ ;; https://github.com/emacs-evil/evil-collection/blob/master/modes/dired/evil-collection-dired.el
  (:after dired
   (:map dired-mode-map
    :nm "c"   nil

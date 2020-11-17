@@ -50,6 +50,8 @@ brew cask install emacs-mac
 | CJK Font     | 🆗ok       | 🆗ok       | 🆗ok           |
 |--------------+------------+------------+----------------|
 
+*Update* now using =emacs-plus@28= from Homebrew.
+
 ** Installing Doom
 
 #+begin_example sh

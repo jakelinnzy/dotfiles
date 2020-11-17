@@ -525,11 +525,12 @@ Customize the size of popup window.
 ;;   (ivy-posframe-mode -1))
 #+end_src
 
-Finish search with current input by pressing =C-d= or =S-Return=
+Finish search with current input by pressing =C-d= or =S-Return=. This useful, for example, when creating a file named =conf= when =config.org= exists.
 #+begin_src elisp
 (after! ivy
   (map! :map ivy-minibuffer-map
-        "C-d" #'ivy-immediate-done
+        "C-d"     #'ivy-immediate-done
+        "C-c C-c" #'ivy-immediate-done
         "<S-Return>" #'ivy-immediate-done))
 #+end_src
 

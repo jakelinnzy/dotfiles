@@ -242,7 +242,8 @@
 
 (after! ivy
   (map! :map ivy-minibuffer-map
-        "C-d" #'ivy-immediate-done
+        "C-d"     #'ivy-immediate-done
+        "C-c C-c" #'ivy-immediate-done
         "<S-Return>" #'ivy-immediate-done))
 
 (after! magit

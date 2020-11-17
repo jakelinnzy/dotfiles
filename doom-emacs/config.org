@@ -296,17 +296,30 @@ And evil-snipe is not needed.
     (evil-snipe-mode -1))
 #+end_src
 
-Enable smartparens-mode by default. Looks like it has some issues on Emacs 28.
+Enable smartparens-mode by default. Looks like it has some issues on Emacs 28. Defining another global minor mode that does not use ~turn-on-smartparens-mode~ fixes [[https://github.com/Fuco1/smartparens/issues/1052][the issue]].
 #+begin_src elisp
 ;; In packages.el:
 ;;     (package! smartparens)
+(require 'smartparens)
 (require 'smartparens-config)
-(after! smartparens-config
-  ;; Enable triple backtick (markdown style quote)
-  (sp-local-pair '(prog-mode text-mode) "```" "```"))
+;; Enable triple backtick (markdown style quote)
+(sp-local-pair '(prog-mode text-mode) "```" "```")
 (after! smartparens-org
   ;; Disable ' in org-mode
   (sp-local-pair 'org-mode "'" nil :actions nil))
+(defun my/fix-smartparens ()
+  "Enable smartparens mode"
+ (define-globalized-minor-mode my/smartparens-global-mode
+   smartparens-mode smartparens-mode)
+ (my/smartparens-global-mode 1)
+ (define-globalized-minor-mode my/show-smartparens-global-mode
+   show-smartparens-mode show-smartparens-mode)
+ (my/show-smartparens-global-mode 1)
+ ;; (define-globalized-minor-mode my/smartparens-global-strict-mode
+ ;;   smartparens-strict-mode smartparens-strict-mode)
+ ;; (my/smartparens-global-strict-mode 1)
+ )
+(my/fix-smartparens)
 #+end_src
 
 ** Completion (company-mode)
@@ -321,7 +334,6 @@ Enable smartparens-mode by default. Looks like it has some issues on Emacs 28.
 #+begin_src elisp
 (add-hook 'doom-scratch-buffer-hook #'text-mode)
 #+end_src
-
 
 * Mappings
 

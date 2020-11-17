@@ -92,13 +92,26 @@
 
 ;; In packages.el:
 ;;     (package! smartparens)
+(require 'smartparens)
 (require 'smartparens-config)
-(after! smartparens-config
-  ;; Enable triple backtick (markdown style quote)
-  (sp-local-pair '(prog-mode text-mode) "```" "```"))
+;; Enable triple backtick (markdown style quote)
+(sp-local-pair '(prog-mode text-mode) "```" "```")
 (after! smartparens-org
   ;; Disable ' in org-mode
   (sp-local-pair 'org-mode "'" nil :actions nil))
+(defun my/fix-smartparens ()
+  "Enable smartparens mode"
+ (define-globalized-minor-mode my/smartparens-global-mode
+   smartparens-mode smartparens-mode)
+ (my/smartparens-global-mode 1)
+ (define-globalized-minor-mode my/show-smartparens-global-mode
+   show-smartparens-mode show-smartparens-mode)
+ (my/show-smartparens-global-mode 1)
+ ;; (define-globalized-minor-mode my/smartparens-global-strict-mode
+ ;;   smartparens-strict-mode smartparens-strict-mode)
+ ;; (my/smartparens-global-strict-mode 1)
+ )
+(my/fix-smartparens)
 
 ;; Yes I'm lazy
 (setq company-minimum-prefix-length 1)

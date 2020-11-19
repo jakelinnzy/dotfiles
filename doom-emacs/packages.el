@@ -54,16 +54,20 @@
 
 ;; View magit diffs with delta
 (package! magit-delta
-    :recipe (:host github :repo "dandavison/magit-delta"))
+    :recipe (:host github :repo "dandavison/magit-delta")
+    :disable t)
 ;; Display proportional font but use monospace for code, tables, etc
-(package! mixed-pitch)
-(package! smartparens)
+(package! mixed-pitch
+    :pin "d305108f9520e196b533f05d1dcc284cf535faaf")
+(package! smartparens
+    :pin "7f5825dd655942c3d56d14acabab1ffab1aa2ae2")
 (package! resize-window
-    :recipe (:host github :repo "dpsutton/resize-window"))
-(package! org-pretty-table
-    :recipe (:host github :repo "Fuco1/org-pretty-table"))
-(package! pdf-continuous-scroll-mode
-    :recipe (:host github :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
+    :recipe (:host github :repo "dpsutton/resize-window")
+    :pin "72018aa4d2401b60120588199d4cedd0dc1fbcfb")
+;; (package! org-pretty-table
+;;     :recipe (:host github :repo "Fuco1/org-pretty-table"))
+;; (package! pdf-continuous-scroll-mode
+;;     :recipe (:host github :repo "dalanicolai/pdf-continuous-scroll-mode.el"))
 
 ;; tree-sitter
 (package! tree-sitter)
@@ -71,16 +75,19 @@
 
 ;; Arduino
 (package! arduino-mode
-    :recipe (:host github :repo "bookest/arduino-mode"))
+    :recipe (:host github :repo "bookest/arduino-mode")
+    :pin "3e2bad4569ad26e929e6db2cbcff0d6d36812698")
 ;; Python LSP doesn't support formatting
 ;; Use SPC m f to format python code instead.
-(package! py-autopep8)
+(package! py-autopep8
+    :pin "68e12d8788c91c7ec53a68acf1d23adb2ffa4788")
 
 ;; Write emails in org mode
 ;; (package! org-msg)
 
 ;; Absolutely the killer feature of Emacs
-(package! xkcd)
+(package! xkcd
+    :pin "66e928706fd660cfdab204c98a347b49c4267bdf")
 
 ;; Fix Chinese font display
 ;; Doesn't work with Doom, but it is actually not needed (can be replaced by config file)

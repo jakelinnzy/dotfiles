@@ -5,9 +5,14 @@
 
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font"
                            :size 13 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Apercu" :size 13)
+      doom-variable-pitch-font
+      ;; (font-spec :family "Libre Baskerville" :size 13.5)
+      ;; (font-spec :family "Overpass" :size 14)
+      (font-spec :family "Publico Text" :size 14)
       ;; Display Emoji in system font
-      emojify-display-style 'unicode)
+      emojify-display-style 'unicode
+      ;; NOTE Enable this to make variable pitch font size work
+      mixed-pitch-set-height t)
 
 ;; This fixes CJK alignment issues on macOS
 ;; TODO make it also work on Linux
@@ -201,7 +206,7 @@
    "p"    nil
    "p a"  #'treemacs-add-project-to-workspace
    "p d"  #'treemacs-remove-project-from-workspace
-   "m"    #'treemacs-move-file
+   "M"    #'treemacs-move-file
    "v"    #'treemacs-peek
    "M-h"  nil
    "M-j"  nil
@@ -429,20 +434,19 @@
   (add-hook! '(org-mode-hook dired-mode-hook)
              #'org-download-enable))
 
-(setq my/enable-org-title-size nil)
 (after! org
-  ;; give titles different font size (disabled)
-  (when my/enable-org-title-size
-    (dolist (face '((org-level-1 . 1.2)
-                    (org-level-2 . 1.1)
-                    (org-level-3 . 1.05)
-                    (org-level-4 . 1.0)
-                    (org-level-5 . 1.0)
-                    (org-level-6 . 1.0)
-                    (org-level-7 . 1.0)
-                    (org-level-8 . 1.0)))
-      (set-face-attribute (car face) nil :font doom-variable-pitch-font :weight
-                          'bold :height (cdr face))))
+  ;; give titles different font size
+    (custom-set-faces!
+      '(org-document-title :height 1.3)
+      '(org-level-1 :height 1.3)
+      '(org-level-2 :height 1.2)
+      '(org-level-3 :height 1.1)
+      '(org-level-4 :height 1.05)
+      '(org-level-5 :height 1.0)
+      '(org-level-6 :height 1.0)
+      '(org-level-7 :height 1.0)
+      '(org-level-8 :height 1.0)
+      '(org-indent  :inherit (org-hide fixed-pitch)))
 
   ;; prettify symbols
   (defun my/prettify-org-setup ()
@@ -450,7 +454,6 @@
     (setq-local prettify-symbols-alist
                 '(("#+begin_src" . ?➤) ;; ➤ 🖝 ➟ ➤ ✎
                   ("#+end_src"   . ?¶) ;; ⏹
-                  ("#+header:" . ,rasmus/ob-header-symbol)
                   ("#+begin_quote" . ?»)
                   ("#+end_quote" . ?«)
                   ("#+begin_example" . ?➟)
@@ -464,7 +467,7 @@
     ;; Limit the window width to 80 characters to make it easier to read
     (visual-fill-column-mode 1))
 
-  (add-hook! '(org-mode-hook) #'my/prettify-org-setup))
+  (add-hook! '(org-mode-hook) #'my/prettify-org-setup #'mixed-pitch-mode))
 
 (after! org
   (load! "vendor/org-return-dwim" doom-private-dir)

@@ -5,17 +5,21 @@
 
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font"
                            :size 13 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Apercu" :size 14)
+      doom-variable-pitch-font (font-spec :family "Apercu" :size 16)
+      ;; Display Emoji in system font
+      emojify-display-style 'unicode)
 
-      ;; This fixes CJK alignment issues on macOS
-      ;; TODO make it also work on Linux
-      doom-unicode-extra-fonts
-      '("PingFang SC"
-        "Weather Icons" "github-octicons" "FontAwesome"
-        "all-the-icons" "file-icons" "Apple Color Emoji" "Menlo")
-      face-font-rescale-alist '(("PingFang SC" . 1.25)))
-
-;; (doom/reload-font)
+;; This fixes CJK alignment issues on macOS
+;; TODO make it also work on Linux
+(cond
+ (IS-MAC
+  (setq doom-unicode-extra-fonts
+        '("PingFang SC"
+          "Weather Icons" "github-octicons" "FontAwesome"
+          "all-the-icons" "file-icons" "Apple Color Emoji" "Menlo")
+        face-font-rescale-alist '(("PingFang SC" . 1.25))))
+ ;; TODO
+ (IS-LINUX nil))
 
 ;; load theme from user config directory
 (add-to-list 'custom-theme-load-path doom-private-dir)
@@ -434,8 +438,14 @@
                     (org-level-7 . 1.0)
                     (org-level-8 . 1.0)))
       (set-face-attribute (car face) nil :font doom-variable-pitch-font :weight 'bold :height (cdr face))))
-  ;; prettify symbols
   (defun my/prettify-org-setup ()
+    (interactive)
+    ;; Disable line numbers & add a margin instead
+    (setq-local left-margin-width 2
+                right-margin-width 2
+                display-line-numbers nil)
+    (set-window-buffer (selected-window) (current-buffer))
+    ;; prettify symbols
     (setq-local prettify-symbols-alist
                 '(("#+begin_src" . ?➤) ;; ➤ 🖝 ➟ ➤ ✎
                   ("#+end_src"   . ?¶) ;; ⏹

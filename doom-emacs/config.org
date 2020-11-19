@@ -483,6 +483,7 @@ IMO it's far more ergonomic to scroll with a single key than combinations such a
   :desc "Go to definition"         "c g" #'evil-goto-definition
   :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized
   :desc "Toggle monospace font"    "t m" #'mixed-pitch-mode
+  :desc "Toggle fixed wrapping"    "t v" #'visual-fill-column-mode
   :desc "Move workspace left"  "TAB <" #'+workspace/swap-left
   :desc "Move workspace right" "TAB >" #'+workspace/swap-right))
 #+end_src
@@ -858,37 +859,12 @@ Use =SPC m E=
     (prettify-symbols-mode 1)
     ;; hl-line-mode looks bad on source blocks that have different background
     ;; colour
-    (hl-line-mode -1))
+    (hl-line-mode -1)
+    (display-line-numbers-mode -1)
+    ;; Limit the window width to 80 characters to make it easier to read
+    (visual-fill-column-mode 1))
 
-  ;; disable line numbers & add a margin around windows
-  (defun my/display-margin--reload-margin ()
-    "Apply left-margin-width and right-margin-width"
-    (interactive)
-    (set-window-buffer (selected-window) (current-buffer)))
-  (define-minor-mode my/display-margin-mode
-    "When display-margin-mode is enabled, disable line numbers and add a margin
-around the window. "
-    :init-value nil :lighter nil :global nil
-    (cond
-     (my/display-margin-mode ;; enable
-      (setq left-margin-width  2
-            right-margin-width 2
-            display-line-numbers nil)
-      (display-line-numbers-mode -1)
-      ;; When go back to the org buffer from special editing mode (SPC m '),
-      ;; window margin settings are removed. Need to call this again
-      (add-hook 'window-configuration-change-hook
-                #'my/display-margin--reload-margin))
-     (t ;; disable
-      (setq left-margin-width    (default-value 'left-margin-width)
-            right-margin-width   (default-value 'right-margin-width)
-            display-line-numbers (default-value 'display-line-numbers))
-      (display-line-numbers-mode 1)
-      (remove-hook 'window-configuration-change-hook
-                   #'my/display-margin--reload-margin)))
-    (my/display-margin--reload-margin))
-
-  (add-hook! '(org-mode-hook) #'my/prettify-org-setup #'my/display-margin-mode))
+  (add-hook! '(org-mode-hook) #'my/prettify-org-setup))
 #+end_src
 
 ** Smarter return

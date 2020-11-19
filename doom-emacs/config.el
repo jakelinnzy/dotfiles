@@ -5,7 +5,7 @@
 
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font"
                            :size 13 :weight 'regular)
-      doom-variable-pitch-font (font-spec :family "Apercu" :size 16)
+      doom-variable-pitch-font (font-spec :family "Apercu" :size 13)
       ;; Display Emoji in system font
       emojify-display-style 'unicode)
 

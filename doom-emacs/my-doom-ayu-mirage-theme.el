@@ -29,8 +29,9 @@ determine the exact padding."
 (def-doom-theme my-doom-ayu-mirage
     "A dark theme inspired by Atom One Dark"
 
-    ;; name        default   256       16
-    ((bg         '("#1f2430" nil       nil            ))
+    (
+        ;;name        default   256       16
+        (bg         '("#1f2430" nil       nil            ))
         (bg-alt     '("#191e2a" nil       nil            ))
         (base0      '("#1B2229" "black"   "black"        ))
         (base1      '("#1c1f24" "#1e1e1e" "brightblack"  ))
@@ -109,8 +110,11 @@ determine the exact padding."
 
 
     ;; --- extra faces ------------------------
-    ((elscreen-tab-other-screen-face :background "#353a42" :foreground "#1e2022")
-        (hl-line :background bg-alt)
+    (
+        (elscreen-tab-other-screen-face :background "#353a42"
+                                        :foreground "#1e2022")
+        (cursor :background accent)
+        (hl-line :background base3)
 
         ;; evil state indicators (the small circle at left of modeline)
         (doom-modeline-evil-normal-state :foreground blue)

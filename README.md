@@ -1,6 +1,8 @@
 # My dotfiles backup
 
-Managed with [dotbot](https://github.com/anishathalye/dotbot). To install, clone the repo and run `./install`. To add a file/directory, move it into the repo (delete/rename the original), modify `install.conf.yaml`, and run `./install`.
+Automatically install with the help of [dotbot](https://github.com/anishathalye/dotbot). Simply clone the repo and run `./install`.
+
+When adding a new file, modify `install.conf.yaml` and run `./install` to get it symlinked.
 
 ## Minimal dependencies to get started
 

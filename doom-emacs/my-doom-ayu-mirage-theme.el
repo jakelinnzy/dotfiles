@@ -114,7 +114,7 @@ determine the exact padding."
         (elscreen-tab-other-screen-face :background "#353a42"
                                         :foreground "#1e2022")
         (cursor :background accent)
-        (hl-line :background base3)
+        (hl-line :background base4)
 
         ;; evil state indicators (the small circle at left of modeline)
         (doom-modeline-evil-normal-state :foreground blue)

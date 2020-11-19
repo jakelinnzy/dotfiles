@@ -6,9 +6,9 @@
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font"
                            :size 13 :weight 'regular)
       doom-variable-pitch-font
-      ;; (font-spec :family "Libre Baskerville" :size 13.5)
-      ;; (font-spec :family "Overpass" :size 14)
-      (font-spec :family "Publico Text" :size 14)
+      ;; (font-spec :family "Libre Baskerville" :size 13)
+      ;; (font-spec :family "Overpass" :size 13)
+      (font-spec :family "ETBembo" :size 13)
       ;; Display Emoji in system font
       emojify-display-style 'unicode
       ;; NOTE Enable this to make variable pitch font size work
@@ -22,7 +22,10 @@
         '("PingFang SC"
           "Weather Icons" "github-octicons" "FontAwesome"
           "all-the-icons" "file-icons" "Apple Color Emoji" "Menlo")
-        face-font-rescale-alist '(("PingFang SC" . 1.25))))
+        face-font-rescale-alist
+        '(("PingFang SC" . 1.25)
+          ("Publico Text" . 1.1)
+          ("ETBembo" . 1.15))))
  ;; TODO
  (IS-LINUX nil))
 

@@ -214,17 +214,7 @@
    "M-h"  nil
    "M-j"  nil
    "M-k"  nil
-   "M-l"  nil))
-
- ;; Dired: 'c f' creates empty file, 'c d' creates directory
- ;; Make it consistent with treemacs
- ;; See mappings for dired under Evil mode at
- ;; https://github.com/emacs-evil/evil-collection/blob/master/modes/dired/evil-collection-dired.el
- (:after dired
-  (:map dired-mode-map
-   :nm "c"   nil
-   :nm "c f" #'dired-create-empty-file
-   :nm "c d" #'dired-create-directory)))
+   "M-l"  nil)))
 
 (defun my/toggle-vterm ()
   (interactive)
@@ -260,6 +250,13 @@
    '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))))
 
 (setq treemacs-width 30)
+
+(after! dired
+  (map!
+   :map ranger-mode-map
+   :nm "c"   nil
+   :nm "c f" #'dired-create-empty-file
+   :nm "c d" #'dired-create-directory))
 
 (setq ivy-posframe-width     130
       ivy-posframe-min-width 130

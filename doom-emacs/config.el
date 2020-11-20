@@ -429,7 +429,7 @@
 
 (setq org-directory "~/Documents/org/")
 
-(setq org-ellipsis "▼"
+(setq org-ellipsis "▼" ;; ➡, ⚡, ▼, ↴, , ∞, ⬎, ⤷, ⤵
       ;; Hides *bold* /italic/ etc.
       org-hide-emphasis-markers nil)
 

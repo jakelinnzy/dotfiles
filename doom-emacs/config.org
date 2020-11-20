@@ -832,7 +832,7 @@ This has to be set before org loads.
 ** Various settings
 
 #+begin_src elisp
-(setq org-ellipsis "▼"
+(setq org-ellipsis "▼" ;; ➡, ⚡, ▼, ↴, , ∞, ⬎, ⤷, ⤵
       ;; Hides *bold* /italic/ etc.
       org-hide-emphasis-markers nil)
 #+end_src

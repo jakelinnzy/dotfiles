@@ -50,16 +50,16 @@
       highlight-indent-guides-bitmap-function
       #'highlight-indent-guides--bitmap-line)
 
-(setq my/cursor-colour-str       "#ffd580"
-      evil-default-cursor        `(,my/cursor-colour-str box)
-      evil-normal-state-cursor   `(,my/cursor-colour-str box)
-      evil-insert-state-cursor   'bar
-      evil-visual-state-cursor   'hollow
-      evil-operator-state-cursor #'evil-half-cursor
-      evil-emacs-state-cursor    '("white"   box)
-      ;; Don't let mixed-pitch-mode change cursor
-      ;; t or nil
-      mixed-pitch-cursor-type    nil)
+(let ((cursor-color-str "#ffd580"))
+  (setq evil-default-cursor        (list cursor-color-str 'box)
+        evil-normal-state-cursor   (list cursor-color-str 'box)
+        evil-insert-state-cursor   'bar
+        evil-visual-state-cursor   'hollow
+        evil-operator-state-cursor #'evil-half-cursor
+        evil-emacs-state-cursor    (list "white" 'box)))
+;; Don't let mixed-pitch-mode change cursor
+;; t or nil
+(setq mixed-pitch-cursor-type    nil)
 
 (defun my/doom-modeline-conditional-buffer-encoding ()
   "Hide the encoding information when it is not LF UTF-8."

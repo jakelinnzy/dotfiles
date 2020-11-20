@@ -447,17 +447,21 @@
 
 (after! org
   ;; give titles different font size
-    (custom-set-faces!
-      '(org-document-title :height 1.3)
-      '(org-level-1 :height 1.3)
-      '(org-level-2 :height 1.2)
-      '(org-level-3 :height 1.1)
-      '(org-level-4 :height 1.05)
-      '(org-level-5 :height 1.0)
-      '(org-level-6 :height 1.0)
-      '(org-level-7 :height 1.0)
-      '(org-level-8 :height 1.0)
-      '(org-indent  :inherit (org-hide fixed-pitch)))
+  (custom-set-faces!
+    '(org-document-title :height 1.3)
+    '(org-level-1 :height 1.3)
+    '(org-level-2 :height 1.2)
+    '(org-level-3 :height 1.1)
+    '(org-level-4 :height 1.05)
+    '(org-level-5 :height 1.0)
+    '(org-level-6 :height 1.0)
+    '(org-level-7 :height 1.0)
+    '(org-level-8 :height 1.0)
+    '(org-indent  :inherit (org-hide fixed-pitch)))
+  ;; make link fixed width
+  (after! mixed-pitch
+    (add-to-list 'mixed-pitch-fixed-pitch-faces
+                 'org-link))
 
   ;; prettify symbols
   (defun my/prettify-org-setup ()

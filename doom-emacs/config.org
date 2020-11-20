@@ -237,6 +237,22 @@ Indent guide character
       #'highlight-indent-guides--bitmap-line)
 #+end_src
 
+** Cursor
+
+Possible cursor types: =box=, =hollow=, =bar=, =hbar=.
+#+begin_src elisp
+(setq my/cursor-colour-str       "#ffd580"
+      evil-default-cursor        `(,my/cursor-colour-str box)
+      evil-normal-state-cursor   `(,my/cursor-colour-str box)
+      evil-insert-state-cursor   'bar
+      evil-visual-state-cursor   'hollow
+      evil-operator-state-cursor #'evil-half-cursor
+      evil-emacs-state-cursor    '("white"   box)
+      ;; Don't let mixed-pitch-mode change cursor
+      ;; t or nil
+      mixed-pitch-cursor-type    nil)
+#+end_src
+
 ** Modeline
 
 The modeline always shows "LF UTF-8", which is unnecessary.

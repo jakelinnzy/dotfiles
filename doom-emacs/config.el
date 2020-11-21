@@ -192,6 +192,8 @@
 
 (map!
  ;; map j and k only in normal mode, so v10j works as expected.
+ :n   "j"   #'evil-next-visual-line
+ :n   "k"   #'evil-previous-visual-line
  :n   "RET" #'evil-ex-nohighlight
  ;; Home row keys jump to beginning and end of line
  :nvmo "H"   #'evil-first-non-blank

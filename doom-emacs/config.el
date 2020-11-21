@@ -94,6 +94,11 @@
 ;; in the Dock, you switch to the workspace Emacs is in.
 (menu-bar-mode 1)
 
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 5))
+      mouse-wheel-progressive-speed nil
+      mouse-wheel-follow-mouse t
+      scroll-step 3)
+
 (setq tab-width 4
       evil-shift-width 4)
 (setq-default indent-tabs-mode nil)
@@ -263,7 +268,7 @@
    '(("" . "\\`+?evil[-:]?\\(?:a-\\)?\\(.*\\)") . (nil . "◂\\1"))
    '(("\\`g s" . "\\`evilem--?motion-\\(.*\\)") . (nil . "◃\\1"))))
 
-(setq treemacs-width 30)
+(setq treemacs-width 25)
 
 (after! dired
   (map!

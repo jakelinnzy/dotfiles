@@ -259,6 +259,14 @@ The modeline always shows "LF UTF-8", which is unnecessary.
 (menu-bar-mode 1)
 #+end_src
 
+(Relatively) smooth mouse scroll.
+#+begin_src elisp
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 5))
+      mouse-wheel-progressive-speed nil
+      mouse-wheel-follow-mouse t
+      scroll-step 3)
+#+end_src
+
 ** Don't be evil
 
 Indentation: use 4 spaces by default.
@@ -515,7 +523,7 @@ Hide =evil-= prefix that appear too much in which-key popup.
 
 The width of treemacs window.
 #+begin_src elisp
-(setq treemacs-width 30)
+(setq treemacs-width 25)
 #+end_src
 
 ** Dired (Ranger)

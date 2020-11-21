@@ -287,8 +287,8 @@ set background=dark
 " Color scheme overrides
 let g:ayucolor = "mirage"
 function! s:ayu_mirage()
-    hi Cursor        gui=NONE guifg=#212733 guibg=#D9D7CE
-    hi lCursor       gui=NONE guifg=#212733 guibg=#D9D7CE
+    hi Cursor        gui=NONE guifg=#212733 guibg=#FFD580
+    hi lCursor       gui=NONE guifg=#212733 guibg=#FFD580
     hi Comment       guifg=#7C8793
     hi CursorLine    guibg=#303844
     hi IncSearch     gui=NONE guifg=#212733 guibg=#D9D7CE

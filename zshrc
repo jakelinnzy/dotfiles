@@ -98,6 +98,9 @@ alias jj="fasd_cd -di"
 
 alias la="ls -Ah"
 alias lla="ls -lAh"
+
+alias cx="chmod +x"
+
 alias coa="conda activate"
 alias cod="conda deactivate"
 alias coe="conda info --envs"

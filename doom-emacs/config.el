@@ -110,11 +110,11 @@
 (modify-syntax-entry ?_ "w")
 
 (setq avy-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l
-                 ?q ?w ?e ?r ?t ?y ?u ?i ?o ?p
-                 ?z ?x ?c ?v ?b ?n ?m 59))
+                    ?q ?w ?e ?r ?t ?y ?u ?i ?o ?p
+                    ?z ?x ?c ?v ?b ?n ?m 59))
 
 (after! evil-snipe
-    (evil-snipe-mode -1))
+  (evil-snipe-mode -1))
 
 ;; In packages.el:
 ;;     (package! smartparens)
@@ -127,16 +127,16 @@
   (sp-local-pair 'org-mode "'" nil :actions nil))
 (defun my/fix-smartparens ()
   "Enable smartparens mode"
- (define-globalized-minor-mode my/smartparens-global-mode
-   smartparens-mode smartparens-mode)
- (my/smartparens-global-mode 1)
- (define-globalized-minor-mode my/show-smartparens-global-mode
-   show-smartparens-mode show-smartparens-mode)
- (my/show-smartparens-global-mode 1)
- ;; (define-globalized-minor-mode my/smartparens-global-strict-mode
- ;;   smartparens-strict-mode smartparens-strict-mode)
- ;; (my/smartparens-global-strict-mode 1)
- )
+  (define-globalized-minor-mode my/smartparens-global-mode
+    smartparens-mode smartparens-mode)
+  (my/smartparens-global-mode 1)
+  (define-globalized-minor-mode my/show-smartparens-global-mode
+    show-smartparens-mode show-smartparens-mode)
+  (my/show-smartparens-global-mode 1)
+  ;; (define-globalized-minor-mode my/smartparens-global-strict-mode
+  ;;   smartparens-strict-mode smartparens-strict-mode)
+  ;; (my/smartparens-global-strict-mode 1)
+  )
 (my/fix-smartparens)
 
 ;; Yes I'm lazy

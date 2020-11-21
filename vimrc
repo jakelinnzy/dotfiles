@@ -14,7 +14,7 @@ let maplocalleader = '\'
 let s:mac = has('mac')
 let s:windows = has('win32') || has('win64')
 let s:linux = has('linux')
-if $TERM_PROGRAM =~# '\v(kitty|iTerm)'
+if $TERM_PROGRAM =~# '\v(kitty|iTerm|alacritty)'
     let s:patched_font = 1
     let s:termguicolors = 1
 else

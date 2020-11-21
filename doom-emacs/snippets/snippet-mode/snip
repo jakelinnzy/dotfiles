@@ -1,6 +1,8 @@
-# key: snip
 # name: New snippet
+# key: snip
 # --
-# key: ${1:trigger keys}
-# name: ${2:snippet name}
+# -*- mode: snippet -*-
+# name: ${1:snippet name}
+# key: ${2:trigger keys}
 # --
+$0

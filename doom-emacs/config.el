@@ -3,12 +3,15 @@
 (setq user-full-name    "Ziyang Lin"
       user-mail-address "jakelinnzy@gmail.com")
 
-(setq doom-font (font-spec :family "JetBrainsMono Nerd Font"
-                           :size 13 :weight 'regular)
+(setq doom-font
+      (font-spec :family "Sarasa Mono CL" :size 13 :weight 'regular)
+      ;; (font-spec :family "JetBrainsMono Nerd Font" :size 13 :weight 'regular)
+
       doom-variable-pitch-font
       ;; (font-spec :family "Libre Baskerville" :size 13)
       ;; (font-spec :family "Overpass" :size 13)
       (font-spec :family "ETBembo" :size 13)
+
       ;; Display Emoji in system font
       emojify-display-style 'unicode
       ;; NOTE Enable this to make variable pitch font size work
@@ -19,7 +22,7 @@
 (cond
  (IS-MAC
   (setq doom-unicode-extra-fonts
-        '("PingFang SC"
+        `("PingFang SC" ,doom-font
           "Weather Icons" "github-octicons" "FontAwesome"
           "all-the-icons" "file-icons" "Apple Color Emoji" "Menlo")
         face-font-rescale-alist

@@ -634,6 +634,8 @@ Manages projects with =SPC p=.
   (or (mapcar (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
 #+end_src
 
+*** TODO Fix this by using ~after!~ and test
+
 ** Make
 
 Run make with =SPC c m=.
@@ -832,7 +834,10 @@ This has to be set before org loads.
 ** Various settings
 
 #+begin_src elisp
-(setq org-ellipsis "▼" ;; ➡, ⚡, ▼, ↴, , ∞, ⬎, ⤷, ⤵
+(setq org-global-properties
+      ;; directory of attachments
+      '(("dir" . "attach/"))
+      org-ellipsis "▼" ;; ➡, ⚡, ▼, ↴, , ∞, ⬎, ⤷, ⤵
       ;; Hides *bold* /italic/ etc.
       org-hide-emphasis-markers nil)
 #+end_src

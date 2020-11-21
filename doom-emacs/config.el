@@ -429,7 +429,10 @@
 
 (setq org-directory "~/Documents/org/")
 
-(setq org-ellipsis "▼" ;; ➡, ⚡, ▼, ↴, , ∞, ⬎, ⤷, ⤵
+(setq org-global-properties
+      ;; directory of attachments
+      '(("dir" . "attach/"))
+      org-ellipsis "▼" ;; ➡, ⚡, ▼, ↴, , ∞, ⬎, ⤷, ⤵
       ;; Hides *bold* /italic/ etc.
       org-hide-emphasis-markers nil)
 

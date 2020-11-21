@@ -1,0 +1,6 @@
+# key: snip
+# name: New snippet
+# --
+# key: ${1:trigger keys}
+# name: ${2:snippet name}
+# --

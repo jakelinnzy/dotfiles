@@ -289,6 +289,10 @@
   (setq-default dired-omit-files-p t)
   (setq dired-omit-files
         "\\`[.]?#\\|\\`[.][.]?\\'\\|flycheck_.*\\.el$"))
+(setq ranger-hidden-regexp
+      '("^\\."
+        ;; flycheck elisp
+        "^flycheck_.*\\.el$"))
 
 (setq ivy-posframe-width     130
       ivy-posframe-min-width 130

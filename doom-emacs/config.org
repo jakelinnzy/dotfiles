@@ -552,6 +552,10 @@ Ignore files
   (setq-default dired-omit-files-p t)
   (setq dired-omit-files
         "\\`[.]?#\\|\\`[.][.]?\\'\\|flycheck_.*\\.el$"))
+(setq ranger-hidden-regexp
+      '("^\\."
+        ;; flycheck elisp
+        "^flycheck_.*\\.el$"))
 #+end_src
 
 More info [[https://github.com/ralesi/ranger.el#minimal-ranger-mode-deer][here]].

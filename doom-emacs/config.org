@@ -619,6 +619,13 @@ Edit string in a dedicated buffer with =SPC e s=. =C-c C-c= to confirm and =C-c 
 #+begin_src elisp
 (use-package string-edit
   :commands 'string-edit-at-point)
+(after! string-edit
+  (add-hook 'string-edit-mode-hook
+            (lambda ()
+              (setq header-line-format
+                    (substitute-command-keys
+                     (concat "\\[string-edit-conclude] to finish, "
+                             "\\[string-edit-abort] to abort."))))))
 #+end_src
 
 ** TODO taskrunner

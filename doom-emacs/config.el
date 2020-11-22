@@ -326,6 +326,13 @@
 
 (use-package string-edit
   :commands 'string-edit-at-point)
+(after! string-edit
+  (add-hook 'string-edit-mode-hook
+            (lambda ()
+              (setq header-line-format
+                    (substitute-command-keys
+                     (concat "\\[string-edit-conclude] to finish, "
+                             "\\[string-edit-abort] to abort."))))))
 
 ;; (use-package taskrunner
 ;;   :commands (ivy-taskrunner))

@@ -81,6 +81,29 @@ alias e="emacsclient --no-wait --alternate-editor=nvim"
 # emacs in terminal
 alias et="emacs -nw"
 
+# shell builtins
+alias la="ls -Ah"
+alias lla="ls -lAh"
+alias cx="chmod +x"
+
+# git
+alias glg="git log --graph --decorate --stat"
+
+# ranger
+alias ra="ranger"
+
+# fasd: more powerful autojump
+alias j="fasd_cd -d"
+alias jj="fasd_cd -di"
+
+alias coa="conda activate"
+alias cod="conda deactivate"
+alias coe="conda info --envs"
+
+# Who still uses Python 2?
+alias python="python3"
+alias pip="pip3"
+
 # Compilation flags
 export CFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c99"
 export CXXFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c++17"
@@ -91,24 +114,6 @@ export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"
 # fzf & ripgrep
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
 export FZF_DEFAULT_COMMAND="rg --files"
-
-# fasd: more powerful autojump
-alias j="fasd_cd -d"
-alias jj="fasd_cd -di"
-
-alias la="ls -Ah"
-alias lla="ls -lAh"
-
-alias cx="chmod +x"
-
-alias coa="conda activate"
-alias cod="conda deactivate"
-alias coe="conda info --envs"
-alias glg="git log --graph --decorate --stat"
-
-# Who still uses Python 2?
-alias python="python3"
-alias pip="pip3"
 
 # LSCOLORS {{{2
 

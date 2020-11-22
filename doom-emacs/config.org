@@ -545,6 +545,15 @@ Use =c f= to create empty file, =c d= to create directory (consistent with treem
    :nm "c d" #'dired-create-directory))
 #+end_src
 
+Ignore files
+#+begin_src elisp
+(after! dired
+  (require 'dired-x)
+  (setq-default dired-omit-files-p t)
+  (setq dired-omit-files
+        "\\`[.]?#\\|\\`[.][.]?\\'\\|flycheck_.*\\.el$"))
+#+end_src
+
 More info [[https://github.com/ralesi/ranger.el#minimal-ranger-mode-deer][here]].
 
 ** ivy, a search engine for love and life

@@ -1,5 +1,5 @@
 # Insert a elisp src block
-# key: elb
+# key: el
 # --
 #+begin_src elisp
 $0

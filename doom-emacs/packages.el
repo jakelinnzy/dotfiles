@@ -64,6 +64,8 @@
 (package! resize-window
     :recipe (:host github :repo "dpsutton/resize-window")
     :pin "72018aa4d2401b60120588199d4cedd0dc1fbcfb")
+;; call string-edit-at-point to edit a string in dedicated buffer
+(package! string-edit)
 ;; (package! org-pretty-table
 ;;     :recipe (:host github :repo "Fuco1/org-pretty-table"))
 ;; (package! pdf-continuous-scroll-mode

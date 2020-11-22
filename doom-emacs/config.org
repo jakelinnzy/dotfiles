@@ -470,16 +470,22 @@ IMO it's far more ergonomic to scroll with a single key than combinations such a
 ** <Leader>
 
 #+begin_src elisp
-(map!
- ;; SPC l g - Go to definition
- (:leader
-  :desc "Format buffer"            "c f" #'lsp-format-buffer
-  :desc "Go to definition"         "c g" #'evil-goto-definition
-  :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized
-  :desc "Toggle monospace font"    "t m" #'mixed-pitch-mode
-  :desc "Toggle fixed wrapping"    "t v" #'visual-fill-column-mode
-  :desc "Move workspace left"  "TAB <" #'+workspace/swap-left
-  :desc "Move workspace right" "TAB >" #'+workspace/swap-right))
+(map! :leader
+      ;; By default Magit is invoked with SPC g (a/b/c...)
+      ;; These bindings can be directly accessed within the Magit status buffer
+      "g" nil
+      :desc "Magit"                    "g"   #'magit-status
+      :desc "Format buffer"            "c f" #'lsp-format-buffer
+      :desc "Go to definition"         "c g" #'evil-goto-definition
+      :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized
+      :desc "Toggle monospace font"    "t m" #'mixed-pitch-mode
+      :desc "Toggle fixed wrapping"    "t v" #'visual-fill-column-mode
+      :desc "Edit string at point"     "e s" #'string-edit-at-point
+      :desc "Move workspace left"    "TAB <" #'+workspace/swap-left
+      :desc "Move workspace right"   "TAB >" #'+workspace/swap-right
+      :desc "Run last make task"       "c m" #'+make/run-last
+      :desc "Run make task"            "c M" #'+make/run
+      :desc "resize-mode"              "w e" #'resize-window)
 #+end_src
 
 
@@ -575,11 +581,6 @@ Finish search with current input by pressing =C-d= or =S-Return=. This useful, f
         :g "," #'evil-scroll-up
         :g "M" #'magit-merge
         :g "R" #'magit-remote))
-;; By default Magit is invoked with SPC g (a/b/c...)
-;; These bindings can be directly accessed within the Magit status buffer
-(map! :leader
-      "g" nil
-      :desc "Magit" "g" #'magit-status)
 #+end_src
 
 ** IBuffer
@@ -612,14 +613,12 @@ Manages projects with =SPC p=.
 
 *** TODO Fix this by using ~after!~ and test
 
-** Make
+** string-edit-mode
 
-Run make with =SPC c m=.
+Edit string in a dedicated buffer with =SPC e s=. =C-c C-c= to confirm and =C-c C-k= to abort. Characters like =\= are automatically escaped.
 #+begin_src elisp
-(map! :map prog-mode-map
-      :leader
-      :desc "Run last make task" "c m" #'+make/run-last
-      :desc "Run make task" "c M" #'+make/run)
+(use-package string-edit
+  :commands 'string-edit-at-point)
 #+end_src
 
 ** TODO taskrunner
@@ -635,9 +634,6 @@ Doesn't work for some reason. Need to figure out.
 
 A plugin for quickly resizing window.
 #+begin_src elisp
-(map! :leader
-      :desc "resize-mode" "w e" #'resize-window)
-
 ;; redifine the keymap to be consistent with evil
 (after! resize-window
   (setq resize-window-dispatch-alist

@@ -248,16 +248,22 @@
  ;; nvim
  :nvim "s-`" #'my/toggle-vterm)
 
-(map!
- ;; SPC l g - Go to definition
- (:leader
-  :desc "Format buffer"            "c f" #'lsp-format-buffer
-  :desc "Go to definition"         "c g" #'evil-goto-definition
-  :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized
-  :desc "Toggle monospace font"    "t m" #'mixed-pitch-mode
-  :desc "Toggle fixed wrapping"    "t v" #'visual-fill-column-mode
-  :desc "Move workspace left"  "TAB <" #'+workspace/swap-left
-  :desc "Move workspace right" "TAB >" #'+workspace/swap-right))
+(map! :leader
+      ;; By default Magit is invoked with SPC g (a/b/c...)
+      ;; These bindings can be directly accessed within the Magit status buffer
+      "g" nil
+      :desc "Magit"                    "g"   #'magit-status
+      :desc "Format buffer"            "c f" #'lsp-format-buffer
+      :desc "Go to definition"         "c g" #'evil-goto-definition
+      :desc "Toggle maximized window"  "t M" #'toggle-frame-maximized
+      :desc "Toggle monospace font"    "t m" #'mixed-pitch-mode
+      :desc "Toggle fixed wrapping"    "t v" #'visual-fill-column-mode
+      :desc "Edit string at point"     "e s" #'string-edit-at-point
+      :desc "Move workspace left"    "TAB <" #'+workspace/swap-left
+      :desc "Move workspace right"   "TAB >" #'+workspace/swap-right
+      :desc "Run last make task"       "c m" #'+make/run-last
+      :desc "Run make task"            "c M" #'+make/run
+      :desc "resize-mode"              "w e" #'resize-window)
 
 (setq which-key-idle-delay 0.5
       which-key-idle-secondary-delay 0)
@@ -299,11 +305,6 @@
         :g "," #'evil-scroll-up
         :g "M" #'magit-merge
         :g "R" #'magit-remote))
-;; By default Magit is invoked with SPC g (a/b/c...)
-;; These bindings can be directly accessed within the Magit status buffer
-(map! :leader
-      "g" nil
-      :desc "Magit" "g" #'magit-status)
 
 (after! ibuffer
   (map! :mode ibuffer-mode
@@ -323,16 +324,11 @@
   "Return t if FILEPATH is within any of `projectile-ignored-projects'"
   (or (mapcar (lambda (p) (s-starts-with-p p filepath)) projectile-ignored-projects)))
 
-(map! :map prog-mode-map
-      :leader
-      :desc "Run last make task" "c m" #'+make/run-last
-      :desc "Run make task" "c M" #'+make/run)
+(use-package string-edit
+  :commands 'string-edit-at-point)
 
 ;; (use-package taskrunner
 ;;   :commands (ivy-taskrunner))
-
-(map! :leader
-      :desc "resize-mode" "w e" #'resize-window)
 
 ;; redifine the keymap to be consistent with evil
 (after! resize-window

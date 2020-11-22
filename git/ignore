@@ -10,6 +10,9 @@
 .clangd
 .tasks
 
+# Emacs
+flycheck_*.el
+
 # Thumbnails
 ._*
 

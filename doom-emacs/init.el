@@ -21,10 +21,12 @@
     ;;layout            ; auie,ctsrnm is the superior home row
 
     :completion
-    (company +childframe) ; the ultimate code completion backend
+    (company            ; the ultimate code completion backend
+        +childframe)
     ;;helm              ; the *other* search engine for love and life
     ;;ido               ; the other *other* search engine...
-    (ivy +childframe +fuzzy +prescient +icons) ; a search engine for love and life
+    (ivy                ; a search engine for love and life
+        +childframe +fuzzy +prescient +icons)
 
     :ui
     ;;deft              ; notational velocity for Emacs
@@ -67,7 +69,8 @@
     ;;word-wrap         ; soft wrapping with language-aware indent
 
     :emacs
-    (dired +icons +ranger)  ; making dired pretty [functional]
+    (dired              ; making dired pretty [functional]
+        +icons +ranger)
     electric            ; smarter, keyword-based electric-indent
     (ibuffer +icons)    ; interactive buffer management
     undo                ; persistent, smarter undo for your inevitable mistakes
@@ -138,7 +141,8 @@
     (javascript +lsp)   ; all(hope(abandon(ye(who(enter(here))))))
     ;;julia             ; a better, faster MATLAB
     ;;kotlin            ; a better, slicker Java(Script)
-    (latex +latexmk +lsp +fold) ; writing papers in Emacs has never been so fun
+    (latex              ; writing papers in Emacs has never been so fun
+        +latexmk +lsp +fold)
     ;;lean
     ;;factor
     ;;ledger            ; an accounting system in Emacs
@@ -147,8 +151,8 @@
     ;;nim               ; python + lisp at the speed of c
     ;;nix               ; I hereby declare "nix geht mehr!"
     ;;ocaml             ; an objective camel
-    (org +brain +dragndrop +pandoc ; organize your plain life in plain text
-        +present +pretty)
+    (org                ; organize your plain life in plain text
+        +brain +dragndrop +pandoc +present +pretty)
     ;;php               ; perl's insecure younger brother
     ;;plantuml          ; diagrams for confusing people more
     ;;purescript        ; javascript, but functional
@@ -159,7 +163,7 @@
     ;;rest              ; Emacs as a REST client
     ;;rst               ; ReST in peace
     ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-    (rust +lsp)                ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+    (rust +lsp)         ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
     ;;scala             ; java, but good
     ;;scheme            ; a fully conniving family of lisps
     sh                  ; she sells {ba,z,fi}sh shells on the C xor

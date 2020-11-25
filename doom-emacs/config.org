@@ -746,9 +746,9 @@ Enable tree-sitter highlighting for all supported modes.
 Only enable spell checking when I press =SPC t s= to avoid red underlines.
 
 #+begin_src elisp
-(add-hook! '(text-mode-hook org-mode-hook)
-           :append
-           (lambda () (spell-fu-mode -1)))
+;; (add-hook! '(text-mode-hook org-mode-hook)
+;;            :append
+;;            (lambda () (spell-fu-mode -1)))
 #+end_src
 
 ** YASnippet

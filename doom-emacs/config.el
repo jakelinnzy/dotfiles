@@ -411,9 +411,9 @@
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
-(add-hook! '(text-mode-hook org-mode-hook)
-           :append
-           (lambda () (spell-fu-mode -1)))
+;; (add-hook! '(text-mode-hook org-mode-hook)
+;;            :append
+;;            (lambda () (spell-fu-mode -1)))
 
 
 

@@ -92,7 +92,7 @@
 ;; This makes emacs-mac-port behave like any other Mac app in multiple
 ;; workspaces. e.g. when you are in another workspace and click Emacs' icon
 ;; in the Dock, you switch to the workspace Emacs is in.
-(menu-bar-mode 1)
+;; (menu-bar-mode 1)
 
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 5))
       mouse-wheel-progressive-speed nil
@@ -108,10 +108,10 @@
       ;; :s command has the global flag by default, adding /g cancels the flag.
       evil-ex-substitute-global t
       ;; keep 5 lines from the margin
-      scroll-margin 5
+      ;; scroll-margin 5
       ;; scroll-step 1
       ;; j / k move visual lines, etc
-      evil-respect-visual-line-mode t)
+      evil-respect-visual-line-mode nil)
 
 (modify-syntax-entry ?_ "w")
 
@@ -128,6 +128,11 @@
 (require 'smartparens-config)
 ;; Enable triple backtick (markdown style quote)
 (sp-local-pair '(prog-mode text-mode) "```" "```")
+;; Make {<ENTER> behave sanely
+(sp-with-modes '(prog-mode)
+  (sp-local-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
+  (sp-local-pair "[" nil :post-handlers '(("||\n[i]" "RET")))
+  (sp-local-pair "(" nil :post-handlers '(("||\n[i]" "RET"))))
 (after! smartparens-org
   ;; Disable ' in org-mode
   (sp-local-pair 'org-mode "'" nil :actions nil))
@@ -219,13 +224,13 @@
 
  ;; treemacs: NERDTree-like file explorer
  ;; C-t or SPC f t to open treemacs
- :nm "C-t" #'treemacs
+ :nm "C-t" #'+treemacs/toggle
  (:leader
   (:prefix ("f" . "file")
-   :desc "Open treemacs"           "t" #'treemacs
    :desc "Add project to treemacs" "T" #'treemacs-add-project-to-workspace))
  (:after treemacs
   (:map evil-treemacs-state-map
+   "s-`"  #'ignore
    "p"    nil
    "p a"  #'treemacs-add-project-to-workspace
    "p d"  #'treemacs-remove-project-from-workspace
@@ -375,7 +380,7 @@
 (setq +zen-text-scale 0)
 
 (setq lsp-enable-snippet t
-      lsp-idle-delay 0.5
+      lsp-idle-delay 0.3
       lsp-modeline-diagnostics-message t
       lsp-modeline-diagnostics-scope :file
       ;; enable lens if server supports
@@ -406,9 +411,9 @@
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
-(after! spell-fu
-  (remove-hook 'text-mode-hook
-               #'spell-fu-mode))
+(add-hook! '(text-mode-hook org-mode-hook)
+           :append
+           (lambda () (spell-fu-mode -1)))
 
 
 
@@ -444,6 +449,10 @@
         :localleader
         ;; consistent with org-mode
         :desc "Toggle hiding links" "l t" #'markdown-toggle-url-hiding))
+(add-hook 'markdown-mode-hook
+          (lambda ()
+            (hl-line-mode -1)
+            (highlight-indent-guides-mode -1)))
 
 (add-to-list 'load-path "~/.doom.d/vendor/arduino-mode")
 (setq auto-mode-alist (cons '("\\.\\(pde\\|ino\\)$" . arduino-mode) auto-mode-alist))
@@ -503,6 +512,7 @@
     ;; hl-line-mode looks bad on source blocks that have different background
     ;; colour
     (hl-line-mode -1)
+    (highlight-indent-guides-mode -1)
     (display-line-numbers-mode -1)
     ;; Limit the window width to 80 characters to make it easier to read
     (visual-fill-column-mode 1))

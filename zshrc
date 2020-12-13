@@ -11,9 +11,12 @@ if [[ "$(uname)" = "Linux" ]]; then
 fi
 export PATH="$PATH:/usr/local/sbin"
 export PATH="$PATH:$HOME/opt/bin:$HOME/.local/bin"
+
 export PATH="$PATH:$HOME/.cargo/bin" # cargo
 export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH" # ghc
 
+export GOPATH="$HOME/.local/go"  # `go get` puts stuff here
+export PATH="$GOPATH/bin:$PATH"
 # export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH" # brew coreutils
 
 # END PATH }}}
@@ -30,8 +33,8 @@ fi
 # loads zsh completions installed with homebrew
 # should be called before compinit
 if type brew &>/dev/null; then
-    local brew_prefix=$(brew --prefix)
-    fpath=($brew_prefix/share/zsh/site-functions $fpath)
+    export BREW_PREFIX=$(brew --prefix)
+    fpath=($BREW_PREFIX/share/zsh/site-functions $fpath)
 fi
 fpath=(~/.zfunc /usr/local/share/zsh-completions $fpath)
 

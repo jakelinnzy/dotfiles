@@ -515,6 +515,7 @@
     (highlight-indent-guides-mode -1)
     (display-line-numbers-mode -1)
     ;; Limit the window width to 80 characters to make it easier to read
+    (setq fill-column 100)
     (visual-fill-column-mode 1))
 
   (add-hook! '(org-mode-hook) #'my/prettify-org-setup #'mixed-pitch-mode))

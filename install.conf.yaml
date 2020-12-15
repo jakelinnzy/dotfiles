@@ -41,6 +41,8 @@
     ~/.vim/coc-settings.json: vim/coc-settings.json
     ~/.vim/tasks.ini: vim/tasks.ini
     ~/.vimrc: vimrc
+    # ideavim
+    ~/.ideavimrc: ideavimrc
     # doom-emacs
     ~/.doom.d: doom-emacs
 

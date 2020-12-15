@@ -1,0 +1,86 @@
+" Map <leader> to space
+let mapleader = ' '
+
+" Emulated plugins
+set surround
+set commentary
+let g:EasyMotion_do_mapping = 0
+set easymotion
+set highlightedyank
+
+" IDEA specific settings
+set ideajoin
+set ideaput
+set ideamark
+set ideastatusicon=gray
+set idearefactormode=keep
+
+
+set showmode
+set scrolloff=5
+set sidescrolloff=5
+set incsearch
+set number
+set relativenumber
+
+inoremap jk <Esc>
+map f <Plug>(easymotion-bd-f)
+map s <Plug>(easymotion-s2)
+
+" More sensible defaults
+map <Space> <Nop>
+
+" Jump to start and end of line using the home row keys
+noremap H ^
+noremap L $
+
+" Scroll with , and m
+noremap , <C-u>
+noremap m <C-d>
+" Move the mark key to M
+noremap M m
+
+" Use Emacs movement keybindings in insert mode
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
+inoremap <C-p> <C-o>gk
+inoremap <C-n> <C-o>gj
+inoremap <M-f> <S-Right>
+inoremap <M-b> <S-Left>
+
+cnoremap <C-h> <Left>
+cnoremap <C-j> <Down>
+cnoremap <C-k> <Up>
+cnoremap <C-l> <Right>
+cnoremap <C-b> <S-Left>
+cnoremap <C-f> <S-Right>
+
+" Ctrl-a and Ctrl-e
+inoremap <C-a> <C-o>^
+inoremap <C-e> <C-o>$
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+
+" ideavim uses <A-h> instead of <M-h>
+" <M-n> to move between pairs
+inoremap <A-n> <C-o>%
+" <M-o> and <M-Shift-o> adds new line below and above
+inoremap <A-o> <C-o>o
+inoremap <A-O> <C-o>O
+
+" Better way to move between windows
+map <A-h> <C-W>h
+map <A-j> <C-W>j
+map <A-k> <C-W>k
+map <A-l> <C-W>l
+
+inoremap <A-h> <Esc><C-W>h
+inoremap <A-j> <Esc><C-W>j
+inoremap <A-k> <Esc><C-W>k
+inoremap <A-l> <Esc><C-W>l
+
+" Ctrl-W t to move window to a new tab
+nnoremap <C-w>t <C-w>T
+
+" Leader key mappings
+map <Leader>fs :w<CR>

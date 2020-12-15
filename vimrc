@@ -150,7 +150,7 @@ set breakindent     " Indent wrapped line the same amount as last line.
 set hidden          " Enables hidden buffer
                     " :DH to close all saved hidden buffers (see below)
 set swapfile
-" set clipboard=unnamedplus  " yank into system clipboard by default
+set clipboard=unnamedplus  " yank into system clipboard by default
 
 " - Tab width & indentation {{{1
 

@@ -67,6 +67,7 @@ Plug 'chrisbra/unicode.vim'
 
 " Custom Text Objects
 Plug 'kana/vim-textobj-user'
+Plug 'kana/vim-textobj-entire'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'wellle/targets.vim'
 
@@ -1343,12 +1344,6 @@ au vimrc VimEnter * call MyTabularCommands()
 
 
 " - textobj-user {{{2
-
-" aF to select a file
-call textobj#user#plugin('file', {
-            \ 'file': {
-            \ 'pattern': '\f\+', 'select': ['aF', 'iF']
-            \ }})
 
 
 " - undotree {{{2

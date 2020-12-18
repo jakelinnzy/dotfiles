@@ -40,6 +40,7 @@ Plug 'jakelinnzy/delimitMate'    " my fork
 Plug 'jakelinnzy/vim-easymotion' " my fork
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
+Plug 'jdhao/better-escape.vim'
 " auto-pairs prevents <CR> from expanding abbreviations
 Plug 'junegunn/vim-easy-align'  " ga to align
 Plug 'junegunn/vim-emoji'
@@ -429,9 +430,12 @@ au Syntax c,cpp,python,java,rust,go,javascript,typescript,ruby,swift,
 " <Leader> had been set to <Space> at the top of this file
 
 " There's no *escape* {{{2
+
 " Press jk to leave insert mode
-" To type 'jk', use <C-v>jk
-inoremap jk <Esc>
+" inoremap jk <Esc>
+" :h better-escape.txt
+let g:better_escape_interval = 150
+let g:better_escape_shortcut = 'jk'
 
 " <Esc> to exit terminal mode
 " fzf.vim can interfere with this, so check first

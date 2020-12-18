@@ -1,8 +1,8 @@
 [include]
     path = ~/.gitconfig_local
 [user]
-    email = jakelinnzy@gmail.com
     name = Ziyang Lin
+    email = jakelinnzy@gmail.com
 [core]
     pager = delta
     excludesfile = ~/.config/git/ignore
@@ -241,4 +241,4 @@
     subrepo = !sh -c 'git filter-branch --prune-empty --subdirectory-filter $1 master' -
     human = name-rev --name-only --refs=refs/heads/*
 
-# vim:ft=conf
+# vim:ft=gitconfig

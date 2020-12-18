@@ -53,20 +53,36 @@ map s <Plug>(easymotion-s2)
 
 inoremap jk <Esc>
 
+" 'Q' in normal mode enters Ex mode. You almost never want this.
+nnoremap Q <Nop>
+map <Space> <Nop>
+
+" `s` deletes one character and enters insert mode
+" Why use it if you have xi and r?
+nnoremap s <Nop>
+" S is a synonym for cc (change the current line)
+nnoremap S <Nop>
+
+" Make Y consistent with C and D
+nnoremap Y y$
+
+" ^U Insert Mode breaks undo sequence
+inoremap <C-u> <C-g>u<C-u>
+
 " Use Emacs movement keybindings in insert mode
 inoremap <C-f> <Right>
 inoremap <C-b> <Left>
 inoremap <C-p> <C-o>gk
 inoremap <C-n> <C-o>gj
-inoremap <M-f> <S-Right>
-inoremap <M-b> <S-Left>
+inoremap <A-f> <S-Right>
+inoremap <A-b> <S-Left>
 
-cnoremap <C-h> <Left>
-cnoremap <C-j> <Down>
-cnoremap <C-k> <Up>
-cnoremap <C-l> <Right>
-cnoremap <C-b> <S-Left>
-cnoremap <C-f> <S-Right>
+cnoremap <C-f> <Right>
+cnoremap <C-b> <Left>
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+cnoremap <A-b> <S-Left>
+cnoremap <A-f> <S-Right>
 
 " Ctrl-a and Ctrl-e
 inoremap <C-a> <C-o>^

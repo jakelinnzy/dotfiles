@@ -495,12 +495,12 @@ inoremap <C-n> <C-o>gj
 inoremap <M-f> <S-Right>
 inoremap <M-b> <S-Left>
 
-cnoremap <C-h> <Left>
-cnoremap <C-j> <Down>
-cnoremap <C-k> <Up>
-cnoremap <C-l> <Right>
-cnoremap <C-b> <S-Left>
-cnoremap <C-f> <S-Right>
+cnoremap <C-f> <Right>
+cnoremap <C-b> <Left>
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+cnoremap <M-b> <S-Left>
+cnoremap <M-f> <S-Right>
 
 " Ctrl-a and Ctrl-e
 inoremap <C-a> <C-o>^

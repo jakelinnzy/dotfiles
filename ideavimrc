@@ -1,12 +1,15 @@
 " Map <leader> to space
+" Has to appear before extension load, etc.
 let mapleader = ' '
 
 " Emulated plugins
+let g:EasyMotion_do_mapping = 0
 set surround
 set commentary
-let g:EasyMotion_do_mapping = 0
-set easymotion
+set easymotion " Requires installing IdeaVim-EasyMotion in IDE
 set highlightedyank
+set textobj-entire " ae, ie for entire file
+set argtextobj     " aa, ia for an argument
 
 " IDEA specific settings
 set ideajoin
@@ -19,18 +22,19 @@ set idearefactormode=keep
 set showmode
 set scrolloff=5
 set sidescrolloff=5
-set incsearch
 set smartcase
+set incsearch
+set hlsearch
 set clipboard=unnamedplus  " yank into system clipboard by default
+set clipboard+=ideaput
 
 set number
 set norelativenumber
 
-inoremap jk <Esc>
-map f <Plug>(easymotion-bd-f)
-map s <Plug>(easymotion-s2)
+" --------
+" Mappings
+" --------
 
-" More sensible defaults
 map <Space> <Nop>
 
 " Jump to start and end of line using the home row keys
@@ -42,6 +46,12 @@ noremap , <C-u>
 noremap m <C-d>
 " Move the mark key to M
 noremap M m
+
+" Use easymotion with f and s
+map f <Plug>(easymotion-bd-f)
+map s <Plug>(easymotion-s2)
+
+inoremap jk <Esc>
 
 " Use Emacs movement keybindings in insert mode
 inoremap <C-f> <Right>
@@ -88,32 +98,43 @@ nnoremap <C-w>t <C-w>T
 " unimpaired mappings - from https://github.com/saaguero/ideavimrc/blob/master/.ideavimrc
 nnoremap [<space> O<esc>j
 nnoremap ]<space> o<esc>k
-nnoremap [q :action PreviousOccurence<cr>
-nnoremap ]q :action NextOccurence<cr>
-nnoremap [m :action MethodUp<cr>
-nnoremap ]m :action MethodDown<cr>
-nnoremap [c :action VcsShowPrevChangeMarker<cr>
-nnoremap ]c :action VcsShowNextChangeMarker<cr>
+nnoremap [q <Action>(PreviousOccurence)
+nnoremap ]q <Action>(NextOccurence)
+nnoremap [m <Action>(MethodUp)
+nnoremap ]m <Action>(MethodDown)
+nnoremap [c <Action>(VcsShowPrevChangeMarker)
+nnoremap ]c <Action>(VcsShowNextChangeMarker)
 
 " Tabs
-nnoremap [b :action PreviousTab<cr>
-nnoremap ]b :action NextTab<cr>
+nnoremap [b <Action>(PreviousTab)
+nnoremap ]b <Action>(NextTab)
 
 " -------------------
 " Leader key mappings
 " -------------------
 
-map <Leader><Space> :action GotoFile<CR>
-map <Leader>q :q<CR>
+nmap <Leader><Space> <Action>(GotoFile)
+nmap <Leader>q :q<CR>
 
-map <Leader>fs :w<CR>
-map <Leader>ff :action GotoFile<CR>
-map <Leader>fr :action RecentFiles<CR>
+" Find stuff
+nmap <Leader>fs :w<CR>
+nmap <Leader>ff <Action>(GotoFile)
+nmap <Leader>fr <Action>(RecentFiles)
+
+" Code actions...
+nmap <Leader>cf <Action>(ReformatCode)
+nmap <Leader>cd <Action>(GotoDeclaration)
+nmap <Leader>cu <Action>(FindUsages)
 
 " Toggle settings
-map <Leader>tw :action EditorToggleUseSoftWraps<CR>
+nmap <Leader>tw <Action>(EditorToggleUseSoftWraps)
+nmap <Leader>th :nohlsearch<CR>
+" SPC t a to show action IDs
+nmap <Leader>ta <Action>(VimFindActionIdAction)
+" show git blame
+nmap <Leader>tb <Action>(Annotate)
 
 " SPC w c to close window
-map <Leader>wq <C-w>c
-map <Leader>ws :split<CR>
-map <Leader>wv :vsplit<CR>
+nmap <Leader>wq <C-w>c
+nmap <Leader>ws :split<CR>
+nmap <Leader>wv :vsplit<CR>

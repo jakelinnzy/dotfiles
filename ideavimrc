@@ -138,9 +138,11 @@ nmap <Leader>ff <Action>(GotoFile)
 nmap <Leader>fr <Action>(RecentFiles)
 
 " Code actions...
+nmap <Leader>ca <Action>(ShowIntentionActions)
 nmap <Leader>cf <Action>(ReformatCode)
 nmap <Leader>cd <Action>(GotoDeclaration)
 nmap <Leader>cu <Action>(FindUsages)
+nmap <Leader>cb <Action>(ToggleLineBreakpoint)
 
 " Toggle settings
 nmap <Leader>tw <Action>(EditorToggleUseSoftWraps)

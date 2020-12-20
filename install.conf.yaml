@@ -20,6 +20,10 @@
     ~/.inputrc: inputrc
     # kitty
     ~/.config/kitty/kitty.conf: kitty/kitty.conf
+    # Homebrew alias: https://github.com/Homebrew/homebrew-aliases
+    ~/.brew-aliases:
+        if: '[ $(uname) = Darwin ]'
+        path: brew-aliases
     # i3
     ~/.config/i3:
         if: '[ $(uname) = Linux ]'

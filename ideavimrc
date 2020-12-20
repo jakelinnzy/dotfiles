@@ -18,6 +18,9 @@ set ideamark
 set ideastatusicon=gray
 set idearefactormode=keep
 
+" Use C-P and C-N to navigate through completion items
+set lookupkeys& " <Tab>,<Down>,<Up>,<Enter>,<Left>,<Right>,<C-Down>,<C-Up>,<PageUp>,<PageDown>,<C-J>,<C-Q>
+set lookupkeys+=<C-P>,<C-N>
 
 set showmode
 set scrolloff=5
@@ -35,7 +38,14 @@ set norelativenumber
 " Mappings
 " --------
 
+inoremap jk <Esc>
+
 map <Space> <Nop>
+" `s` deletes one character and enters insert mode
+" Why use it if you have xi and r?
+nnoremap s <Nop>
+" S is a synonym for cc (change the current line)
+nnoremap S <Nop>
 
 " Jump to start and end of line using the home row keys
 noremap H ^
@@ -48,20 +58,12 @@ noremap m <C-d>
 noremap M m
 
 " Use easymotion with f and s
-map f <Plug>(easymotion-bd-f)
-map s <Plug>(easymotion-s2)
-
-inoremap jk <Esc>
+nmap f <Plug>(easymotion-bd-f)
+nmap s <Plug>(easymotion-s2)
 
 " 'Q' in normal mode enters Ex mode. You almost never want this.
 nnoremap Q <Nop>
-map <Space> <Nop>
-
-" `s` deletes one character and enters insert mode
-" Why use it if you have xi and r?
-nnoremap s <Nop>
-" S is a synonym for cc (change the current line)
-nnoremap S <Nop>
+nnoremap U <Nop>
 
 " Make Y consistent with C and D
 nnoremap Y y$
@@ -86,7 +88,7 @@ cnoremap <A-f> <S-Right>
 
 " Ctrl-a and Ctrl-e
 inoremap <C-a> <C-o>^
-inoremap <C-e> <C-o>$
+inoremap <C-e> <End>
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
@@ -114,16 +116,16 @@ nnoremap <C-w>t <C-w>T
 " unimpaired mappings - from https://github.com/saaguero/ideavimrc/blob/master/.ideavimrc
 nnoremap [<space> O<esc>j
 nnoremap ]<space> o<esc>k
-nnoremap [q <Action>(PreviousOccurence)
-nnoremap ]q <Action>(NextOccurence)
-nnoremap [m <Action>(MethodUp)
-nnoremap ]m <Action>(MethodDown)
-nnoremap [c <Action>(VcsShowPrevChangeMarker)
-nnoremap ]c <Action>(VcsShowNextChangeMarker)
+nmap [q <Action>(PreviousOccurence)
+nmap ]q <Action>(NextOccurence)
+nmap [m <Action>(MethodUp)
+nmap ]m <Action>(MethodDown)
+nmap [c <Action>(VcsShowPrevChangeMarker)
+nmap ]c <Action>(VcsShowNextChangeMarker)
 
 " Tabs
-nnoremap [b <Action>(PreviousTab)
-nnoremap ]b <Action>(NextTab)
+nmap [b <Action>(PreviousTab)
+nmap ]b <Action>(NextTab)
 
 " -------------------
 " Leader key mappings

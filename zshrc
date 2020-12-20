@@ -91,6 +91,7 @@ alias cx="chmod +x"
 
 # git
 alias glg="git log --graph --decorate --stat"
+alias gla="git log --branches --remotes --tags --graph --oneline --decorate"
 alias gpr="git pull --rebase"
 
 # ranger

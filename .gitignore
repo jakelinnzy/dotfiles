@@ -1,1 +1,7 @@
 github-cli/hosts.yml
+
+nvim/before.vim
+nvim/after.vim
+
+zsh/before.zsh
+zsh/after.zsh

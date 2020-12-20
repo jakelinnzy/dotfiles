@@ -1,0 +1,144 @@
+" A Vim config without plugins
+
+" Map <leader> to space
+" Has to appear before extension load, etc.
+let mapleader = ' '
+
+set showmode
+set scrolloff=5
+set sidescrolloff=5
+set smartcase
+set incsearch
+set hlsearch
+
+set number
+set relativenumber
+set cursorline
+set list            " Shows tab character clearly
+set listchars=tab:➤·,trail:_,nbsp:␣
+set showcmd         " Shows pressed keys at status bar
+set wrap            " Wrap text at window width. The actual file is unchanged.
+set linebreak       " Wrap lines only at word breaks to improve readability.
+set breakindent     " Indent wrapped line the same amount as last line.
+set hidden          " Enables hidden buffer
+
+set clipboard=unnamedplus  " yank into system clipboard by default
+
+set wildmenu               " Turn on the Wild menu
+set shortmess=filmntToOF   " Shorten various messages, see :h 'shortmess'
+set shortmess+=rxc         " Avoids hit-enter prompts
+set magic                  " Always use magic search
+
+" Enable mouse support.
+set mouse+=a
+
+" Open new split window at bottom right
+set splitbelow
+set splitright
+
+set tabstop=4      " display width of tab character
+set shiftwidth=4   " amount of indent using < and >
+set softtabstop=4
+set expandtab      " insert spaces
+set smarttab       " insert and delete 'shiftwidth' spaces at start of line
+set autoindent     " copy the indent from last line
+" smartindent is deprecated. autoindent + filetype plugin indent on is enough.
+" set smartindent
+
+let g:is_posix = 1  " Prevent Vim from marking the $() in shell script as error
+
+" --------
+" Mappings
+" --------
+
+map <Space> <Nop>
+
+" Jump to start and end of line using the home row keys
+noremap H ^
+noremap L $
+
+" Scroll with , and m
+noremap , <C-u>
+noremap m <C-d>
+" Move the mark key to M
+noremap M m
+
+inoremap jk <Esc>
+
+" 'Q' in normal mode enters Ex mode. You almost never want this.
+nnoremap Q <Nop>
+map <Space> <Nop>
+
+" `s` deletes one character and enters insert mode
+" Why use it if you have xi and r?
+nnoremap s <Nop>
+" S is a synonym for cc (change the current line)
+nnoremap S <Nop>
+
+" Make Y consistent with C and D
+nnoremap Y y$
+
+" ^U Insert Mode breaks undo sequence
+inoremap <C-u> <C-g>u<C-u>
+
+" Use Emacs movement keybindings in insert mode
+inoremap <C-f> <Right>
+inoremap <C-b> <Left>
+inoremap <C-p> <C-o>gk
+inoremap <C-n> <C-o>gj
+inoremap <A-f> <S-Right>
+inoremap <A-b> <S-Left>
+
+cnoremap <C-f> <Right>
+cnoremap <C-b> <Left>
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+cnoremap <A-b> <S-Left>
+cnoremap <A-f> <S-Right>
+
+" Ctrl-a and Ctrl-e
+inoremap <C-a> <C-o>^
+inoremap <C-e> <C-o>$
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+
+" ideavim uses <A-h> instead of <M-h>
+" <M-n> to move between pairs
+inoremap <A-n> <C-o>%
+" <M-o> and <M-Shift-o> adds new line below and above
+inoremap <A-o> <C-o>o
+inoremap <A-O> <C-o>O
+
+" Better way to move between windows
+map <A-h> <C-W>h
+map <A-j> <C-W>j
+map <A-k> <C-W>k
+map <A-l> <C-W>l
+
+inoremap <A-h> <Esc><C-W>h
+inoremap <A-j> <Esc><C-W>j
+inoremap <A-k> <Esc><C-W>k
+inoremap <A-l> <Esc><C-W>l
+
+" Ctrl-W t to move window to a new tab
+nnoremap <C-w>t <C-w>T
+
+" Mappings similar to unimpaired
+nnoremap [<space> O<esc>j
+nnoremap ]<space> o<esc>k
+
+" -------------------
+" Leader key mappings
+" -------------------
+
+nmap <Leader>q :q<CR>
+
+" Find stuff
+nmap <Leader>fs :w<CR>
+
+nmap <Leader>th :nohlsearch<CR>
+
+" SPC w c to close window
+nmap <Leader>wq <C-w>c
+nmap <Leader>ws :split<CR>
+nmap <Leader>wv :vsplit<CR>

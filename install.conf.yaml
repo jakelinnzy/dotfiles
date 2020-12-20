@@ -36,15 +36,9 @@
     ~/.gitconfig: git/gitconfig
     ~/.config/git/ignore: git/ignore
     ~/.config/gh: github-cli
-    # vim
+    # Neovim
     ~/.config/nvim: nvim
-    ~/.config/coc/UltiSnips: vim/snippets
-    ~/.vim/autoload: vim/autoload
-    ~/.vim/plugin: vim/plugin
-    ~/.vim/spell: vim/spell
-    ~/.vim/coc-settings.json: vim/coc-settings.json
-    ~/.vim/tasks.ini: vim/tasks.ini
-    ~/.vimrc: vimrc
+    ~/.vimrc: vimrc_minimal
     # ideavim
     ~/.ideavimrc: ideavimrc
     # doom-emacs
@@ -63,10 +57,10 @@
 - shell:
     - ['touch ~/.gitconfig_local
        ~/.config/kitty/local.conf
-       ~/.vimrc_before ~/.vimrc_after ~/.vim/bookmarks
-       ~/.zshrc_before ~/.zshrc_after', "Creating local files"]
+       ~/.config/nvim/before.vim ~/.config/nvim/after.vim ~/.vim/bookmarks
+       ~/.config/zsh/before.zsh ~/.config/zsh/after.zsh', "Creating local files"]
     - ["git submodule update --init --recursive", "Installing submodules"]
-    - ['[ -f ~/.local/antigen.sh ] ||
+    - ['[ -f ~/.local/antigen.zsh ] ||
         curl -L git.io/antigen > ~/.local/antigen.zsh', "installing antigen"]
     - [
         'type nvim > /dev/null && nvim -es -u nvim/init.vim -i NONE -c

@@ -2,7 +2,7 @@
 # zmodload zsh/zprof
 # to use, add `zprof` to end of .zshrc
 
-[ -f ~/.zshrc_before ] && source ~/.zshrc_before
+[ -f ~/.config/zsh/before.zsh ] && source ~/.config/zsh/before.zsh
 
 # PATH {{{1
 
@@ -222,7 +222,7 @@ vterm_printf(){
 
 # END Initialisation }}}1
 
-[ -f ~/.zshrc_after ] && source ~/.zshrc_after
+[ -f ~/.config/zsh/after.zsh ] && source ~/.config/zsh/after.zsh
 
 # reset the $? variable so it doesn't mess up the prompt
 :

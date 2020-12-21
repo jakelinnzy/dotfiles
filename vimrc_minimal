@@ -29,6 +29,8 @@ set shortmess=filmntToOF   " Shorten various messages, see :h 'shortmess'
 set shortmess+=rxc         " Avoids hit-enter prompts
 set magic                  " Always use magic search
 
+set backspace=indent,eol,start
+
 " Enable mouse support.
 set mouse+=a
 

@@ -197,7 +197,7 @@ zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
 # fasd
-eval "$(fasd --init auto)"
+type fasd > /dev/null && eval "$(fasd --init auto)"
 
 # iTerm2 shell integration {{{2
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"

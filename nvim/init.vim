@@ -3,26 +3,20 @@
 " <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 " Things to do first {{{1
-if &compatible
-    set nocompatible
-endif
 let mapleader = ' '
 let maplocalleader = '\'
 let s:is_mac = has('mac')
 let s:is_windows = has('win32') || has('win64')
 let s:is_linux = has('linux')
+
 if s:is_mac
     let g:python3_host_prog = '/usr/local/bin/python3'
 elseif s:is_linux
     let g:python3_host_prog = '/usr/bin/python3'
 endif
-if $TERM_PROGRAM =~# '\v(kitty|iTerm|alacritty)'
-    let s:patched_font = 1
-    let s:termguicolors = 1
-else
-    let s:patched_font = 0
-    let s:termguicolors = 0
-endif
+
+let s:patched_font = $TERM_PROGRAM =~# '\v(kitty|iTerm|alacritty)'
+let s:true_color = has('gui') || $COLORTERM =~# '\v^(truecolor|24bit)$'
 
 source ~/.config/nvim/before.vim
 " }}}
@@ -178,7 +172,7 @@ set pumheight=20           " Display at most 20 completion items
 set shortmess=filmntToOF   " Shorten various messages, see :h 'shortmess'
 set shortmess+=rxc         " Avoids hit-enter prompts
 
-if has('nvim') && s:termguicolors
+if has('nvim') && s:true_color
     " Make pum and floating windows pseudo-transparent
     set pumblend=15
     set winblend=15
@@ -283,7 +277,7 @@ endif
 " - Color Scheme {{{1
 
 " Use true colors in terminal
-if exists("+termguicolors") && s:termguicolors
+if exists("+termguicolors") && s:true_color
     set termguicolors
     " nvim-colorizer.lua
 endif
@@ -349,7 +343,7 @@ endfunction
 
 " Apply color scheme
 try
-    if s:termguicolors
+    if s:true_color
         colorscheme ayu
     else
         colorscheme wombat256mod
@@ -359,7 +353,7 @@ catch /^Vim\%((\a\+)\)\=:E185/
     echom 'Color scheme not found.'
 endtry
 
-if has('nvim') && s:termguicolors
+if has('nvim') && s:true_color
     lua require'colorizer'.setup()
 endif
 

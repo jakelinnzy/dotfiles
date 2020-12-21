@@ -3,6 +3,9 @@
 " Map <leader> to space
 " Has to appear before extension load, etc.
 let mapleader = ' '
+set encoding=utf-8
+filetype plugin indent on
+syntax on
 
 set showmode
 set scrolloff=5

@@ -90,14 +90,16 @@ if has('nvim')
     " Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 endif
 if has('nvim-0.5.0')
-    Plug 'nvim-treesitter/nvim-treesitter'
-    Plug 'iamcco/markdown-preview.nvim',
-                \ { 'do': 'cd app && yarn install', 'for': ['markdown'] }
+    Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
+    Plug 'iamcco/markdown-preview.nvim', {
+                \ 'do': 'cd app && yarn install',
+                \ 'for': ['markdown'],
+                \ }
 endif
 
 " Languages
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'antoinemadec/coc-fzf', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+Plug 'antoinemadec/coc-fzf', { 'branch': 'release' }
 Plug 'editorconfig/editorconfig-vim'
 Plug 'skywind3000/asynctasks.vim'
 Plug 'skywind3000/asyncrun.vim'

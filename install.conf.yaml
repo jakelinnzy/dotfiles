@@ -55,7 +55,7 @@
         path: kitty/linux.conf
 
 - shell:
-    - ['touch ~/.gitconfig_local
+    - ['touch ~/.config/git/local.gitconfig
        ~/.config/kitty/local.conf
        ~/.config/nvim/before.vim ~/.config/nvim/after.vim ~/.vim/bookmarks
        ~/.config/zsh/before.zsh ~/.config/zsh/after.zsh', "Creating local files"]

@@ -1470,20 +1470,20 @@ nnoremap <silent> <LocalLeader>lt
 " - nvim-treesitter {{{2
 
 if has('nvim-0.5.0')
-lua <<EOF
+    lua <<EOF
 
-local blackList = { "bash", "zsh", "rust" }
-require'nvim-treesitter.configs'.setup {
-    ensure_installed = "maintained",
-    highlight = {
-        enable = true,
-        disable = blackList,
-    },
-    indent = {
-        enable = true,
-        disable = blackList,
-    },
-}
+    local blackList = { "bash", "zsh", "rust" }
+    require'nvim-treesitter.configs'.setup {
+        ensure_installed = "maintained",
+        highlight = {
+            enable = true,
+            disable = blackList,
+        },
+        indent = {
+            enable = true,
+            disable = blackList,
+        },
+    }
 EOF
 endif
 

@@ -116,6 +116,9 @@ Plug 'junegunn/seoul256.vim'
 Plug 'fenetikm/falcon'
 Plug 'embark-theme/vim', { 'as': 'embark' }
 
+" For benchmark only
+Plug 'tweekmonster/startuptime.vim', { 'on': 'StartupTime' }
+
 call plug#end()
 " - END vim-plug setup }}}1
 

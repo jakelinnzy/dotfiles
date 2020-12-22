@@ -27,7 +27,7 @@ export PATH="$GOPATH/bin:$PATH"
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 # loads zsh completions installed with homebrew
@@ -65,19 +65,26 @@ antigen apply
 
 # Settings & aliases {{{1
 
-# Neovim (nvim remote)
-# This prevents nested nvim in git commit etc.
-if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
-    export VISUAL="nvr -cc tabedit --remote-wait +'set bufhidden=wipe'"
-    export MANPAGER="less -is"
+if type nvim &> /dev/null; then
+    # Use Neovim and nvim remote if installed
+    # This prevents nested nvim in git commit etc.
+    if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
+        export VISUAL="nvr -cc tabedit --remote-wait +'set bufhidden=wipe'"
+        export MANPAGER="less -is"
+    else
+        export VISUAL="nvim"
+        export MANPAGER='nvim +Man!'
+        # export MANWIDTH=80
+    fi
+    alias v="$VISUAL"
 else
-    export VISUAL="nvim"
-    export MANPAGER='nvim +Man!'
-    export MANWIDTH=80
+    # Use what should be here
+    export VISUAL="vim"
+    export MANPAGER="less"
 fi
+
 export EDITOR="$VISUAL"
 export GIT_EDITOR="$VISUAL"
-alias v="$VISUAL"
 
 # Emacs
 alias e="emacsclient --no-wait --alternate-editor=nvim"

@@ -1487,7 +1487,11 @@
   # typeset -g POWERLEVEL9K_TIME_PREFIX='%fat '
 
   function prompt_my_separator() {
-      p10k segment -t '#' -f 8
+      if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [ -n "$SSH_CONNECTION" ]; then
+          p10k segment -t '#ssh' -f 8
+      else
+          p10k segment -t '#' -f 8
+      fi
   }
   # Example of a user-defined prompt segment. Function prompt_example will be called on every
   # prompt if `example` prompt segment is added to POWERLEVEL9K_LEFT_PROMPT_ELEMENTS or

@@ -101,6 +101,7 @@ Plug 'skywind3000/asyncrun.vim'
 Plug 'plasticboy/vim-markdown'
 Plug 'neoclide/jsonc.vim'
 Plug 'lervag/vimtex'
+let g:polyglot_disabled = ['markdown']
 Plug 'sheerun/vim-polyglot'    " Language pack
 
 " Color scheme
@@ -1284,10 +1285,6 @@ vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
 
 
 " }}}
-
-" - vim-polyglot {{{2
-let g:polyglor_disabled = ['markdown']
-
 
 " - vim-markdown {{{2
 

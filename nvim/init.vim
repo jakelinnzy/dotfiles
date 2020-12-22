@@ -1339,35 +1339,7 @@ let g:vimtex_compiler_latexmk_engines = {
 nnoremap <silent> <LocalLeader>lt
             \ :call vimtex#fzf#run('ctli', g:fzf_layout)<CR>
 
-" - nvim-treesitter {{{2
 
-if has('nvim-0.5.0')
-    lua <<EOF
-
-    local blackList = { "bash", "zsh", "rust" }
-    require'nvim-treesitter.configs'.setup {
-        ensure_installed = "maintained",
-        highlight = {
-            enable = true,
-            disable = blackList,
-        },
-        indent = {
-            enable = true,
-            disable = blackList,
-        },
-    }
-EOF
-endif
-
-" - semshi {{{2
-
-" List of highlight groups not to highlight.
-" Choose from local, unresolved, attribute, builtin, free, global, parameter,
-" parameterUnused, self, imported.
-let g:semshi#excluded_hl_groups = ['local']
-
-
-" }}}2
 
 " END Plugin settings }}}1
 

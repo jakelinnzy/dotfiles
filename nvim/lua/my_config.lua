@@ -14,7 +14,7 @@ function M.setup()
         require('colorizer').setup()
     end
 
-    if vim.call('has', 'nvim-0.5.0') then
+    if vim.fn.has('nvim-0.5.0') then
         M.setup_treesitter()
     end
 

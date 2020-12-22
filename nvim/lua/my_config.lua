@@ -9,12 +9,14 @@ local M = {}
 
 
 function M.setup()
-    if vim.g.has_true_color then
+    -- caution: 0 and '' are true in Lua
+    -- `~=` is the 'not equal' operator
+    if vim.g.has_true_color ~= 0 then
         vim.o.termguicolors = true
         require('colorizer').setup()
     end
 
-    if vim.fn.has('nvim-0.5.0') then
+    if vim.fn.has('nvim-0.5.0') ~= 0 then
         M.setup_treesitter()
     end
 

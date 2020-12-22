@@ -18,7 +18,7 @@ function M.setup()
         M.setup_treesitter()
     end
 
-    require('my_config/which_key_map').setup()
+    require('config/which_key_map').setup()
 end
 
 

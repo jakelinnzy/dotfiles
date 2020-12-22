@@ -5,24 +5,24 @@
 
 ---- For reference, see https://github.com/nanotee/nvim-lua-guide
 
-local mod = {}
+local M = {}
 
 
-function mod.setup()
+function M.setup()
     if vim.g.has_true_color then
         vim.o.termguicolors = true
         require('colorizer').setup()
     end
 
     if vim.call('has', 'nvim-0.5.0') then
-        mod.setup_treesitter()
+        M.setup_treesitter()
     end
 
-    mod.setup_which_key()
+    M.setup_which_key()
 end
 
 
-function mod.setup_which_key()
+function M.setup_which_key()
     -- Setup vim-which-key
     -- lua's table syntax is way cleaner than vimscript's
     vim.g.which_key_leader = {
@@ -181,7 +181,7 @@ function mod.setup_which_key()
 end
 
 
-function mod.setup_treesitter()
+function M.setup_treesitter()
     local blackList = { 'bash', 'zsh', 'rust' }
     require('nvim-treesitter.configs').setup {
         ensure_installed = "maintained",
@@ -197,4 +197,4 @@ function mod.setup_treesitter()
 end
 
 
-return mod
+return M

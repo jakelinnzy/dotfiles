@@ -467,8 +467,6 @@ inoremap <M-b> <S-Left>
 
 cnoremap <C-f> <Right>
 cnoremap <C-b> <Left>
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 

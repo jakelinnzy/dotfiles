@@ -7,6 +7,7 @@
 
 local mod = {}
 
+
 function mod.setup()
     if vim.g.has_true_color then
         vim.o.termguicolors = true

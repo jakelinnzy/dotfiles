@@ -5,18 +5,18 @@
 " Things to do first {{{1
 let mapleader = ' '
 let maplocalleader = '\'
-let s:is_mac = has('mac')
-let s:is_windows = has('win32') || has('win64')
-let s:is_linux = has('linux')
+let g:is_mac = has('mac')
+let g:is_windows = has('win32') || has('win64')
+let g:is_linux = has('linux')
 
-if s:is_mac
+if g:is_mac
     let g:python3_host_prog = '/usr/local/bin/python3'
-elseif s:is_linux
+elseif g:is_linux
     let g:python3_host_prog = '/usr/bin/python3'
 endif
 
-let s:patched_font = $TERM_PROGRAM =~# '\v(kitty|iTerm|alacritty)'
-let s:true_color = has('gui') || $COLORTERM =~# '\v^(truecolor|24bit)$'
+let g:has_patched_font = $TERM_PROGRAM =~# '\v(kitty|iTerm|alacritty)'
+let g:has_true_color = has('gui') || $COLORTERM =~# '\v^(truecolor|24bit)$'
 
 source ~/.config/nvim/before.vim
 " }}}
@@ -71,7 +71,7 @@ Plug 'wellle/targets.vim'
 " Display
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-if s:patched_font
+if g:has_patched_font
     Plug 'ryanoasis/vim-devicons'
 endif
 Plug 'liuchengxu/vim-which-key'
@@ -117,6 +117,12 @@ Plug 'embark-theme/vim', { 'as': 'embark' }
 
 call plug#end()
 " - END vim-plug setup }}}1
+
+" Load lua configuration in ~/.config/nvim/lua/my_config.lua
+" TODO: move more settings to lua and eventually switch to init.lua
+if has('nvim')
+    lua require("my_config").setup()
+endif
 
 " - Basic {{{1
 
@@ -172,7 +178,7 @@ set pumheight=20           " Display at most 20 completion items
 set shortmess=filmntToOF   " Shorten various messages, see :h 'shortmess'
 set shortmess+=rxc         " Avoids hit-enter prompts
 
-if has('nvim') && s:true_color
+if has('nvim') && g:has_true_color
     " Make pum and floating windows pseudo-transparent
     set pumblend=15
     set winblend=15
@@ -233,7 +239,6 @@ au vimrc BufReadPost *
             \ | exe "normal! g'\"zv"
             \ | endif
 
-
 " - Misc {{{1
 
 " Delete comment character when joining commented lines
@@ -275,12 +280,6 @@ if has('nvim')
 endif
 
 " - Color Scheme {{{1
-
-" Use true colors in terminal
-if exists("+termguicolors") && s:true_color
-    set termguicolors
-    " nvim-colorizer.lua
-endif
 
 set background=dark
 
@@ -343,7 +342,7 @@ endfunction
 
 " Apply color scheme
 try
-    if s:true_color
+    if g:has_true_color
         colorscheme ayu
     else
         colorscheme wombat256mod
@@ -352,10 +351,6 @@ catch /^Vim\%((\a\+)\)\=:E185/
     " Color scheme not found
     echom 'Color scheme not found.'
 endtry
-
-if has('nvim') && s:true_color
-    lua require'colorizer'.setup()
-endif
 
 " Highlight common operators in most languages {{{2
 function! s:syn_operator()
@@ -415,8 +410,7 @@ function! s:syn_operator()
 endfunction
 
 
-au Syntax c,cpp,python,java,rust,go,javascript,typescript,ruby,swift,
-            \kotlin,scala
+au Syntax c,cpp,python,java,rust,go,javascript,typescript,ruby,swift,kotlin,scala
             \ call s:syn_operator()
 
 " END Operators }}}
@@ -555,122 +549,6 @@ vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>?<C-R>=@/<CR><CR>
 
 
 " <Leader> {{{2
-
-let g:which_key_leader = {
-            \ 'q': [ ':silent Sayonara', 'Quit' ],
-            \ 'Q': [ ':silent Sayonara!', 'Quit (preserve window)' ],
-            \ 'f': { 'name': '+file/find',
-            \        'e': { 'name': '+edit',
-            \               'v': [':drop ~/.vimrc', 'Edit .vimrc'],
-            \               'c': [':CocConfig', 'Edit coc_settings.json'],
-            \               't': [':drop ~/.vim/tasks.ini', 'Edit global tasks'],
-            \               'd': [':call execute("drop ".&spellfile)', 'Edit dictionary'],
-            \               's': [':SnipEdit', 'Edit snippets'] },
-            \        's': [ ':if &modified | silent! undojoin | w | endif', 'Save buffer' ],
-            \        'n': { 'name': '+new',
-            \               'n': [':Scratch', 'Open empty buffer'],
-            \               't': [':TScratch', 'Open empty tab'],
-            \               'v': [':VScratch', 'Open empty vsplit'], },
-            \        'N': { 'name': '+new from clipboard',
-            \               'n': [':Scratch | put +', 'Open empty buffer from clipboard'],
-            \               't': [':TScratch | put +', 'Open empty tab from clipboard'],
-            \               'v': [':VScratch | put +', 'Open empty vsplit from clipboard']},
-            \        'y': { 'name': '+yank',
-            \               'c': 'Copy file content',
-            \               'p': 'Copy file path'},
-            \        'd': { 'name': '+prefix',
-            \               'h': [':call DeleteHiddenBuffers()',
-            \                     'Delete hidden buffers']},
-            \        't': [ ':NERDTreeCWD', 'NERDTree' ],
-            \        'g': {},
-            \        'r': [ ':FRg', 'Find with rg' ],
-            \        'f': [ ':Files', 'Find files' ],
-            \        'h': [ ':Helptags', 'Find help' ],
-            \        'c': { 'name': '+find-coc',
-            \               'l': [ ':CocFzfList', 'Find coc...' ],
-            \               'c': [ ':CocFzfList commands', 'Coc commands' ],
-            \               'o': [ ':CocFzfList outline', 'Coc outline' ],
-            \               's': [ ':CocFzfList sources', 'Coc sources' ]},
-            \ },
-            \ 'b': { 'name': '+buffer',
-            \        'd': [ ':Sayonara!', 'Delete buffer' ],
-            \ },
-            \ 'r': { 'name': '+run',
-            \        's': [ ':AsyncTaskFzf', 'Select task...' ],
-            \        'b': [ ':AsyncTask project-build', 'Build project' ],
-            \        'r': [ ':AsyncTask project-run', 'Run project' ],
-            \        't': [ ':AsyncTask project-test', 'Test project' ],
-            \        'f': [ ':AsyncTask file-run', 'Run current file' ]},
-            \ 'e': { 'name': '+edit',
-            \        't': [ ':call TrimTrailingWhitespace()', 'Trim' ],
-            \        'f': [ '<Plug>(coc-format)', 'Format' ],
-            \ },
-            \ 'g': { 'name': '+goto/git',
-            \        'h': [ ':History', 'History' ],
-            \        'b': [ ':Buffers', 'Buffers' ],
-            \        'm': [ ':Marks', 'Marks' ],
-            \        's': { 't': [':Git status', 'git status']} },
-            \ 'l': { 'name': '+language',
-            \        'a': { 'name': 'Code Action' },
-            \        'c': [ ':CocFzfList commands', 'List commands' ],
-            \        'r': [ '<Plug>(coc-rename)', 'Rename' ],
-            \        'f': [ '<Plug>(coc-refactor)', 'Refactor' ],
-            \        'g': [ '<Plug>(coc-definition)', 'Go to definition' ],
-            \        'i': [ '<Plug>(coc-implementation)', 'Go to implementation' ],
-            \        'd': [ ':CocFzfList diagnostics', 'Diagnostics' ],
-            \ },
-            \ 't': { 'name': '+toggle',
-            \        'a': { 'name': '+autoformat',
-            \               'a': [ ':Leadertaa', 'Formatting while typing' ],
-            \               'j': [ ':Leadertaj', 'Join lines' ],
-            \               'c': [ ':Leadertac', 'Only format comment' ],
-            \               'w': [ ':AirlineToggleWhitespace', 'Airline-checkWS'],
-            \ },
-            \        'w': [':set wrap! | set wrap?', 'wrap'],
-            \        'l': [':set list! | set list?', 'list'],
-            \        's': [':set spell! | set spell?', 'spellcheck'],
-            \        'n': [':set number! | let &relativenumber = &number | set number?',
-            \              'number'],
-            \        'r': { 'n': [':set relativenumber! | set relativenumber?',
-            \                     'relativenumber'],
-            \               't': [':RooterToggleStatus', 'Rooter'] },
-            \        'd': { 'l': [':call ToggleDisplayLongLines()', 'Display long lines'] },
-            \        'c': { 'name': '+cursor/coc',
-            \               'o': [':call ToggleCoc()', 'coc'],
-            \               'l': [':set cursorline! | set cursorline?', 'cursorline'],
-            \               'c': [':set cursorcolumn! | set cursorcolumn?', 'cursorcolumn'],
-            \               'r': [':ColorizerToggle', 'colorizer'],
-            \               'e': [':ToggleConceal', 'conceal']},
-            \         'p': [ '<M-p>', 'Auto-pairs' ]},
-            \ 'w': { 'name': '+window',
-            \        'm': { 'name': '+move',
-            \               'h': [ '<C-w>H', 'move left' ],
-            \               'j': [ '<C-w>J', 'move down' ],
-            \               'k': [ '<C-w>K', 'move up' ],
-            \               'l': [ '<C-w>L', 'move right' ],
-            \               't': [ '<C-w>T', 'move to tab' ],
-            \               'o': [ '<C-w>o', 'maximize' ],
-            \               'x': [ '<C-w>x', 'exchange' ],
-            \               '=': [ '<C-w>=', 'equal size' ], },
-            \        'w': { 'name': '+width' },
-            \        'h': { 'name': '+height' },
-            \        's': [ ':split', 'Split' ],
-            \        'v': [ ':vsplit', 'VSplit' ],
-            \        't': [ ':tabnew', 'VSplit' ],
-            \ },
-            \ 's': [':if &modified | silent! undojoin | w | endif', 'Save buffer'],
-            \ 'p': [':Files', 'Find files'],
-            \ 'S': [':Startify', 'Startify'],
-            \ '`': ['<C-^>', 'Alt-file'],
-            \ '<CR>': 'No-highlight',
-            \ 'j': 'which_key_ignore',
-            \ 'k': 'which_key_ignore',
-            \ 'n': 'which_key_ignore',
-            \ 'N': 'which_key_ignore',
-            \ ',': 'which_key_ignore',
-            \ ';': 'which_key_ignore',
-            \ '.': 'which_key_ignore',
-            \ }
 
 if has('nvim')
     let g:which_key_leader.o = [':OpenTerm', 'Open terminal']
@@ -861,7 +739,7 @@ let g:airline_mode_map = {
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
-if s:patched_font
+if g:has_patched_font
     " powerline symbols
     let g:airline_left_sep = ''
     let g:airline_left_alt_sep = ''

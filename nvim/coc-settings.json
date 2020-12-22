@@ -31,6 +31,11 @@
     // -- C/C++
     "clangd.arguments": ["-header-insertion=never"],
     "clangd.fallbackFlags": ["-Wall", "-Ilib"],
+    // -- Lua
+    "Lua.runtime.version": "LuaJIT",
+    "Lua.runtime.unicodeName": true,
+    "Lua.runtime.special": {},
+    "Lua.diagnostics.globals": ["vim"],
     // -- TSServer
     "tsserver.formatOnType": false,
     // -- Prettier

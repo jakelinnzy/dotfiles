@@ -849,14 +849,15 @@ command! -nargs=0 AsyncTaskFzf call s:asynctasks_fzf()
 " - coc.nvim {{{2
 " ---------------------------
 
-" Config file at ~/.vim/coc-settings.json
-let g:coc_config_home = '~/.vim'
+" Config file at ~/.config/nvim/coc-settings.json
+let g:coc_config_home = '~/.config/nvim'
 
 " These coc extensions will be automatically installed
 " After changing this list, reload vimrc and run :CocRestart
 let g:coc_global_extensions = [
             \ 'coc-snippets',
             \ 'coc-lists',
+            \ 'coc-lua',
             \ 'coc-clangd',
             \ 'coc-java',
             \ 'coc-html',

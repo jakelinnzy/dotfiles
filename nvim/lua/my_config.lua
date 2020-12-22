@@ -13,7 +13,16 @@ function M.setup()
     -- `~=` is the 'not equal' operator
     if vim.g.has_true_color ~= 0 then
         vim.o.termguicolors = true
-        require('colorizer').setup()
+        require('colorizer').setup(
+            {'*'},
+            {
+                RGB      = false,
+                names    = false,
+                RRGGBB   = true,
+                RRGGBBAA = true,
+                css_fn   = true,  -- rgb(), rgba(), hsl(), hsla()
+                mode     = 'background',
+            })
     end
 
     if vim.fn.has('nvim-0.5.0') ~= 0 then
@@ -25,16 +34,15 @@ end
 
 
 function M.setup_treesitter()
-    local blackList = { 'bash', 'zsh', 'rust' }
     require('nvim-treesitter.configs').setup {
         ensure_installed = "maintained",
         highlight = {
             enable = true,
-            disable = blackList,
+            disable = { "bash", "zsh"  },
         },
         indent = {
             enable = true,
-            disable = blackList,
+            disable = { "bash", "zsh"  },
         },
     }
 end

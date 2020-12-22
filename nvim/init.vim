@@ -67,6 +67,7 @@ Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'wellle/targets.vim'
+Plug 'nvim-lua/completion-nvim'
 
 " Display
 Plug 'vim-airline/vim-airline'
@@ -92,8 +93,9 @@ if has('nvim-0.5.0')
 endif
 
 " Languages
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-Plug 'antoinemadec/coc-fzf', { 'branch': 'release' }
+Plug 'neovim/nvim-lspconfig'
+" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+" Plug 'antoinemadec/coc-fzf', { 'branch': 'release' }
 Plug 'editorconfig/editorconfig-vim'
 Plug 'skywind3000/asynctasks.vim'
 Plug 'skywind3000/asyncrun.vim'
@@ -846,99 +848,6 @@ endfunction
 command! -nargs=0 AsyncTaskFzf call s:asynctasks_fzf()
 
 
-" - coc.nvim {{{2
-" ---------------------------
-
-" Config file at ~/.config/nvim/coc-settings.json
-let g:coc_config_home = '~/.config/nvim'
-
-" These coc extensions will be automatically installed
-" After changing this list, reload vimrc and run :CocRestart
-let g:coc_global_extensions = [
-            \ 'coc-snippets',
-            \ 'coc-lists',
-            \ 'coc-lua',
-            \ 'coc-clangd',
-            \ 'coc-java',
-            \ 'coc-html',
-            \ 'coc-emmet',
-            \ 'coc-tsserver',
-            \ 'coc-css',
-            \ 'coc-json',
-            \ 'coc-yaml',
-            \ 'coc-toml',
-            \ 'coc-python',
-            \ 'coc-vimtex',
-            \ 'coc-vimlsp',
-            \ 'coc-emoji',
-            \ 'coc-prettier',
-            \ ]
-
-" Option+Space triggers completion.
-inoremap <silent><expr> <M-Space> coc#refresh()
-
-" Use <tab> to select and accept the first completion item
-inoremap <silent><expr> <tab>
-            \ pumvisible() ? coc#_select_confirm()
-            \ : "\<tab>"
-
-" Use K to show documentation in preview window.
-nnoremap <silent> K :<C-u>call <SID>show_documentation()<CR>
-function! s:show_documentation()
-    if (index(['vim','help'], &filetype) >= 0)
-        execute 'h '.expand('<cword>')
-    else
-        call CocActionAsync('doHover')
-    endif
-endfunction
-
-" Use Ctrl-P and Ctrl-N to scroll the popup window
-if has('nvim-0.4.3')
-    nnoremap <nowait><expr> <C-p> coc#float#has_scroll() ?
-                \ coc#float#scroll(0) : '<C-p>'
-    nnoremap <nowait><expr> <C-n> coc#float#has_scroll() ?
-                \ coc#float#scroll(1) : '<C-n>'
-endif
-
-" Custom text objects provided by coc (:h text-objects)
-" if / af to select a function
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-" ic / ac to select a class
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold   :call CocAction('fold', <f-args>)
-" Add `:OR` command for organize imports of the current buffer.
-command! OR :call CocAction('runCommand', 'editor.action.organizeImport')
-
-" Use CTRL-S for selections ranges.
-" Requires 'textDocument/selectionRange' support of language server.
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
-
-" Configure Snippets
-command! SnipEdit     :CocCommand snippets.editSnippets
-command! SnipFiles    :CocCommand snippets.openSnippetFiles
-
-let g:coc_snippet_next = '<C-j>'
-let g:coc_snippet_prev = '<C-k>'
-
-" If coc is not installed (typically on a new system), don't load autocommands
-" to prevent error
-augroup vimrc
-    " Force lightline to update when Coc status changes
-    " au User CocStatusChange,CosDiagnosticChange call lightline#update()
-    " Highlight symbol under cursor
-    au CursorHold * silent! call CocActionAsync('highlight')
-augroup END
-
-
 " - delimitMate {{{2
 
 " Allow triple quotes '''|'''
@@ -1012,8 +921,8 @@ let g:EasyMotion_space_jump_first = 1
 " EasyMotion can confuse coc.nvim because it changes the text in buffer
 " This is a workaround
 augroup vimrc
-    au User EasyMotionPromptBegin silent! CocDisable
-    au User EasyMotionPromptEnd   silent! CocEnable
+    " au User EasyMotionPromptBegin silent! CocDisable
+    " au User EasyMotionPromptEnd   silent! CocEnable
     " au TextChanged,CursorMoved * call s:fix_easymotion_coc()
 augroup END
 

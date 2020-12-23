@@ -8,12 +8,17 @@ function M.setup()
 end
 
 function M.setup_completion()
+    vim.g.completion_enable_auto_popup = 1
+    vim.g.completion_confirm_key = ''
+    vim.api.nvim_exec([[
+        imap <expr> <Tab> pumvisible() ?  "\<Plug>(completion_confirm_completion)" : "\<CR>"
+    ]], false)
     vim.api.nvim_exec([[
         augroup vimrc_completion
             au!
             au BufEnter * lua require('completion').on_attach()
         augroup END
-    ]], true)
+    ]], false)
 end
 
 -- Reference:

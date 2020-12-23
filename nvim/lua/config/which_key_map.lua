@@ -20,6 +20,10 @@ function M.setup()
             name = "+buffer",
             d = { ":Sayonara!", "Delete buffer" },
         },
+        c = {
+            name = "+code",
+            f = { ":lua vim.lsp.buf.formatting()", "Format file" }
+        },
         e = {
             name = "+edit",
             f = { "<Plug>(coc-format)", "Format" },

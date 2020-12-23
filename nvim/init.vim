@@ -85,6 +85,10 @@ if has('nvim')
     " Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 endif
 if has('nvim-0.5.0')
+    Plug 'neovim/nvim-lspconfig'
+    Plug 'nvim-lua/completion-nvim'
+    Plug 'nvim-lua/diagnostic-nvim'
+    Plug 'gfanto/fzf-lsp.nvim'
     Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
     Plug 'iamcco/markdown-preview.nvim', {
                 \ 'do': 'cd app && yarn install',
@@ -93,7 +97,6 @@ if has('nvim-0.5.0')
 endif
 
 " Languages
-Plug 'neovim/nvim-lspconfig'
 " Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 " Plug 'antoinemadec/coc-fzf', { 'branch': 'release' }
 Plug 'editorconfig/editorconfig-vim'
@@ -469,8 +472,6 @@ inoremap <M-b> <S-Left>
 
 cnoremap <C-f> <Right>
 cnoremap <C-b> <Left>
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 
@@ -515,6 +516,15 @@ nnoremap <M-L> :vertical resize +2<CR>
 
 " Ctrl-W t to move window to a new tab
 nnoremap <C-w>t <C-w>T
+
+" Neovim LSP
+
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+
 
 " Nvim Terminal {{{2
 if has('nvim')

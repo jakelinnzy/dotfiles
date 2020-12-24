@@ -1,6 +1,6 @@
 # My dotfiles backup
 
-Automatically install with the help of [dotbot](https://github.com/anishathalye/dotbot). Simply clone the repo and run `./install`.
+Automatically install with [dotbot](https://github.com/anishathalye/dotbot). Simply clone the repo and run `./install`.
 
 When adding a new file, modify `install.conf.yaml` and run `./install` to get it symlinked.
 

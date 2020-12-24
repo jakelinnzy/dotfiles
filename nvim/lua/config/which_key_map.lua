@@ -151,12 +151,10 @@ function M.setup()
                 x = { "<C-w>x", "exchange" },
                 ["="] = { "<C-w>=", "equal size" },
             },
+            q = { "<C-w>q", "close window" },
             s = { ":split", "Split" },
             t = { ":tabnew", "VSplit" },
             v = { ":vsplit", "VSplit" },
-            w = {
-                name = "+width"
-            }
         }
     }
 end

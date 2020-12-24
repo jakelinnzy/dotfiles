@@ -112,10 +112,6 @@ alias coa="conda activate"
 alias cod="conda deactivate"
 alias coe="conda info --envs"
 
-# Who still uses Python 2?
-alias python="python3"
-alias pip="pip3"
-
 # Compilation flags
 export CFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c99"
 export CXXFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c++17"

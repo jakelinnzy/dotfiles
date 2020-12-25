@@ -129,7 +129,7 @@ Plug 'tweekmonster/startuptime.vim', { 'on': 'StartupTime' }
 call plug#end()
 " - END vim-plug setup }}}1
 
-" Load lua configuration in ~/.config/nvim/lua/my_config.lua
+" Load main lua init file at ~/.config/nvim/lua/zlin/config.lua
 " TODO: move more settings to lua and eventually switch to init.lua
 if has('nvim')
     lua require('zlin/config').setup()

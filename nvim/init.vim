@@ -132,7 +132,7 @@ call plug#end()
 " Load lua configuration in ~/.config/nvim/lua/my_config.lua
 " TODO: move more settings to lua and eventually switch to init.lua
 if has('nvim')
-    lua require('my_config').setup()
+    lua require('zlin/config').setup()
 endif
 
 " - Basic {{{1

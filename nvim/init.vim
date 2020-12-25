@@ -517,14 +517,6 @@ function! ToggleSetFlag(option, flag, pos_description, neg_description) abort
     endif
 endfunction
 
-function! ToggleCoc() abort
-    if get(g:, 'coc_enabled', 0) == 1
-        CocDisable
-    else
-        CocEnable
-    endif
-endfunction
-
 " }}}
 
 " END Commands }}}2

@@ -18,7 +18,14 @@ endif
 let g:has_patched_font = $TERM_PROGRAM =~# '\v(kitty|iTerm|alacritty)'
 let g:has_true_color = has('gui') || $COLORTERM =~# '\v^(truecolor|24bit)$'
 
+" Remove all autocommands in this file and then define them again so reloading
+" this file is safe.
+augroup vimrc
+    au!
+augroup END
+
 source ~/.config/nvim/before.vim
+
 " }}}
 " vim-plug Setup {{{1
 " I choose vim-plug because it is actively maintained and allows to backup all
@@ -125,7 +132,7 @@ call plug#end()
 " Load lua configuration in ~/.config/nvim/lua/my_config.lua
 " TODO: move more settings to lua and eventually switch to init.lua
 if has('nvim')
-    lua require("my_config").setup()
+    lua require('my_config').setup()
 endif
 
 " - Basic {{{1
@@ -133,12 +140,6 @@ endif
 " Turn on file type detection & syntax highlighting.
 filetype plugin indent on
 syntax on
-
-" Remove all autocommands in this file and then define them again so reloading
-" this file is safe.
-augroup vimrc
-    au!
-augroup END
 
 set encoding=utf-8  " Set default encoding to utf-8. No effect for Neovim.
 

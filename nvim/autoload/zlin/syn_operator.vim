@@ -1,6 +1,9 @@
 function zlin#syn_operator#setup()
-    au Syntax c,cpp,python,java,rust,go,javascript,typescript,ruby,swift,kotlin,scala
+    augroup syn_operator
+        au!
+        au Syntax c,cpp,python,java,rust,go,javascript,typescript,ruby,swift,kotlin,scala
                 \ call zlin#syn_operator#c_like_patterns()
+    augroup END
 endfunction
 
 

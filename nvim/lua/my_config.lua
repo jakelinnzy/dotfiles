@@ -38,11 +38,12 @@ function M.setup_treesitter()
         ensure_installed = "maintained",
         highlight = {
             enable = true,
-            disable = { "bash", "zsh"  },
+            disable = { "bash", "zsh" },
         },
         indent = {
-            enable = true,
-            disable = { "bash", "zsh"  },
+            enable = false,
+            -- treesitter indent does not work with Python for some reason
+            disable = { "bash", "zsh", "python" },
         },
     }
 end

@@ -199,7 +199,7 @@ pastefinish() {
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
 
-# fasd
+# fasd {{{2
 type fasd > /dev/null && eval "$(fasd --init auto)"
 
 # iTerm2 shell integration {{{2

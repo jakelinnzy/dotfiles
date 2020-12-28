@@ -50,7 +50,7 @@ antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle lukechilds/zsh-better-npm-completion
 antigen bundle MichaelAquilina/zsh-autoswitch-virtualenv
-export YSU_IGNORED_ALIASES=("python")
+export YSU_IGNORED_ALIASES=(python v g)
 antigen bundle MichaelAquilina/zsh-you-should-use # prompt for available aliases
 antigen bundle zsh-users/zsh-syntax-highlighting
 

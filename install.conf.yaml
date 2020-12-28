@@ -1,9 +1,14 @@
+# https://learnxinyminutes.com/docs/yaml
+
 - defaults:
     link:
-        create: true
-        relink: true
+      create: true
+      relink: true
 
-- clean: ['~', '~/.config', '~/.vim']
+- clean:
+    - '~'
+    - ~/.config
+    - ~/.vim
 
 - create:
     - ~/repos
@@ -11,60 +16,67 @@
     - ~/.local
 
 - link:
-    ~/.dotfiles: "" # This links ~/.dotfiles to this repo
-    ~/.editorconfig: editorconfig
-    ~/.clang-format: clang-format
-    ~/.condarc: condarc
-    # direnv
-    ~/.config/direnv: direnv
-    ~/.inputrc: inputrc
-    # kitty
-    ~/.config/kitty/kitty.conf: kitty/kitty.conf
-    # Homebrew alias: https://github.com/Homebrew/homebrew-aliases
-    ~/.brew-aliases:
-        if: '[ $(uname) = Darwin ]'
-        path: brew-aliases
-    # i3
-    ~/.config/i3:
-        if: '[ $(uname) = Linux ]'
-        path: i3
-    ~/.config/ripgrep/ripgreprc: ripgrep/ripgreprc
+    # link to this repo
+    ~/.dotfiles: ''
     # zsh
     ~/.zshrc: zshrc
     ~/.config/zsh: zsh
-    # git & github-cli
+    # Neovim and Vim
+    ~/.config/nvim: nvim
+    ~/.vimrc: vimrc_minimal
+    ~/.ideavimrc: ideavimrc
+    # Emacs
+    ~/.doom.d: doom-emacs
+    # Global editorconfig
+    ~/.editorconfig: editorconfig
+    # git
     ~/.gitconfig: git/gitconfig
     ~/.config/git/ignore: git/ignore
     ~/.config/gh: github-cli
-    # Neovim
-    ~/.config/nvim: nvim
-    ~/.vimrc: vimrc_minimal
-    # ideavim
-    ~/.ideavimrc: ideavimrc
-    # doom-emacs
-    ~/.doom.d: doom-emacs
 
+    # other stuff
+    ~/.clang-format: clang-format
+    ~/.condarc: condarc
+    ~/.config/direnv: direnv
+    ~/.inputrc: inputrc
+    ~/.config/kitty/kitty.conf: kitty/kitty.conf
+    ~/.config/ripgrep/ripgreprc: ripgrep/ripgreprc
+    ~/.brew-aliases:
+      if: '[ $(uname) = Darwin ]'
+      path: brew-aliases
+    ~/.config/i3:
+      if: '[ $(uname) = Linux ]'
+      path: i3
+
+# OS specific settings for macOS and Linux
 - link:
     ~/.config/kitty/os.conf:
-        if: '[ $(uname) = Darwin ]'
-        path: kitty/macOS.conf
-
+      if: '[ $(uname) = Darwin ]'
+      path: kitty/macOS.conf
 - link:
     ~/.config/kitty/os.conf:
-        if: '[ $(uname) = Linux ]'
-        path: kitty/linux.conf
+      if: '[ $(uname) = Linux ]'
+      path: kitty/linux.conf
 
 - shell:
-    - ['touch ~/.config/git/local.gitconfig
-       ~/.config/kitty/local.conf
-       ~/.config/nvim/before.vim ~/.config/nvim/after.vim ~/.vim/bookmarks
-       ~/.config/zsh/before.zsh ~/.config/zsh/after.zsh', "Creating local files"]
-    - ["git submodule update --init --recursive", "Installing submodules"]
-    - ['[ -f ~/.local/antigen.zsh ] ||
-        curl -L git.io/antigen > ~/.local/antigen.zsh', "installing antigen"]
-    - [
-        'type nvim > /dev/null && nvim -es -u nvim/init.vim -i NONE -c "PlugInstall" -c "qa"',
-        "Installing vim plugins"
-      ]
+    # YAML multiline string syntax: https://yaml-multiline.info/
+    # '>-' means: replace newlines with spaces (folded), no newline at end (strip).
+    - description: Creating local files
+      command: >-
+        touch ~/.config/git/local.gitconfig ~/.config/kitty/local.conf
+        ~/.config/nvim/before.vim ~/.config/nvim/after.vim
+        ~/.config/zsh/before.zsh ~/.config/zsh/after.zsh
 
-# vim: expandtab shiftwidth=4 softtabstop=4
+    - description: Installing submodules
+      command: >-
+        git submodule update --init --recursive
+
+    - description: Installing antigen
+      command: >-
+        [ -f ~/.local/antigen.zsh ] || curl -L git.io/antigen > ~/.local/antigen.zsh
+
+    - description: Installing Vim plugins
+      command: >-
+        type nvim > /dev/null && nvim -es -u nvim/init.vim -i NONE -c "PlugInstall" -c "qa"
+
+# vim: expandtab shiftwidth=2 softtabstop=2

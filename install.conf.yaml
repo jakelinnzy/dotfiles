@@ -37,6 +37,7 @@
     # other stuff
     ~/.clang-format: clang-format
     ~/.condarc: condarc
+    ~/.config/bat: bat
     ~/.config/direnv: direnv
     ~/.inputrc: inputrc
     ~/.config/kitty/kitty.conf: kitty/kitty.conf

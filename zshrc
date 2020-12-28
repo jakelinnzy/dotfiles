@@ -123,6 +123,9 @@ export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
 export FZF_DEFAULT_COMMAND="rg --files"
 
+# bat
+export BAT_THEME="Nord"
+
 # LSCOLORS {{{2
 
 # The color designators are as follows:

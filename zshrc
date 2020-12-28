@@ -86,6 +86,12 @@ fi
 export EDITOR="$VISUAL"
 export GIT_EDITOR="$VISUAL"
 
+# Less
+#   -F Quit if the whole file fits in one screen
+#   -R Retain colors
+#   -i Smartcase search
+export LESS="-FRi"
+
 # Emacs
 alias e="emacsclient --no-wait --alternate-editor=nvim"
 # emacs in terminal

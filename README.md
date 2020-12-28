@@ -20,7 +20,7 @@ sudo apt install -y neovim
 Other tools:
 ```
 # homebrew
-brew install autojump bat fd fzf ripgrep git node yarn git-delta
+brew install autojump bat curl fasd fd fzf ripgrep git git-delta node tree yarn
 
 # apt
 sudo apt install -y autojump curl fzf ripgrep npm python3-pip python3-pynvim zsh

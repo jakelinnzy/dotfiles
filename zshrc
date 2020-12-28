@@ -90,12 +90,22 @@ export GIT_EDITOR="$VISUAL"
 #   -F Quit if the whole file fits in one screen
 #   -R Retain colors
 #   -i Smartcase search
-export LESS="-FRi"
+export LESS="-Ri"
+
+# Bat
+export BAT_THEME="Nord"
+
+# fzf & ripgrep
+export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
+export FZF_DEFAULT_COMMAND="rg --files"
 
 # Emacs
 alias e="emacsclient --no-wait --alternate-editor=nvim"
 # emacs in terminal
 alias et="emacs -nw"
+
+# Delta
+export DELTA_PAGER="less $LESS"
 
 # shell builtins
 alias la="ls -Ah"
@@ -124,13 +134,6 @@ export CXXFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c++17"
 
 # make pkg-config find icu
 export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"
-
-# fzf & ripgrep
-export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
-export FZF_DEFAULT_COMMAND="rg --files"
-
-# bat
-export BAT_THEME="Nord"
 
 # LSCOLORS {{{2
 

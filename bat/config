@@ -1,2 +1,2 @@
---pager='less -FRi'
+--pager='less -Ri'
 --theme='Nord'

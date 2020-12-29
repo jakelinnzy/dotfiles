@@ -1,121 +1,28 @@
 ---- init.lua file for Neovim 0.5+
 ---- For reference, see https://github.com/nanotee/nvim-lua-guide
 
-local U = require('zlin/utils')
+-- Make this globally available
+U = require('zlin/utils')
 
 -- Use space key as <leader>
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- Operating system
-IS_MAC = vim.fn.has('mac')
-IS_LINUX = vim.fn.has('linux')
-IS_WINDOWS = vim.fn.has('win32') or vim.fn.has('win64')
-
-if IS_MAC then
+if U.is_mac then
     vim.g.python3_host_prog = '/usr/local/bin/python3'
-elseif IS_LINUX then
+elseif U.is_linux then
     vim.g.python3_host_prog = '/usr/bin/python3'
 end
 
 -- Load plugins
-U.viml [[
-call plug#begin('~/.config/plugged')
+U.vimfile('plug_setup.vim')
 
-Plug 'jakelinnzy/delimitMate'    " my fork
-Plug 'jakelinnzy/vim-easymotion' " my fork
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'jdhao/better-escape.vim'
-" auto-pairs prevents <CR> from expanding abbreviations
-Plug 'junegunn/vim-easy-align'  " ga to align
-Plug 'junegunn/vim-emoji'
-Plug 'junegunn/vim-peekaboo'    " automatically show register contents
-Plug 'AndrewRadev/splitjoin.vim'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-fugitive'       " Git wrapper
-Plug 'tpope/vim-unimpaired'     " Bracket mappings
-Plug 'tpope/vim-abolish'        " cr* to change case
-Plug 'tpope/vim-speeddating'
-Plug 'tpope/vim-eunuch'         " :SudoWrite, :Chmod, etc.
-Plug 'ciaranm/detectindent'     " :DetectIndent
-Plug 'preservim/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'mhinz/vim-startify'
-Plug 'mhinz/vim-sayonara'
-Plug 'airblade/vim-rooter'      " Automatically cd to project root
-Plug 'godlygeek/tabular'        " Required by vim-markdown
-Plug 'mbbill/undotree'
-Plug 'chrisbra/unicode.vim'
+require('zlin/mappings').setup()
 
-" Custom Text Objects
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-entire'
-Plug 'michaeljsmith/vim-indent-object'
-Plug 'wellle/targets.vim'
-
-" Display
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-if g:has_patched_font
-    Plug 'ryanoasis/vim-devicons'
-endif
-Plug 'liuchengxu/vim-which-key'
-" Zen mode
-Plug 'junegunn/goyo.vim'
-Plug 'junegunn/limelight.vim'
-Plug 'norcalli/nvim-colorizer.lua'
-if has('nvim-0.5.0')
-    Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
-    Plug 'iamcco/markdown-preview.nvim', {
-                \ 'do': 'cd app && yarn install',
-                \ 'for': ['markdown'],
-                \ }
-endif
-
-" Languages
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-Plug 'antoinemadec/coc-fzf', { 'branch': 'release' }
-Plug 'editorconfig/editorconfig-vim'
-Plug 'skywind3000/asynctasks.vim'
-Plug 'skywind3000/asyncrun.vim'
-" Plug 'keith/swift.vim'
-Plug 'plasticboy/vim-markdown'
-Plug 'neoclide/jsonc.vim'
-Plug 'lervag/vimtex'
-let g:polyglot_disabled = ['markdown']
-Plug 'sheerun/vim-polyglot'    " Language pack
-
-" Color scheme
-Plug 'ayu-theme/ayu-vim'
-Plug 'mhinz/vim-janah'
-Plug 'vim-scripts/wombat256.vim'
-Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'nightsense/carbonized'
-Plug 'zacanger/angr.vim'
-Plug 'joshdick/onedark.vim'
-Plug 'junegunn/seoul256.vim'
-Plug 'fenetikm/falcon'
-Plug 'embark-theme/vim', { 'as': 'embark' }
-
-" For benchmark only
-Plug 'tweekmonster/startuptime.vim', { 'on': 'StartupTime' }
-
-call plug#end()
-]]
-
-require('zlin/which_key_map').setup()
-
--- Load viml functions
+-- Load viml functions (~/.config/nvim/autoload/zlin)
 vim.call('zlin#color#setup')
 vim.call('zlin#syn_operator#setup')
 
--- caution: 0 and '' are true in Lua
--- `~=` is the 'not equal' operator
 if vim.g.has_true_color ~= 0 then
     vim.o.termguicolors = true
     require('colorizer').setup(
@@ -130,7 +37,7 @@ if vim.g.has_true_color ~= 0 then
         })
 end
 
-if vim.fn.has('nvim-0.5.0') ~= 0 then
+if U.is_nvim_nightly then
     require('nvim-treesitter.configs').setup {
         ensure_installed = "maintained",
         highlight = {

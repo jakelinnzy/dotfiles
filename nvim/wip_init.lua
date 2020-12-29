@@ -23,6 +23,7 @@ require('zlin/mappings').setup()
 vim.call('zlin#color#setup')
 vim.call('zlin#syn_operator#setup')
 
+-- Lua plugins
 if vim.g.has_true_color ~= 0 then
     vim.o.termguicolors = true
     require('colorizer').setup(

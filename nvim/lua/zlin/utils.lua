@@ -8,9 +8,13 @@ U.is_windows  = vim.fn.has('win32') ~= 0 or vim.fn.has('win64') ~= 0
 U.is_nvim_nightly  = vim.fn.has('nvim-0.5.0') ~= 0
 U.has_patched_font = (vim.env.TERM_PROGRAM
                       and (not not vim.regex([[\v(kitty|iTerm|alacritty)]]):match_str(vim.env.TERM_PROGRAM)))
-U.has_true_color   = (vim.fn.has('gui')
+U.has_true_color   = (vim.fn.has('gui') ~= 0
                       or vim.env.COLORTERM
-                      and (not not vim.regex([[\v^(truecolor|24bit)$]]):match_str(vim.env.COLORTERM)))
+                      and (not not vim.regex([[\v(truecolor|24bit)]]):match_str(vim.env.COLORTERM)))
+-- set these variables for Viml too
+for key, value in pairs(U) do
+    vim.g[key] = value
+end
 
 -- Execute a piece of Vimscript code and discard the result
 --   require('zlin/utils').viml [[

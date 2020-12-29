@@ -3,7 +3,7 @@ if exists('g:loaded_float_terminal')
 endif
 let g:loaded_float_terminal = 1
 
-let s:float_terminal_height = get(g:, float_terminal_height, 15)
+let s:float_terminal_height = get(g:, 'float_terminal_height', 15)
 
 command! OpenTerm call s:float_terminal_open()
 

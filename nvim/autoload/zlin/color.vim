@@ -21,7 +21,6 @@ function zlin#color#setup()
         hi CocHighlightText    guibg=#4C5763
         hi! link semshiSelected CocHighlightText
     endfunction
-    au vimrc ColorScheme ayu call s:ayu_mirage()
 
     function! s:seoul256()
         " Seoul256 (dark): 233~239 default:237
@@ -33,7 +32,12 @@ function zlin#color#setup()
         hi CursorColumn  ctermbg=236 guibg=#303030
         hi CursorLineNr  ctermbg=236 guibg=#303030
     endfunction
-    au vimrc ColorScheme seoul256 call s:seoul256()
+
+    augroup my_colorscheme
+        au!
+        au ColorScheme ayu call s:ayu_mirage()
+        au ColorScheme seoul256 call s:seoul256()
+    augroup END
 
     " Apply color scheme
     try

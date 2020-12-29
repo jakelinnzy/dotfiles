@@ -114,6 +114,7 @@ alias cx="chmod +x"
 
 # git
 alias glg="git log --graph --decorate --stat"
+alias glo="git log --graph --decorate --oneline"  # Compact view
 alias gla="git log --branches --remotes --tags --graph --oneline --decorate"
 alias gpr="git pull --rebase"
 

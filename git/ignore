@@ -1,10 +1,11 @@
-# General
+# macOS files
 .DS_Store
 .AppleDouble
 .LSOverride
 
-# Python venv hint
-.venv
+# Direnv
+.direnv
+.envrc
 
 # Vim
 *.swp

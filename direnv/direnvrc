@@ -1,3 +1,1 @@
-export DIRENV_LOG_FORMAT=
 
-source "$(asdf direnv hook asdf)"

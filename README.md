@@ -20,16 +20,14 @@ sudo apt install -y neovim
 Other tools:
 ```
 # homebrew
-brew install autojump bat curl fasd fd fzf ripgrep git git-delta node tree yarn
+brew install autojump bat curl direnv fasd fd fzf ripgrep git git-delta node tree yarn
 
 # apt
-sudo apt install -y autojump curl fzf ripgrep npm python3-pip python3-pynvim zsh
+sudo apt install -y autojump curl direnv fzf ripgrep npm python3-pip python3-pynvim zsh
 
 pip3 install pynvim neovim-remote pylint
 npm install -g neovim
 ```
-
-Environment version management: check [asdf](https://asdf-vm.com) and [asdf-direnv](https://github.com/asdf-community/asdf-direnv). Configure both in `~/.zshrc_after`.
 
 Homebrew provides a way to save all installed packages (including cask) to a file. Run `brew bundle dump`.
 

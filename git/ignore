@@ -3,6 +3,9 @@
 .AppleDouble
 .LSOverride
 
+# Python venv hint
+.venv
+
 # Vim
 *.swp
 .root

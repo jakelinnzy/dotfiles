@@ -97,7 +97,13 @@ export BAT_THEME="Nord"
 
 # fzf & ripgrep
 export RIPGREP_CONFIG_PATH="$HOME/.config/ripgrep/ripgreprc"
-export FZF_DEFAULT_COMMAND="rg --files"
+if type fd &> /dev/null; then
+    export FZF_DEFAULT_COMMAND="fd --type f"
+elif type rg &> /dev/null; then
+    export FZF_DEFAULT_COMMAND="rg --files"
+else
+    export FZF_DEFAULT_COMMAND="find . -type f"
+fi
 
 # Emacs
 alias e="emacsclient --no-wait --alternate-editor=nvim"

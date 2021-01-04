@@ -1,4 +1,6 @@
 # https://learnxinyminutes.com/docs/yaml
+# Format with:
+#   prettier -w install.conf.yaml
 
 - defaults:
     link:
@@ -6,7 +8,7 @@
       relink: true
 
 - clean:
-    - '~'
+    - "~"
     - ~/.config
     - ~/.vim
 
@@ -17,7 +19,7 @@
 
 - link:
     # link to this repo
-    ~/.dotfiles: ''
+    ~/.dotfiles: ""
     # zsh
     ~/.zshrc: zshrc
     ~/.config/zsh: zsh
@@ -43,20 +45,20 @@
     ~/.config/kitty/kitty.conf: kitty/kitty.conf
     ~/.config/ripgrep/ripgreprc: ripgrep/ripgreprc
     ~/.brew-aliases:
-      if: '[ $(uname) = Darwin ]'
+      if: "[ $(uname) = Darwin ]"
       path: brew-aliases
     ~/.config/i3:
-      if: '[ $(uname) = Linux ]'
+      if: "[ $(uname) = Linux ]"
       path: i3
 
 # OS specific settings for macOS and Linux
 - link:
     ~/.config/kitty/os.conf:
-      if: '[ $(uname) = Darwin ]'
+      if: "[ $(uname) = Darwin ]"
       path: kitty/macOS.conf
 - link:
     ~/.config/kitty/os.conf:
-      if: '[ $(uname) = Linux ]'
+      if: "[ $(uname) = Linux ]"
       path: kitty/linux.conf
 
 - shell:

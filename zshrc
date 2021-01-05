@@ -138,8 +138,8 @@ alias coe="conda info --envs"
 export CFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c99"
 export CXXFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c++17"
 
-# make pkg-config find icu
-export PKG_CONFIG_PATH="/usr/local/opt/icu4c/lib/pkgconfig:$PKG_CONFIG_PATH"
+# Disable the (venv) before shell prompt since p10k takes care of it
+export VIRTUAL_ENV_DISABLE_PROMPT="true"
 
 # LSCOLORS {{{2
 

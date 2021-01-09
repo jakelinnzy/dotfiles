@@ -1055,17 +1055,27 @@ let g:startify_change_to_dir = 0       " let rooter do this
 let g:startify_change_to_vcs_root = 0
 let g:startify_fortune_use_unicode = 1 " Use Unicode characters
 
-let s:startify_ascii_header = [
- \ '                                        ▟▙            ',
- \ '                                        ▝▘            ',
- \ '██▃▅▇█▆▖  ▗▟████▙▖   ▄████▄   ██▄  ▄██  ██  ▗▟█▆▄▄▆█▙▖',
- \ '██▛▔ ▝██  ██▄▄▄▄██  ██▛▔▔▜██  ▝██  ██▘  ██  ██▛▜██▛▜██',
- \ '██    ██  ██▀▀▀▀▀▘  ██▖  ▗██   ▜█▙▟█▛   ██  ██  ██  ██',
- \ '██    ██  ▜█▙▄▄▄▟▊  ▀██▙▟██▀   ▝████▘   ██  ██  ██  ██',
- \ '▀▀    ▀▀   ▝▀▀▀▀▀     ▀▀▀▀       ▀▀     ▀▀  ▀▀  ▀▀  ▀▀',
- \]
-let g:startify_custom_header = map(s:startify_ascii_header +
-            \ startify#fortune#boxed(), { k, v -> "        " .. v })
+lua << EOF
+
+local header = [[
+
+         _   _                 _
+        | \ | |               (_)
+        |  \| | ___  _____   ___ _ __ ___
+        | . ` |/ _ \/ _ \ \ / / | '_ ` _ \
+        | |\  |  __/ (_) \ V /| | | | | | |
+        |_| \_/\___|\___/ \_/ |_|_| |_| |_|
+
+]]
+local header_arr = {}
+local i = 1
+for segment in vim.gsplit(header, '\n', true) do
+    header_arr[i] = string.format('%-36s', segment) -- pad the line
+    i = i + 1
+end
+vim.g.startify_custom_header = header_arr
+
+EOF
 
 au vimrc FileType startify setl nowrap
 

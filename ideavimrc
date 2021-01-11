@@ -20,7 +20,8 @@ set idearefactormode=keep
 
 " Use C-P and C-N to navigate through completion items
 set lookupkeys& " <Tab>,<Down>,<Up>,<Enter>,<Left>,<Right>,<C-Down>,<C-Up>,<PageUp>,<PageDown>,<C-J>,<C-Q>
-set lookupkeys+=<C-P>,<C-N>
+set lookupkeys+=<C-N>
+set lookupkeys+=<C-P>
 
 set showmode
 set scrolloff=5

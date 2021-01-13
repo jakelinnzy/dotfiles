@@ -26,6 +26,7 @@ set lookupkeys+=<C-P>
 set showmode
 set scrolloff=5
 set sidescrolloff=5
+set ignorecase
 set smartcase
 set incsearch
 set hlsearch

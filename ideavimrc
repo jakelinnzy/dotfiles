@@ -142,6 +142,7 @@ nmap <Leader>ff <Action>(GotoFile)
 nmap <Leader>fr <Action>(RecentFiles)
 
 " Code actions...
+nmap <Leader>cc <Action>(osmedile.intellij.stringmanip.SwitchCasePopup)
 nmap <Leader>ca <Action>(ShowIntentionActions)
 nmap <Leader>cr <Action>(RenameElement)
 nmap <Leader>cf <Action>(ReformatCode)

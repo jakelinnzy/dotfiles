@@ -12,9 +12,6 @@ fi
 export PATH="$PATH:/usr/local/sbin"
 export PATH="$PATH:$HOME/opt/bin:$HOME/.local/bin"
 
-export PATH="$PATH:$HOME/.cargo/bin" # cargo
-export PATH="$HOME/.cabal/bin:$HOME/.ghcup/bin:$PATH" # ghc
-
 export GOPATH="$HOME/repos/go"  # `go get` puts stuff here
 export PATH="$GOPATH/bin:$PATH"
 # export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH" # brew coreutils

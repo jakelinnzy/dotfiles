@@ -15,3 +15,6 @@ tab_size = 8
 [{Makefile,*.go}]
 indent_style = tab
 tab_size = 4
+
+[{*.yml, *.yaml}]
+indent_size = 2

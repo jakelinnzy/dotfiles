@@ -35,8 +35,10 @@ if type brew &>/dev/null; then
 fi
 fpath=(~/.zfunc /usr/local/share/zsh-completions $fpath)
 
-source "$HOME/.local/antigen.zsh"
+export COMPLETION_WAITING_DOTS=true
 
+
+source "$HOME/.local/antigen.zsh"
 
 # use oh-my-zsh's plugins
 antigen use oh-my-zsh

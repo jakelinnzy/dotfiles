@@ -154,6 +154,7 @@ nmap <Leader>ci <Action>(OptimizeImports)
 " Toggle settings
 nmap <Leader>tw <Action>(EditorToggleUseSoftWraps)
 nmap <Leader>th :nohlsearch<CR>
+nmap <Leader><CR> :nohlsearch<CR>
 " SPC t a to show action IDs
 nmap <Leader>ta <Action>(VimFindActionIdAction)
 " show git blame

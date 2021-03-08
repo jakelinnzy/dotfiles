@@ -133,7 +133,7 @@ nmap ]b <Action>(NextTab)
 " Leader key mappings
 " -------------------
 
-nmap <Leader><Space> <Action>(GotoFile)
+nmap <Space><Space> <Action>(GotoFile)
 nmap <Leader>q :q<CR>
 
 " Find stuff

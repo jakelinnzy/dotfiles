@@ -45,6 +45,9 @@ antigen use oh-my-zsh
 antigen bundle git
 # antigen bundle autojump
 
+NL=$'\n'
+# ignore suggestions with more than one lines
+# export ZSH_AUTOSUGGEST_HISTORY_IGNORE="(*$NL*)"
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle lukechilds/zsh-better-npm-completion

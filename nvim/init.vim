@@ -341,6 +341,9 @@ noremap k gk
 noremap gj j
 noremap gk k
 
+" Use ^K to clear highlights
+nnoremap <C-K> <Cmd>nohlsearch<CR>
+
 " Movements {{{2
 
 " Jump to start and end of line using the home row keys

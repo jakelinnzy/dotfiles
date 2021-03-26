@@ -16,7 +16,8 @@ set ideajoin
 set ideaput
 set ideamark
 set ideastatusicon=gray
-set idearefactormode=keep
+" Enter select mode in refactoring
+set idearefactormode=select
 
 " Use C-P and C-N to navigate through completion items
 set lookupkeys& " <Tab>,<Down>,<Up>,<Enter>,<Left>,<Right>,<C-Down>,<C-Up>,<PageUp>,<PageDown>,<C-J>,<C-Q>

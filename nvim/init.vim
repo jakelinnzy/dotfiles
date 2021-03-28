@@ -59,6 +59,7 @@ Plug 'tpope/vim-unimpaired'     " Bracket mappings
 Plug 'tpope/vim-abolish'        " cr* to change case
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-eunuch'         " :SudoWrite, :Chmod, etc.
+Plug 'vim-scripts/ReplaceWithRegister'  " gr<Range> to replace with register content
 Plug 'ciaranm/detectindent'     " :DetectIndent
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'

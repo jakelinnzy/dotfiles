@@ -1,6 +1,9 @@
-# zsh profiler
-# zmodload zsh/zprof
-# to use, add `zprof` to end of .zshrc
+### zsh profiler
+local profile=0
+if [[ "$profile" -ne 0 ]]; then
+    zmodload zsh/zprof
+fi
+
 
 [ -f ~/.config/zsh/before.zsh ] && source ~/.config/zsh/before.zsh
 
@@ -257,7 +260,9 @@ vterm_printf(){
 # reset the $? variable so it doesn't mess up the prompt
 :
 
-# zsh profiler
-# zprof
+### zsh profiler
+if [[ "$profile" -ne 0 ]]; then
+    zprof
+fi
 
 # vim: shiftwidth=4 softtabstop=4 textwidth=0 foldmethod=marker

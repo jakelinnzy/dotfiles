@@ -51,9 +51,12 @@ NL=$'\n'
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle lukechilds/zsh-better-npm-completion
-export YSU_IGNORED_ALIASES=(python v g)
+
+export YSU_IGNORED_ALIASES=(python v g fsh-alias)
 antigen bundle MichaelAquilina/zsh-you-should-use # prompt for available aliases
-antigen bundle zsh-users/zsh-syntax-highlighting
+
+# antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zdharma/fast-syntax-highlighting
 
 antigen theme romkatv/powerlevel10k
 

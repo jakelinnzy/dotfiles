@@ -233,18 +233,22 @@ pastefinish() {
 }
 zstyle :bracketed-paste-magic paste-init pasteinit
 zstyle :bracketed-paste-magic paste-finish pastefinish
-
-# fasd {{{2
+# }}}
+# fasd
 type fasd > /dev/null && eval "$(fasd --init auto)"
 
-# direnv {{{2
+# direnv
 type direnv &> /dev/null && eval "$(direnv hook zsh)"
 
-# iTerm2 shell integration {{{2
+# iTerm2 shell integration
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # fzf {{{2
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# fnm
+type fnm > /dev/null && eval "$(fnm env --use-on-cd)"
+
 
 # libvterm {{{2
 

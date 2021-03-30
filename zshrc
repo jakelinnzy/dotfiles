@@ -7,6 +7,11 @@ fi
 
 [ -f ~/.config/zsh/before.zsh ] && source ~/.config/zsh/before.zsh
 
+# Set default locale to ensure everything is in UTF-8
+if [[ -z "$LANG" ]] || [[ "$LANG" == "C" ]]; then
+    export LANG='en_AU.UTF-8'
+fi
+
 # PATH {{{1
 
 if [[ "$(uname)" = "Linux" ]]; then

@@ -1,5 +1,5 @@
 ### zsh profiler
-local profile=0
+profile=0
 if [[ "$profile" -ne 0 ]]; then
     zmodload zsh/zprof
 fi
@@ -8,7 +8,7 @@ fi
 [ -f ~/.config/zsh/before.zsh ] && source ~/.config/zsh/before.zsh
 
 # Set default locale to ensure everything is in UTF-8
-if [[ -z "$LANG" ]] || [[ "$LANG" == "C" ]]; then
+if [[ -z "$LANG" || "$LANG" == "C" ]]; then
     export LANG='en_AU.UTF-8'
 fi
 
@@ -53,8 +53,8 @@ antigen use oh-my-zsh
 antigen bundle git
 # antigen bundle autojump
 
-NL=$'\n'
 # ignore suggestions with more than one lines
+# NL=$'\n'
 # export ZSH_AUTOSUGGEST_HISTORY_IGNORE="(*$NL*)"
 antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
@@ -211,7 +211,7 @@ bindkey '^[b' backward-word
 
 # custom functions {{{1
 showpath() {
-    echo $PATH | sed $'s/:/\\\n/g'
+    echo "$PATH" | sed $'s/:/\\\n/g'
 }
 
 showcolors() {

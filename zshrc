@@ -190,6 +190,10 @@ export LSCOLORS="Gxfxcxdxbxegedabagacad"
 # END LSCOLORS }}}2
 
 # Bindings {{{1
+
+# Make <C-w> work more intuitively by treating '--dry-run' as a single word
+WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
+
 # Under iTerm2's CSI u mode, <S-Space> sends '^[[32;2u'. Neovim recognises this by
 # default, but zsh doesn't. This maps <S-Space> to enter a space character.
 # To find out what code a key combination sends to terminal, enter `sed -n l` in

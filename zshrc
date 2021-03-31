@@ -11,6 +11,13 @@ if [[ -z "$LANG" || "$LANG" == "C" ]]; then
     export LANG='en_AU.UTF-8'
 fi
 
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # PATH {{{1
 
 if [[ "$(uname)" = "Linux" ]]; then
@@ -25,15 +32,16 @@ export PATH="$GOPATH/bin:$PATH"
 
 # END PATH }}}
 
+# Display red dots when a tab completion takes long time
+COMPLETION_WAITING_DOTS=true
+
+# Make <C-w> work more intuitively by treating '--dry-run' as a single word
+WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
+
+# Disable the (venv) before shell prompt since p10k takes care of it
+export VIRTUAL_ENV_DISABLE_PROMPT="true"
+
 # plugin config (antigen) {{{1
-
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # loads zsh completions installed with homebrew
 # should be called before compinit
 if type brew &>/dev/null; then
@@ -41,9 +49,6 @@ if type brew &>/dev/null; then
     fpath=($BREW_PREFIX/share/zsh/site-functions $fpath)
 fi
 fpath=(~/.zfunc /usr/local/share/zsh-completions $fpath)
-
-export COMPLETION_WAITING_DOTS=true
-
 
 source "$HOME/.local/antigen.zsh"
 
@@ -150,9 +155,6 @@ alias coe="conda info --envs"
 export CFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c99"
 export CXXFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c++17"
 
-# Disable the (venv) before shell prompt since p10k takes care of it
-export VIRTUAL_ENV_DISABLE_PROMPT="true"
-
 # LSCOLORS {{{2
 
 # The color designators are as follows:
@@ -195,8 +197,6 @@ export LSCOLORS="Gxfxcxdxbxegedabagacad"
 
 # Bindings {{{1
 
-# Make <C-w> work more intuitively by treating '--dry-run' as a single word
-WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
 
 # Under iTerm2's CSI u mode, <S-Space> sends '^[[32;2u'. Neovim recognises this by
 # default, but zsh doesn't. This maps <S-Space> to enter a space character.

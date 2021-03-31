@@ -1,6 +1,5 @@
 ### zsh profiler
-profile=0
-if [[ "$profile" -ne 0 ]]; then
+if [[ "$ZPROFILE" = 1 ]]; then
     zmodload zsh/zprof
 fi
 
@@ -274,7 +273,7 @@ vterm_printf(){
 :
 
 ### zsh profiler
-if [[ "$profile" -ne 0 ]]; then
+if [[ "$ZPROFILE" = 1 ]]; then
     zprof
 fi
 

@@ -50,7 +50,7 @@ if type brew &>/dev/null; then
 fi
 fpath=(~/.zfunc /usr/local/share/zsh-completions $fpath)
 
-source "$HOME/.local/antigen.zsh"
+source "$HOME/.local/antigen-repo/antigen.zsh"
 
 # use oh-my-zsh's plugins
 antigen use oh-my-zsh

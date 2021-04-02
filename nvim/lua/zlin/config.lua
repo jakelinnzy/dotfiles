@@ -29,7 +29,7 @@ function M.setup()
         M.setup_treesitter()
     end
 
-    require('zlin/which_key_map').setup()
+    require('zlin.which_key_map').setup()
 end
 
 

@@ -1,5 +1,0 @@
-# name: __name__ check
-# key: m
-# --
-if __name__ == "__main__":
-    main()

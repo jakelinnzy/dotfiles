@@ -36,12 +36,6 @@ To install all packages with Homebrew, run (this may take a while)
 brew bundle --file=./Brewfile
 ```
 
-## Emacs
-
-See [doom-emacs/config.org](doom-emacs/config.org).
-
-Installing Doom Emacs is really slow. To quickly start working, use Vim / Neovim instead.
-
 ## Shell prompt
 
 [powerlevel10k](https://github.com/romkatv/powerlevel10k), customizable and really fast.

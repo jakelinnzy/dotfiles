@@ -1,6 +1,0 @@
-# key: note
-# name: New note
-# --
-#+TITLE: ${1:Title}
-#+AUTHOR: Ziyang Lin
-$0

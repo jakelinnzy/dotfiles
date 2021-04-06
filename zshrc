@@ -222,6 +222,7 @@ showcolors() {
 # END custom funcitons }}}
 
 # Initialisation scripts {{{1
+
 # Fix slowness of pastes with zsh-syntax-highlighting.zsh {{{2
 pasteinit() {
     OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
@@ -243,12 +244,11 @@ type direnv &> /dev/null && eval "$(direnv hook zsh)"
 # iTerm2 shell integration
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-# fzf {{{2
+# fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # fnm
 type fnm > /dev/null && eval "$(fnm env --use-on-cd)"
-
 
 # libvterm {{{2
 
@@ -263,8 +263,7 @@ vterm_printf(){
     else
         printf "\e]%s\e\\" "$1"
     fi
-}
-
+} # }}}2
 
 # END Initialisation }}}1
 

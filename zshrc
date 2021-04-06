@@ -32,15 +32,6 @@ export PATH="$GOPATH/bin:$PATH"
 
 # END PATH }}}
 
-# Display red dots when a tab completion takes long time
-COMPLETION_WAITING_DOTS=true
-
-# Make <C-w> work more intuitively by treating '--dry-run' as a single word
-WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
-
-# Disable the (venv) before shell prompt since p10k takes care of it
-export VIRTUAL_ENV_DISABLE_PROMPT="true"
-
 # plugin config (antigen) {{{1
 # loads zsh completions installed with homebrew
 # should be called before compinit
@@ -78,6 +69,16 @@ antigen apply
 [[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
 
 # END antigen config }}}
+
+# Display red dots when a tab completion takes long time
+COMPLETION_WAITING_DOTS=true
+
+# Disable the (venv) before shell prompt since p10k takes care of it
+VIRTUAL_ENV_DISABLE_PROMPT="true"
+
+# Make <C-w> work more intuitively by treating '--dry-run' as a single word
+# This has to be set after oh-my-zsh as it changes this variable
+WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
 
 # Settings & aliases {{{1
 

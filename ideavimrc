@@ -77,8 +77,8 @@ inoremap <C-u> <C-g>u<C-u>
 " Use Emacs movement keybindings in insert mode
 inoremap <C-f> <Right>
 inoremap <C-b> <Left>
-inoremap <C-p> <C-o>gk
-inoremap <C-n> <C-o>gj
+inoremap <C-p> <Up>
+inoremap <C-n> <Down>
 inoremap <A-f> <S-Right>
 inoremap <A-b> <S-Left>
 

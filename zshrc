@@ -4,7 +4,7 @@ if [[ "$ZPROFILE" = 1 ]]; then
 fi
 
 
-[ -f ~/.config/zsh/before.zsh ] && source ~/.config/zsh/before.zsh
+[[ -f ~/.config/zsh/before.zsh ]] && source ~/.config/zsh/before.zsh
 
 # Set default locale to ensure everything is in UTF-8
 if [[ -z "$LANG" || "$LANG" == "C" ]]; then
@@ -82,10 +82,16 @@ WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
 
 # Settings & aliases {{{1
 
+[[ "$(uname)" = "Darwin" ]] && TRASH_DIR="$HOME/.Trash/" || TRASH_DIR="$HOME/.local/share/Trash/"
+
+function del () {
+    mv "$@" "$TRASH_DIR"
+}
+
 if type nvim &> /dev/null; then
     # Use Neovim and nvim remote if installed
     # This prevents nested nvim in git commit etc.
-    if [ -n "$NVIM_LISTEN_ADDRESS" ]; then
+    if [[ -n "$NVIM_LISTEN_ADDRESS" ]]; then
         export VISUAL="nvr -cc tabedit --remote-wait +'set bufhidden=wipe'"
         export MANPAGER="less -is"
     else
@@ -151,6 +157,9 @@ alias jj="fasd_cd -di"
 alias coa="conda activate"
 alias cod="conda deactivate"
 alias coe="conda info --envs"
+
+# If on macOS, make stat work like Linux
+[[ "$(uname)" = "Darwin" ]] && alias stat="stat -x"
 
 # Compilation flags
 export CFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c99"
@@ -245,7 +254,7 @@ type direnv &> /dev/null && eval "$(direnv hook zsh)"
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[[ -f ~/.fzf.zsh ]] && source ~/.fzf.zsh
 
 # fnm
 type fnm > /dev/null && eval "$(fnm env --use-on-cd)"
@@ -267,7 +276,7 @@ vterm_printf(){
 
 # END Initialisation }}}1
 
-[ -f ~/.config/zsh/after.zsh ] && source ~/.config/zsh/after.zsh
+[[ -f ~/.config/zsh/after.zsh ]] && source ~/.config/zsh/after.zsh
 
 # reset the $? variable so it doesn't mess up the prompt
 :

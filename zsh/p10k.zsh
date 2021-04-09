@@ -94,7 +94,7 @@
     # time                    # current time
     # ip                    # ip address and bandwidth usage for a specified network interface
     # public_ip             # public IP address
-    # proxy                 # system-wide http/https/ftp proxy
+    proxy                 # system-wide http/https/ftp proxy
     # battery               # internal battery
     # wifi                  # wifi speed
     # example               # example user-defined segment (see prompt_example function below)
@@ -1488,7 +1488,7 @@
   # typeset -g POWERLEVEL9K_TIME_PREFIX='%fat '
 
   function prompt_my_separator() {
-      if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ] || [ -n "$SSH_CONNECTION" ]; then
+      if [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" || -n "$SSH_CONNECTION" ]]; then
           p10k segment -t '#ssh' -f 8
       else
           p10k segment -t '#' -f 8

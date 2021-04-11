@@ -216,8 +216,8 @@ set splitbelow
 set splitright
 
 " Open help doc at the right if have enough horizontal space ( >160 )
-au vimrc BufEnter *.txt
-            \ if &buftype ==# 'help' && winwidth(0) > 160 |
+au vimrc FileType help
+            \ if winwidth(0) > 160 |
             \     wincmd L |
             \ endif
 

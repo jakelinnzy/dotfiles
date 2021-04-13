@@ -41,32 +41,33 @@ if type brew &>/dev/null; then
 fi
 fpath=(~/.zfunc /usr/local/share/zsh-completions $fpath)
 
-source "$HOME/.local/antigen-repo/antigen.zsh"
+if [[ -r "$HOME/.local/antigen-repo/antigen.zsh" ]]; then
+    source "$HOME/.local/antigen-repo/antigen.zsh"
+    # use oh-my-zsh's plugins
+    antigen use oh-my-zsh
+    antigen bundle git
+    # antigen bundle autojump
 
-# use oh-my-zsh's plugins
-antigen use oh-my-zsh
-antigen bundle git
-# antigen bundle autojump
+    # ignore suggestions with more than one lines
+    # NL=$'\n'
+    # export ZSH_AUTOSUGGEST_HISTORY_IGNORE="(*$NL*)"
+    antigen bundle zsh-users/zsh-completions
+    antigen bundle zsh-users/zsh-autosuggestions
+    antigen bundle lukechilds/zsh-better-npm-completion
 
-# ignore suggestions with more than one lines
-# NL=$'\n'
-# export ZSH_AUTOSUGGEST_HISTORY_IGNORE="(*$NL*)"
-antigen bundle zsh-users/zsh-completions
-antigen bundle zsh-users/zsh-autosuggestions
-antigen bundle lukechilds/zsh-better-npm-completion
+    export YSU_IGNORED_ALIASES=(python v g fsh-alias)
+    antigen bundle MichaelAquilina/zsh-you-should-use # prompt for available aliases
 
-export YSU_IGNORED_ALIASES=(python v g fsh-alias)
-antigen bundle MichaelAquilina/zsh-you-should-use # prompt for available aliases
+    # antigen bundle zsh-users/zsh-syntax-highlighting
+    antigen bundle zdharma/fast-syntax-highlighting
 
-# antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zdharma/fast-syntax-highlighting
+    antigen theme romkatv/powerlevel10k
 
-antigen theme romkatv/powerlevel10k
+    antigen apply
 
-antigen apply
-
-# powerlevel10k customizations
-[[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
+    # powerlevel10k customizations
+    [[ ! -f ~/.config/zsh/p10k.zsh ]] || source ~/.config/zsh/p10k.zsh
+fi
 
 # END antigen config }}}
 

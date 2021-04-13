@@ -1,6 +1,0 @@
-#! /bin/bash
-# alias: brew ci
-#:  * `ci` [args...]
-#:    `brew ci` is an alias for `brew cask install`
-brew cask install $*
-

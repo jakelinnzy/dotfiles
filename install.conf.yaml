@@ -44,9 +44,6 @@
     ~/.inputrc: inputrc
     ~/.config/kitty/kitty.conf: kitty/kitty.conf
     ~/.config/ripgrep/ripgreprc: ripgrep/ripgreprc
-    ~/.brew-aliases:
-      if: "[ $(uname) = Darwin ]"
-      path: brew-aliases
     ~/.config/i3:
       if: "[ $(uname) = Linux ]"
       path: i3

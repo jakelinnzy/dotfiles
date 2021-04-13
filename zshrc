@@ -46,6 +46,7 @@ if [[ -r "$HOME/.local/antigen-repo/antigen.zsh" ]]; then
     # use oh-my-zsh's plugins
     antigen use oh-my-zsh
     antigen bundle git
+    antigen bundle safe-paste
     # antigen bundle autojump
 
     # ignore suggestions with more than one lines
@@ -80,6 +81,8 @@ VIRTUAL_ENV_DISABLE_PROMPT="true"
 # Make <C-w> work more intuitively by treating '--dry-run' as a single word
 # This has to be set after oh-my-zsh as it changes this variable
 WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
+
+DISABLE_MAGIC_FUNCTIONS="true"
 
 # Settings & aliases {{{1
 
@@ -233,11 +236,13 @@ showcolors() {
 # Initialisation scripts {{{1
 
 # Fix slowness of pastes with zsh-syntax-highlighting.zsh {{{2
+pasting-self-insert() {
+    zle .self-insert
+}
 pasteinit() {
     OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
-    zle -N self-insert url-quote-magic # I wonder if you'd need `.url-quote-magic`?
+    zle -N self-insert pasting-self-insert
 }
-
 pastefinish() {
     zle -N self-insert $OLD_SELF_INSERT
 }

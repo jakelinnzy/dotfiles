@@ -104,7 +104,6 @@ if type nvim &> /dev/null; then
 else
     # Use what should be here
     export VISUAL="vim"
-    export MANPAGER="less"
 fi
 
 export EDITOR="$VISUAL"

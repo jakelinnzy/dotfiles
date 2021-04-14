@@ -80,7 +80,7 @@ VIRTUAL_ENV_DISABLE_PROMPT="true"
 
 # Make <C-w> work more intuitively by treating '--dry-run' as a single word
 # This has to be set after oh-my-zsh as it changes this variable
-WORDCHARS='*?_-.[]~=/&;!#$%^(){}<>'
+WORDCHARS='*?_-.[]~=&;!#$%^(){}<>'
 
 DISABLE_MAGIC_FUNCTIONS="true"
 

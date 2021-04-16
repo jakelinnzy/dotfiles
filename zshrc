@@ -116,7 +116,7 @@ export GIT_EDITOR="$VISUAL"
 #   -F Quit if the whole file fits in one screen
 #   -R Retain colors
 #   -i Smartcase search
-export LESS="-Ri"
+export LESS="-FRi"
 
 # Bat
 export BAT_THEME="Nord"

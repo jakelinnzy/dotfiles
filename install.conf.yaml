@@ -27,8 +27,6 @@
     ~/.config/nvim: nvim
     ~/.vimrc: vimrc_minimal
     ~/.ideavimrc: ideavimrc
-    # Emacs
-    ~/.doom.d: doom-emacs
     # Global editorconfig
     ~/.editorconfig: editorconfig
     # git

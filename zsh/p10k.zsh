@@ -1,3 +1,5 @@
+# vim: set et ts=2 sts=2 sw=2:
+
 # Wizard options: nerdfont-complete + powerline, large icons, unicode, lean, 24h time,
 # 1 line, compact, few icons, concise, transient_prompt, instant_prompt=verbose.
 # Type `p10k configure` to generate another config.
@@ -94,7 +96,8 @@
     # time                    # current time
     # ip                    # ip address and bandwidth usage for a specified network interface
     # public_ip             # public IP address
-    proxy                 # system-wide http/https/ftp proxy
+    # proxy                 # system-wide http/https/ftp proxy
+    proxy_simplified
     # battery               # internal battery
     # wifi                  # wifi speed
     # example               # example user-defined segment (see prompt_example function below)
@@ -169,6 +172,32 @@
     # End filler on the edge of the screen if there are no right segments on the first line.
     typeset -g POWERLEVEL9K_EMPTY_LINE_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL='%{%}'
   fi
+
+  ############# Custom prompt elements #############
+  function prompt_my_separator() {
+      if [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" || -n "$SSH_CONNECTION" ]]; then
+          p10k segment -t '#ssh' -f 8
+      else
+          p10k segment -t '#' -f 8
+      fi
+  }
+
+  typeset -g P9K_CUSTOM_PROXY_COLOR=69
+  function prompt_proxy_simplified() {
+    # declare a set (array with unique elements)
+    local -U proxies=(
+      "$all_proxy" "$http_proxy" "$https_proxy" "$ftp_proxy"
+      "$ALL_PROXY" "$HTTP_PROXY" "$HTTPS_PROXY" "$FTP_PROXY"
+    )
+    # Remove stuff before ://, @, and after /
+    proxies=(${(@)${(@)${(@)proxies#*://}##*@}%%/*})
+    # Remove 127.0.0.1
+    proxies=(${(@)proxies#(127\.0\.0\.1|localhost)})
+
+    # (( $#proxies == 1 )) || proxies=()
+
+    [[ -n "${proxies[1]}" ]] && p10k segment -f "$P9K_CUSTOM_PROXY_COLOR" -i '↔' -t "${proxies[1]}"
+  }
 
   #################################[ os_icon: os identifier ]##################################
   # OS identifier color.
@@ -1487,13 +1516,6 @@
   # Custom prefix.
   # typeset -g POWERLEVEL9K_TIME_PREFIX='%fat '
 
-  function prompt_my_separator() {
-      if [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" || -n "$SSH_CONNECTION" ]]; then
-          p10k segment -t '#ssh' -f 8
-      else
-          p10k segment -t '#' -f 8
-      fi
-  }
   # Example of a user-defined prompt segment. Function prompt_example will be called on every
   # prompt if `example` prompt segment is added to POWERLEVEL9K_LEFT_PROMPT_ELEMENTS or
   # POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS. It displays an icon and orange text greeting the user.

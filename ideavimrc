@@ -10,6 +10,7 @@ set easymotion " Requires installing IdeaVim-EasyMotion in IDE
 set highlightedyank
 set textobj-entire " ae, ie for entire file
 set argtextobj     " aa, ia for an argument
+set ReplaceWithRegister
 
 " IDEA specific settings
 set ideajoin

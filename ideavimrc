@@ -151,6 +151,7 @@ nmap <Leader>cd <Action>(GotoDeclaration)
 nmap <Leader>cu <Action>(FindUsages)
 nmap <Leader>cb <Action>(ToggleLineBreakpoint)
 nmap <Leader>ci <Action>(OptimizeImports)
+nmap <Leader>ct <Action>(Refactorings.QuickListPopupAction)
 
 " Toggle settings
 nmap <Leader>tw <Action>(EditorToggleUseSoftWraps)

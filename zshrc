@@ -20,14 +20,20 @@ fi
 
 # PATH {{{1
 
+typeset -U path
+
 if [[ "$(uname)" = "Linux" ]]; then
-    export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
+    path+=(/home/linuxbrew/.linuxbrew/bin)
 fi
-export PATH="$PATH:/usr/local/sbin"
-export PATH="$PATH:$HOME/opt/bin:$HOME/.local/bin"
 
 export GOPATH="$HOME/repos/go"  # `go get` puts stuff here
-export PATH="$GOPATH/bin:$PATH"
+
+path+=(
+    "$HOME/opt/bin"
+    "$HOME/.local/bin"
+    "$GOPATH/bin"
+)
+
 # export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH" # brew coreutils
 
 # END PATH }}}
@@ -223,7 +229,7 @@ bindkey '^[b' backward-word
 
 # custom functions {{{1
 showpath() {
-    echo "$PATH" | sed $'s/:/\\\n/g'
+    typeset -p 1 path
 }
 
 showcolors() {

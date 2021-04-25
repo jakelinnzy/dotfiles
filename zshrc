@@ -119,10 +119,13 @@ export EDITOR="$VISUAL"
 export GIT_EDITOR="$VISUAL"
 
 # Less
-#   -F Quit if the whole file fits in one screen
 #   -R Retain colors
 #   -i Smartcase search
-export LESS="-FRi"
+if [[ ${$(less --version)[2]} -gt 530 ]]; then
+    export LESS="--quit-if-one-screen -Ri"
+else
+    export LESS="-Ri"
+fi
 
 # Bat
 export BAT_THEME="Nord"

@@ -171,8 +171,8 @@ alias coe="conda info --envs"
 [[ "$(uname)" = "Darwin" ]] && alias stat="stat -x"
 
 # Compilation flags
-export CFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c99"
-export CXXFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c++17"
+# export CFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c99"
+# export CXXFLAGS="-Wall -Wextra -Wno-unused-parameter -std=c++17"
 
 # LSCOLORS {{{2
 

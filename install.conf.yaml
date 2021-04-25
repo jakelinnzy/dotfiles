@@ -23,6 +23,7 @@
     # zsh
     ~/.zshrc: zshrc
     ~/.config/zsh: zsh
+    ~/.config/fsh/fsh-theme.ini: zsh/fsh-theme.ini
     # Neovim and Vim
     ~/.config/nvim: nvim
     ~/.vimrc: vimrc_minimal
@@ -76,5 +77,9 @@
     - description: Installing Vim plugins
       command: >-
         type nvim > /dev/null && nvim -es -u nvim/init.vim -i NONE -c "PlugInstall" -c "qa"
+
+    - description: Settings zsh syntax highlighting theme
+      command: >-
+        zsh -i -c 'fast-theme ~/.config/fsh/fsh-theme.ini'
 
 # vim: expandtab shiftwidth=2 softtabstop=2

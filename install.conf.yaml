@@ -1,3 +1,5 @@
+# dotbot https://github.com/anishathalye/dotbot
+
 # https://learnxinyminutes.com/docs/yaml
 # Format with:
 #   prettier -w install.conf.yaml
